@@ -1,16 +1,23 @@
 delete:
   tags:
-    - templates
-  summary: Delete a notification template
-  description: Delete a notification template
-  operationId: deleteNotificationTemplate
+    - recipients
+  summary: Delete a recipient
+  description: Delete a recipient
+  operationId: deleteRecipient
+  parameters:
+    - in: path
+      name: recipient_id
+      schema:
+        type: string
+      required: true
+      description: String ID of a recipient to delete
   responses:
     "200":
       description: Successful operation
     "400":
       $ref: "/../../responses.yaml/#/components/responses/Unauthorized"
     "404":
-      "description": "Notification template not found"
+      "description": "Recipient not found"
     "429":
       $ref: "/../../responses.yaml/#/components/responses/TooManyRequests"
     "500":

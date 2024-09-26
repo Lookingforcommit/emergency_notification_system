@@ -1,27 +1,27 @@
-put:
+get:
   tags:
-    - recipients
-  summary: Confirm a recipient creation
-  description: Confirm previously created recipient draft
-  operationId: confirmRecipientCreation
+    - groups
+  summary: Get all recipients of a group by its id
+  description: Get all recipients of a group by its id
+  operationId: getGroupRecipients
   parameters:
     - in: path
-      name: draftId
+      name: group_id
       schema:
         type: string
       required: true
-      description: String ID of a draft to confirm
+      description: String ID of a group to get recipients from
   responses:
     "200":
       description: Successful operation
       content:
         application/json:
           schema:
-            $ref: "/../../schemas.yaml/#/components/schemas/RecipientWithId"
+            $ref: "/../../schemas.yaml/#/components/schemas/RecipientWithIdList"
     "400":
       $ref: "/../../responses.yaml/#/components/responses/Unauthorized"
     "404":
-      "description": "Draft not found"
+      "description": "Recipient group not found"
     "429":
       $ref: "/../../responses.yaml/#/components/responses/TooManyRequests"
     "500":

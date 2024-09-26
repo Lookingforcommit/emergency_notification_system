@@ -1,23 +1,27 @@
-delete:
+put:
   tags:
-    - recipients
-  summary: Delete a recipient
-  description: Delete a recipient
-  operationId: deleteRecipient
+    - groups
+  summary: Confirm a recipient group creation
+  description: Confirm previously created recipient group draft
+  operationId: confirmRecipientGroupCreation
   parameters:
     - in: path
-      name: recipientId
+      name: draft_id
       schema:
         type: string
       required: true
-      description: String ID of a recipient to delete
+      description: String ID of a draft to confirm
   responses:
     "200":
       description: Successful operation
+      content:
+        application/json:
+          schema:
+            $ref: "/../../schemas.yaml/#/components/schemas/RecipientGroupWithId"
     "400":
       $ref: "/../../responses.yaml/#/components/responses/Unauthorized"
     "404":
-      "description": "Recipient not found"
+      "description": "Draft not found"
     "429":
       $ref: "/../../responses.yaml/#/components/responses/TooManyRequests"
     "500":

@@ -6,13 +6,13 @@ put:
   operationId: AddRecipientToRecipientsGroup
   parameters:
     - in: path
-      name: groupId
+      name: group_id
       schema:
         type: string
       required: true
       description: String ID of a group to add recipient to
     - in: path
-      name: recipientId
+      name: recipient_id
       schema:
         type: string
       required: true
@@ -40,13 +40,13 @@ delete:
   operationId: DeleteRecipientFromRecipientsGroup
   parameters:
     - in: path
-      name: groupId
+      name: group_id
       schema:
         type: string
       required: true
       description: String ID of a group to delete recipient from
     - in: path
-      name: recipientId
+      name: recipient_id
       schema:
         type: string
       required: true

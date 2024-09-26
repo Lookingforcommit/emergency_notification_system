@@ -1,22 +1,16 @@
-put:
+get:
   tags:
     - recipients
-  summary: Modify a recipient
-  description: Modify a recipient
-  operationId: modifyRecipient
+  summary: Get a recipient by its id
+  description: Get a recipient by its id
+  operationId: getRecipient
   parameters:
     - in: path
-      name: recipientId
+      name: recipient_id
       schema:
         type: string
       required: true
-      description: String ID of a recipient to modify
-  requestBody:
-    description: Replace recipient contents with given json
-    content:
-      application/json:
-        schema:
-          $ref: "/../../schemas.yaml/#/components/schemas/RecipientWithoutId"
+      description: String ID of a recipient to get
   responses:
     "200":
       description: Successful operation
@@ -28,8 +22,6 @@ put:
       $ref: "/../../responses.yaml/#/components/responses/Unauthorized"
     "404":
       "description": "Recipient not found"
-    "422":
-      "description": "Invalid json"
     "429":
       $ref: "/../../responses.yaml/#/components/responses/TooManyRequests"
     "500":

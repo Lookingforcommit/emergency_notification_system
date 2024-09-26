@@ -6,7 +6,7 @@ get:
   operationId: getRecipientGroup
   parameters:
     - in: path
-      name: groupId
+      name: group_id
       schema:
         type: string
       required: true

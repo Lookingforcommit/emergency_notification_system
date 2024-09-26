@@ -1,20 +1,23 @@
-get:
+delete:
   tags:
-    - templates
-  summary: Get a notification template by its id
-  description: Get a notification template by its id
-  operationId: getNotificationTemplate
+    - notifications
+  summary: Cancel a pending notification
+  description: Cancel a pending notification
+  operationId: cancelNotification
+  parameters:
+    - in: path
+      name: notification_id
+      schema:
+        type: string
+      required: true
+      description: String ID of a notification to cancel
   responses:
     "200":
       description: Successful operation
-      content:
-        application/json:
-          schema:
-            $ref: "/../../schemas.yaml/#/components/schemas/NotificationTemplateWithId"
     "400":
       $ref: "/../../responses.yaml/#/components/responses/Unauthorized"
     "404":
-      "description": "Notification template not found"
+      "description": "Notification not found/Notification was delivered"
     "429":
       $ref: "/../../responses.yaml/#/components/responses/TooManyRequests"
     "500":

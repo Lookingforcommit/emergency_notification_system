@@ -1,16 +1,23 @@
 delete:
   tags:
-    - notifications
-  summary: Cancel a pending notification
-  description: Cancel a pending notification
-  operationId: cancelNotification
+    - groups
+  summary: Delete a recipient group
+  description: Delete a recipient group
+  operationId: deleteRecipientGroup
+  parameters:
+    - in: path
+      name: group_id
+      schema:
+        type: string
+      required: true
+      description: String ID of a recipient group to delete
   responses:
     "200":
       description: Successful operation
     "400":
       $ref: "/../../responses.yaml/#/components/responses/Unauthorized"
     "404":
-      "description": "Notification not found/Notification was delivered"
+      "description": "Recipient group not found"
     "429":
       $ref: "/../../responses.yaml/#/components/responses/TooManyRequests"
     "500":

@@ -4,6 +4,13 @@ put:
   summary: Modify a notification template
   description: Modify a notification template
   operationId: modifyNotificationTemplate
+  parameters:
+    - in: path
+      name: template_id
+      schema:
+        type: string
+      required: true
+      description: String ID of a notification template to modify
   requestBody:
     description: Replace notification template contents with given json
     content:

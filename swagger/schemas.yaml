@@ -38,11 +38,11 @@ components:
           type: string
         email:
           type: string
-        phoneNumber:
+        phone_number:
           type: string
           description: "Recipient phone number in international format"
           example: "+12345"
-        telegramUsername:
+        telegram_username:
           type: string
           example: "@test_telegram"
     ReturnedRecipient:
@@ -53,7 +53,7 @@ components:
         - masterId
       type: object
       properties:
-        masterId:
+        master_id:
           type: string
     RecipientWithoutId:
       description: Recipient object without recipientId. Used to represent user json payloads
@@ -64,9 +64,9 @@ components:
       allOf:
         - $ref: "#/components/schemas/ReturnedRecipient"
         - required:
-            - draftId
+            - draft_id
         - properties:
-            draftId:
+            draft_id:
               type:
                 string
     RecipientWithId:
@@ -74,9 +74,9 @@ components:
       allOf:
         - $ref: "#/components/schemas/ReturnedRecipient"
         - required:
-            - recipientId
+            - recipient_id
         - properties:
-            recipientId:
+            recipient_id:
               type:
                 string
     RecipientWithIdList:
@@ -92,7 +92,7 @@ components:
       properties:
         name:
           type: string
-        notificationTemplateId:
+        notification_template_id:
           type: string
         active:
           type: boolean
@@ -101,10 +101,10 @@ components:
       allOf:
         - $ref: "#/components/schemas/BaseRecipientGroup"
       required:
-        - masterId
+        - master_id
       type: object
       properties:
-        masterId:
+        master_id:
           type: string
     RecipientGroupWithoutId:
       description: RecipientGroup object without recipientGroupId. Used to represent user json payloads
@@ -115,9 +115,9 @@ components:
       allOf:
         - $ref: "#/components/schemas/ReturnedRecipientGroup"
         - required:
-            - draftId
+            - draft_id
         - properties:
-            draftId:
+            draft_id:
               type:
                 string
     RecipientGroupWithId:
@@ -125,9 +125,9 @@ components:
       allOf:
         - $ref: "#/components/schemas/ReturnedRecipientGroup"
         - required:
-            - recipientGroupId
+            - recipient_group_id
         - properties:
-            recipientGroupId:
+            recipient_group_id:
               type:
                 string
     RecipientGroupWithIdList:
@@ -142,17 +142,17 @@ components:
       properties:
         name:
           type: string
-        messageText:
+        message_text:
           type: string
     ReturnedNotificationTemplate:
       description: Base schema for all NotificationTemplate schemas returned by the server
       allOf:
         - $ref: "#/components/schemas/BaseNotificationTemplate"
       required:
-        - masterId
+        - master_id
       type: object
       properties:
-        masterId:
+        master_id:
           type: string
     NotificationTemplateWithoutId:
       description: NotificationTemplate object without notificationTemplateId. Used to represent user json payloads
@@ -163,9 +163,9 @@ components:
       allOf:
         - $ref: "#/components/schemas/ReturnedNotificationTemplate"
         - required:
-            - draftId
+            - draft_id
         - properties:
-            draftId:
+            draft_id:
               type:
                 string
     NotificationTemplateWithId:
@@ -173,9 +173,9 @@ components:
       allOf:
         - $ref: "#/components/schemas/ReturnedNotificationTemplate"
         - required:
-            - notificationTemplateId
+            - notification_template_id
         - properties:
-            notificationTemplateId:
+            notification_template_id:
               type:
                 string
     NotificationTemplateWithIdList:
@@ -185,19 +185,19 @@ components:
     Notification:
       description: Notification sent by user
       required:
-        - masterId
-        - recipientId
-        - groupId
+        - master_id
+        - recipient_id
+        - group_id
         - type
-        - creationTimestamp
-        - completionTimestamp
+        - creation_timestamp
+        - completion_timestamp
       type: object
       properties:
-        masterId:
+        master_id:
           type: string
-        recipientId:
+        recipient_id:
           type: string
-        groupId:
+        group_id:
           type: string
         type:
           type: string
@@ -205,10 +205,10 @@ components:
             - Telegram
             - SMS
             - Mail
-        creationTimestamp:
+        creation_timestamp:
           type: string
           example: "2024-09-24 13:21:50"
-        completionTimestamp:
+        completion_timestamp:
           type: string
           example: "2024-09-24 13:21:54"
     NotificationList:

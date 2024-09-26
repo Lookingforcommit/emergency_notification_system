@@ -1,20 +1,23 @@
-put:
+delete:
   tags:
     - templates
-  summary: Confirm a notification template creation
-  description: Confirm previously created notification template draft
-  operationId: confirmNotificationTemplateCreation
+  summary: Delete a notification template
+  description: Delete a notification template
+  operationId: deleteNotificationTemplate
+  parameters:
+    - in: path
+      name: template_id
+      schema:
+        type: string
+      required: true
+      description: String ID of a notification template to delete
   responses:
     "200":
       description: Successful operation
-      content:
-        application/json:
-          schema:
-            $ref: "/../../schemas.yaml/#/components/schemas/NotificationTemplateWithId"
     "400":
       $ref: "/../../responses.yaml/#/components/responses/Unauthorized"
     "404":
-      "description": "Draft not found"
+      "description": "Notification template not found"
     "429":
       $ref: "/../../responses.yaml/#/components/responses/TooManyRequests"
     "500":
