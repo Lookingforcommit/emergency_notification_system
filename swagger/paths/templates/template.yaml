@@ -1,0 +1,21 @@
+get:
+  tags:
+    - templates
+  summary:  Get all the user's notification templates
+  description: Get all the user's notification templates
+  operationId: getNotificationTemplates
+  responses:
+    "200":
+      description: Successful operation
+      content:
+        application/json:
+          schema:
+            $ref: "/../../schemas.yaml/#/components/schemas/NotificationTemplateWithId"
+    "400":
+      $ref: "/../../responses.yaml/#/components/responses/Unauthorized"
+    "429":
+      $ref: "/../../responses.yaml/#/components/responses/TooManyRequests"
+    "500":
+      $ref: "/../../responses.yaml/#/components/responses/InternalServerError"
+    "503":
+      $ref: "/../../responses.yaml/#/components/responses/ServiceUnavailable"

@@ -1,0 +1,223 @@
+openapi: 3.0.3
+info:
+  title: Project schemas
+  version: 1.0.0
+paths:
+  {}
+components:
+  schemas:
+    User:
+      description: User login schema
+      required:
+        - name
+        - password
+      type: object
+      properties:
+        name:
+          type: string
+        password:
+          type: string
+    JWTString:
+      description: |
+        JWT Schema used for user authorization and authentication <br>
+        JWT is built in the following format: <br>
+        f"base64urlEncoding(header) + '.' + base64urlEncoding(payload) + '.' + base64urlEncoding(signature)" <br>
+        header is an object containing -> {"alg": {CHOSEN_ALG}, "typ": "JWT"} <br>
+        payload is an object containing the data of jwt <br>
+        signature is an encoded with a PRIVATE_KEY object by our CHOSEN_ALG from the following format: <br>
+        CHOSEN_ALG(PRIVATE_KEY, base64urlEncoding(header) + '.' + base64urlEncoding(payload))
+      type: string
+      example: "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOiIxMjM0NTY3ODkwIiwibmFtZSI6IkpvaG4gRG9lIiwiaWF0IjoxNTE2MjM5MDIyfQ.SflKxwRJSMeKKF2QT4fwpMeJf36POk6yJV_adQssw5c"
+    BaseRecipient:
+      description: Base schema for all Recipient schemas
+      required:
+        - name
+      type: object
+      properties:
+        name:
+          type: string
+        email:
+          type: string
+        phoneNumber:
+          type: string
+          description: "Recipient phone number in international format"
+          example: "+12345"
+        telegramUsername:
+          type: string
+          example: "@test_telegram"
+    ReturnedRecipient:
+      description: Base schema for all Recipient schemas returned by the server
+      allOf:
+        - $ref: "#/components/schemas/BaseRecipient"
+      required:
+        - masterId
+      type: object
+      properties:
+        masterId:
+          type: string
+    RecipientWithoutId:
+      description: Recipient object without recipientId. Used to represent user json payloads
+      allOf:
+        - $ref: "#/components/schemas/BaseRecipient"
+    RecipientDraft:
+      description: Recipient draft object. Used to represent a Recipient object pending for creation
+      allOf:
+        - $ref: "#/components/schemas/ReturnedRecipient"
+        - required:
+            - draftId
+        - properties:
+            draftId:
+              type:
+                string
+    RecipientWithId:
+      description: Recipient object with recipientId. Used to represent server-generated objects
+      allOf:
+        - $ref: "#/components/schemas/ReturnedRecipient"
+        - required:
+            - recipientId
+        - properties:
+            recipientId:
+              type:
+                string
+    RecipientWithIdList:
+      type: array
+      items:
+        $ref: "#/components/schemas/RecipientWithId"
+    BaseRecipientGroup:
+      description: Base schema for all RecipientGroup schemas
+      required:
+        - name
+        - active
+      type: object
+      properties:
+        name:
+          type: string
+        notificationTemplateId:
+          type: string
+        active:
+          type: boolean
+    ReturnedRecipientGroup:
+      description: Base schema for all RecipientGroup schemas returned by the server
+      allOf:
+        - $ref: "#/components/schemas/BaseRecipientGroup"
+      required:
+        - masterId
+      type: object
+      properties:
+        masterId:
+          type: string
+    RecipientGroupWithoutId:
+      description: RecipientGroup object without recipientGroupId. Used to represent user json payloads
+      allOf:
+        - $ref: "#/components/schemas/BaseRecipientGroup"
+    RecipientGroupDraft:
+      description: Recipient draft object. Used to represent a RecipientGroup object pending for creation
+      allOf:
+        - $ref: "#/components/schemas/ReturnedRecipientGroup"
+        - required:
+            - draftId
+        - properties:
+            draftId:
+              type:
+                string
+    RecipientGroupWithId:
+      description: RecipientGroup object with recipientGroupId. Used to represent server-generated objects
+      allOf:
+        - $ref: "#/components/schemas/ReturnedRecipientGroup"
+        - required:
+            - recipientGroupId
+        - properties:
+            recipientGroupId:
+              type:
+                string
+    RecipientGroupWithIdList:
+      type: array
+      items:
+        $ref: "#/components/schemas/RecipientGroupWithId"
+    BaseNotificationTemplate:
+      description: Base schema for all NotificationTemplate schemas
+      required:
+        - name
+      type: object
+      properties:
+        name:
+          type: string
+        messageText:
+          type: string
+    ReturnedNotificationTemplate:
+      description: Base schema for all NotificationTemplate schemas returned by the server
+      allOf:
+        - $ref: "#/components/schemas/BaseNotificationTemplate"
+      required:
+        - masterId
+      type: object
+      properties:
+        masterId:
+          type: string
+    NotificationTemplateWithoutId:
+      description: NotificationTemplate object without notificationTemplateId. Used to represent user json payloads
+      allOf:
+        - $ref: "#/components/schemas/BaseNotificationTemplate"
+    NotificationTemplateDraft:
+      description: NotificationTemplate draft object. Used to represent a NotificationTemplate object pending for creation
+      allOf:
+        - $ref: "#/components/schemas/ReturnedNotificationTemplate"
+        - required:
+            - draftId
+        - properties:
+            draftId:
+              type:
+                string
+    NotificationTemplateWithId:
+      description: NotificationTemplate object with notificationTemplateId. Used to represent server-generated objects
+      allOf:
+        - $ref: "#/components/schemas/ReturnedNotificationTemplate"
+        - required:
+            - notificationTemplateId
+        - properties:
+            notificationTemplateId:
+              type:
+                string
+    NotificationTemplateWithIdList:
+      type: array
+      items:
+        $ref: "#/components/schemas/NotificationTemplateWithId"
+    Notification:
+      description: Notification sent by user
+      required:
+        - masterId
+        - recipientId
+        - groupId
+        - type
+        - creationTimestamp
+        - completionTimestamp
+      type: object
+      properties:
+        masterId:
+          type: string
+        recipientId:
+          type: string
+        groupId:
+          type: string
+        type:
+          type: string
+          enum:
+            - Telegram
+            - SMS
+            - Mail
+        creationTimestamp:
+          type: string
+          example: "2024-09-24 13:21:50"
+        completionTimestamp:
+          type: string
+          example: "2024-09-24 13:21:54"
+    NotificationList:
+      type: array
+      items:
+        $ref: "#/components/schemas/Notification"
+
+  securitySchemes:
+    bearerAuth:
+      type: http
+      scheme: bearer
+      bearerFormat: JWT

@@ -1,0 +1,29 @@
+post:
+  tags:
+    - user
+  summary: Create a new account
+  description: Create a new account
+  operationId: createUser
+  requestBody:
+    content:
+      application/json:
+        schema:
+          $ref: "/../..//schemas.yaml/#/components/schemas/User"
+  responses:
+    "200":
+      description: Successful operation, returns a pair of access token and refresh token
+      content:
+        application/jwt:
+          schema:
+            type: array
+            items:
+              $ref: "/../..//schemas.yaml/#/components/schemas/JWTString"
+    "409":
+      "description": "User with this username already exists"
+    "429":
+      $ref: "/../../responses.yaml/#/components/responses/TooManyRequests"
+    "500":
+      $ref: "/../../responses.yaml/#/components/responses/InternalServerError"
+    "503":
+      $ref: "/../../responses.yaml/#/components/responses/ServiceUnavailable"
+  security: []

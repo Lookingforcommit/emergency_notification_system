@@ -1,0 +1,19 @@
+delete:
+  tags:
+    - notifications
+  summary: Cancel a pending notification
+  description: Cancel a pending notification
+  operationId: cancelNotification
+  responses:
+    "200":
+      description: Successful operation
+    "400":
+      $ref: "/../../responses.yaml/#/components/responses/Unauthorized"
+    "404":
+      "description": "Notification not found/Notification was delivered"
+    "429":
+      $ref: "/../../responses.yaml/#/components/responses/TooManyRequests"
+    "500":
+      $ref: "/../../responses.yaml/#/components/responses/InternalServerError"
+    "503":
+      $ref: "/../../responses.yaml/#/components/responses/ServiceUnavailable"

@@ -1,0 +1,21 @@
+get:
+  tags:
+    - notifications
+  summary:  Get all completed notifications of a user
+  description: Get all completed notifications of a user
+  operationId: getCompletedNotifications
+  responses:
+    "200":
+      description: Successful operation
+      content:
+        application/json:
+          schema:
+            $ref: "/../../schemas.yaml/#/components/schemas/NotificationList"
+    "400":
+      $ref: "/../../responses.yaml/#/components/responses/Unauthorized"
+    "429":
+      $ref: "/../../responses.yaml/#/components/responses/TooManyRequests"
+    "500":
+      $ref: "/../../responses.yaml/#/components/responses/InternalServerError"
+    "503":
+      $ref: "/../../responses.yaml/#/components/responses/ServiceUnavailable"

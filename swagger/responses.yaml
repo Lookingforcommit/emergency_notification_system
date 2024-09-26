@@ -1,0 +1,19 @@
+openapi: 3.0.3
+info:
+  title: Project responses
+  description: Title
+  version: 1.0.0
+paths:
+  {}
+components:
+  responses:
+    Unauthorized:
+      description: Only authorized users can access the endpoint. Provide a valid JWT access token or try refreshing it
+    MalformedRequestBody:
+      description: Request body is malformed
+    TooManyRequests:
+      description: You've sent too many requests. Check the API rate-limits
+    InternalServerError:
+      description: Request can't be processed due to internal server error
+    ServiceUnavailable:
+      description: Service is unavailable due to overload or maintenance

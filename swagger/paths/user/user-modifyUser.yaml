@@ -1,0 +1,25 @@
+put:
+  tags:
+    - user
+  summary: Update user
+  description: Update username and password
+  operationId: updateUser
+  requestBody:
+    description: Replace user contents with given json
+    content:
+      application/json:
+        schema:
+          $ref: "/../../schemas.yaml/#/components/schemas/User"
+  responses:
+    "200":
+      description: Successful operation
+    "400":
+      $ref: "/../../responses.yaml/#/components/responses/Unauthorized"
+    "422":
+      "description": "Invalid json"
+    "429":
+      $ref: "/../../responses.yaml/#/components/responses/TooManyRequests"
+    "500":
+      $ref: "/../../responses.yaml/#/components/responses/InternalServerError"
+    "503":
+      $ref: "/../../responses.yaml/#/components/responses/ServiceUnavailable"

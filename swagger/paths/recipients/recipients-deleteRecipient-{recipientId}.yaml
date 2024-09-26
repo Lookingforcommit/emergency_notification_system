@@ -1,0 +1,19 @@
+delete:
+  tags:
+    - recipients
+  summary: Delete a recipient
+  description: Delete a recipient
+  operationId: deleteRecipient
+  responses:
+    "200":
+      description: Successful operation
+    "400":
+      $ref: "/../../responses.yaml/#/components/responses/Unauthorized"
+    "404":
+      "description": "Recipient not found"
+    "429":
+      $ref: "/../../responses.yaml/#/components/responses/TooManyRequests"
+    "500":
+      $ref: "/../../responses.yaml/#/components/responses/InternalServerError"
+    "503":
+      $ref: "/../../responses.yaml/#/components/responses/ServiceUnavailable"

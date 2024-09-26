@@ -1,0 +1,31 @@
+put:
+  tags:
+    - groups
+  summary: Modify a recipient group
+  description: Modify a recipient group
+  operationId: modifyRecipientGroup
+  requestBody:
+    description: Replace recipient group contents with given json
+    content:
+      application/json:
+        schema:
+          $ref: "/../../schemas.yaml/#/components/schemas/RecipientGroupWithoutId"
+  responses:
+    "200":
+      description: Successful operation
+      content:
+        application/json:
+          schema:
+            $ref: "/../../schemas.yaml/#/components/schemas/RecipientGroupWithId"
+    "400":
+      $ref: "/../../responses.yaml/#/components/responses/Unauthorized"
+    "404":
+      "description": "Recipient group not found"
+    "422":
+      "description": "Invalid json"
+    "429":
+      $ref: "/../../responses.yaml/#/components/responses/TooManyRequests"
+    "500":
+      $ref: "/../../responses.yaml/#/components/responses/InternalServerError"
+    "503":
+      $ref: "/../../responses.yaml/#/components/responses/ServiceUnavailable"

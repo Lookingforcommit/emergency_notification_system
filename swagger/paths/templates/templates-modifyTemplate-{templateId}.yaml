@@ -1,0 +1,31 @@
+put:
+  tags:
+    - templates
+  summary: Modify a notification template
+  description: Modify a notification template
+  operationId: modifyNotificationTemplate
+  requestBody:
+    description: Replace notification template contents with given json
+    content:
+      application/json:
+        schema:
+          $ref: "/../../schemas.yaml/#/components/schemas/NotificationTemplateWithoutId"
+  responses:
+    "200":
+      description: Successful operation
+      content:
+        application/json:
+          schema:
+            $ref: "/../../schemas.yaml/#/components/schemas/NotificationTemplateWithId"
+    "400":
+      $ref: "/../../responses.yaml/#/components/responses/Unauthorized"
+    "404":
+      "description": "Notification template not found"
+    "422":
+      "description": "Invalid json"
+    "429":
+      $ref: "/../../responses.yaml/#/components/responses/TooManyRequests"
+    "500":
+      $ref: "/../../responses.yaml/#/components/responses/InternalServerError"
+    "503":
+      $ref: "/../../responses.yaml/#/components/responses/ServiceUnavailable"

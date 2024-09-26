@@ -1,0 +1,30 @@
+post:
+  tags:
+    - templates
+  summary: Create a notification template draft
+  description: Create a notification template draft for later sending
+  operationId: createNotificationTemplateDraft
+  requestBody:
+    description: Create a notification template draft based on given json
+    content:
+      application/json:
+        schema:
+          $ref: "/../../schemas.yaml/#/components/schemas/NotificationTemplateWithoutId"
+    required: true
+  responses:
+    "200":
+      description: Successful operation
+      content:
+        application/json:
+          schema:
+            $ref: "/../../schemas.yaml/#/components/schemas/NotificationTemplateDraft"
+    "400":
+      $ref: "/../../responses.yaml/#/components/responses/Unauthorized"
+    "422":
+      "description": "Invalid json"
+    "429":
+      $ref: "/../../responses.yaml/#/components/responses/TooManyRequests"
+    "500":
+      $ref: "/../../responses.yaml/#/components/responses/InternalServerError"
+    "503":
+      $ref: "/../../responses.yaml/#/components/responses/ServiceUnavailable"

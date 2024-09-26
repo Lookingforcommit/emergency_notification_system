@@ -1,0 +1,23 @@
+get:
+  tags:
+    - groups
+  summary: Get recipients of a group by its id
+  description: Get recipients of a group by its id
+  operationId: getGroupRecipients
+  responses:
+    "200":
+      description: Successful operation
+      content:
+        application/json:
+          schema:
+            $ref: "/../../schemas.yaml/#/components/schemas/RecipientWithIdList"
+    "400":
+      $ref: "/../../responses.yaml/#/components/responses/Unauthorized"
+    "404":
+      "description": "Recipient group not found"
+    "429":
+      $ref: "/../../responses.yaml/#/components/responses/TooManyRequests"
+    "500":
+      $ref: "/../../responses.yaml/#/components/responses/InternalServerError"
+    "503":
+      $ref: "/../../responses.yaml/#/components/responses/ServiceUnavailable"

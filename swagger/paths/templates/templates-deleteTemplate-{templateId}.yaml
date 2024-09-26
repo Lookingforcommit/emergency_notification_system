@@ -1,0 +1,19 @@
+delete:
+  tags:
+    - templates
+  summary: Delete a notification template
+  description: Delete a notification template
+  operationId: deleteNotificationTemplate
+  responses:
+    "200":
+      description: Successful operation
+    "400":
+      $ref: "/../../responses.yaml/#/components/responses/Unauthorized"
+    "404":
+      "description": "Notification template not found"
+    "429":
+      $ref: "/../../responses.yaml/#/components/responses/TooManyRequests"
+    "500":
+      $ref: "/../../responses.yaml/#/components/responses/InternalServerError"
+    "503":
+      $ref: "/../../responses.yaml/#/components/responses/ServiceUnavailable"

@@ -1,0 +1,29 @@
+put:
+  tags:
+    - user
+  summary: Refresh JWT token
+  description: Refresh JWT access token
+  operationId: refreshToken
+  requestBody:
+    description: Provide a valid JWT refresh token
+    content:
+      application/jwt:
+        schema:
+          $ref: "/../../schemas.yaml/#/components/schemas/JWTString"
+  responses:
+    "200":
+      description: Successful operation, returns a pair of new access token and refresh token
+      content:
+        application/jwt:
+          schema:
+            type: array
+            items:
+              $ref: "/../..//schemas.yaml/#/components/schemas/JWTString"
+    "404":
+      "description": "Incorrect refresh JWT"
+    "429":
+      $ref: "/../../responses.yaml/#/components/responses/TooManyRequests"
+    "500":
+      $ref: "/../../responses.yaml/#/components/responses/InternalServerError"
+    "503":
+      $ref: "/../../responses.yaml/#/components/responses/ServiceUnavailable"

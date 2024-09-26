@@ -1,0 +1,24 @@
+put:
+  tags:
+    - notifications
+  summary: Send notifications to all active recipient groups
+  description: Send notifications to all active recipient groups
+  operationId: sendNotifications
+  responses:
+    "200":
+      description: Successful operation
+      content:
+        application/json:
+          schema:
+            description: "Array of IDs identifying created notifications"
+            type: array
+            items:
+              type: string
+    "400":
+      $ref: "/../../responses.yaml/#/components/responses/Unauthorized"
+    "429":
+      $ref: "/../../responses.yaml/#/components/responses/TooManyRequests"
+    "500":
+      $ref: "/../../responses.yaml/#/components/responses/InternalServerError"
+    "503":
+      $ref: "/../../responses.yaml/#/components/responses/ServiceUnavailable"

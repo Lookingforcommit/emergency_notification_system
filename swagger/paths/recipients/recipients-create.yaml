@@ -1,0 +1,30 @@
+post:
+  tags:
+    - recipients
+  summary: Create a recipient draft
+  description: Create a recipient draft for later sending
+  operationId: createRecipientDraft
+  requestBody:
+    description: Create a recipient draft based on given json
+    content:
+      application/json:
+        schema:
+          $ref: "/../../schemas.yaml/#/components/schemas/RecipientWithoutId"
+    required: true
+  responses:
+    "200":
+      description: Successful operation
+      content:
+        application/json:
+          schema:
+            $ref: "/../../schemas.yaml/#/components/schemas/RecipientDraft"
+    "400":
+      $ref: "/../../responses.yaml/#/components/responses/Unauthorized"
+    "422":
+      "description": "Invalid json"
+    "429":
+      $ref: "/../../responses.yaml/#/components/responses/TooManyRequests"
+    "500":
+      $ref: "/../../responses.yaml/#/components/responses/InternalServerError"
+    "503":
+      $ref: "/../../responses.yaml/#/components/responses/ServiceUnavailable"

@@ -1,0 +1,40 @@
+put:
+  tags:
+    - groups
+  summary: Add a recipient to an existing group
+  description: Add a recipient to an existing group
+  operationId: AddRecipientToRecipientsGroup
+  responses:
+    "200":
+      description: Successful operation
+    "400":
+      $ref: "/../../responses.yaml/#/components/responses/Unauthorized"
+    "404":
+      "description": "Group or recipient not found"
+    "409":
+      "description": "Recipient is already present in the group"
+    "429":
+      $ref: "/../../responses.yaml/#/components/responses/TooManyRequests"
+    "500":
+      $ref: "/../../responses.yaml/#/components/responses/InternalServerError"
+    "503":
+      $ref: "/../../responses.yaml/#/components/responses/ServiceUnavailable"
+delete:
+  tags:
+    - groups
+  summary: Delete a recipient from recipients group
+  description: Delete a recipient from recipients group
+  operationId: DeleteRecipientFromRecipientsGroup
+  responses:
+    "200":
+      description: Successful operation
+    "400":
+      $ref: "/../../responses.yaml/#/components/responses/Unauthorized"
+    "404":
+      "description": "Group or recipient not found/No such recipient in the target group"
+    "429":
+      $ref: "/../../responses.yaml/#/components/responses/TooManyRequests"
+    "500":
+      $ref: "/../../responses.yaml/#/components/responses/InternalServerError"
+    "503":
+      $ref: "/../../responses.yaml/#/components/responses/ServiceUnavailable"

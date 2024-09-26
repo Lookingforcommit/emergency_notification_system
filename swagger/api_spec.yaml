@@ -1,0 +1,93 @@
+openapi: 3.0.3
+info:
+  title: Emergency notification system
+  description: |-
+    This is a REST API for emergency notification system project. 
+    You can find out more about it at [github](https://github.com/Lookingforcommit/emergency_notification_system).
+    All the endpoints (except for authorization and authentication) require user JWT token to be provided. JWT token 
+    should be provided in http headers in format: "Authorization: Bearer <token>"
+  contact:
+    email: artyomsh628691@gmail.com
+  version: 1.0.0
+tags:
+  - name: user
+    description: User authorization and authentication
+  - name: recipients
+    description: Manage your recipients
+  - name: groups
+    description: Manage your recipient groups
+  - name: templates
+    description: Manage your notification templates
+  - name: notifications
+    description: Notifications endpoints
+paths:
+  /user/create:
+    $ref: "paths/user/user-create.yaml"
+  /user/login:
+    $ref: "paths/user/user-login.yaml"
+  /user/modifyUser:
+    $ref: "paths/user/user-modifyUser.yaml"
+  /user/refreshToken:
+    $ref: "paths/user/user-refreshToken.yaml"
+  /user/logout:
+    $ref: "paths/user/user-logout.yaml"
+  /user:
+    $ref: "paths/user/user.yaml"
+
+  /recipients/create:
+    $ref: "/paths/recipients/recipients-create.yaml"
+  /recipients/{recipientId}:
+    $ref: "/paths/recipients/recipients-{recipientId}.yaml"
+  /recipients:
+    $ref: "/paths/recipients/recipients.yaml"
+  /recipients/confirmCreation/{draftId}:
+    $ref: "/paths/recipients/recipients-confirmCreation-{draftId}.yaml"
+  /recipients/modifyRecipient/{recipientId}:
+    $ref: "/paths/recipients/recipients-modifyRecipient-{recipientId}.yaml"
+  /recipients/deleteRecipient/{recipientId}:
+    $ref: "/paths/recipients/recipients-deleteRecipient-{recipientId}.yaml"
+
+  /groups/create:
+    $ref: "/paths/groups/groups-create.yaml"
+  /groups:
+    $ref: "/paths/groups/groups.yaml"
+  /groups/active:
+    $ref: "/paths/groups/groups-active.yaml"
+  /groups/{groupId}:
+    $ref: "/paths/groups/groups-{groupId}.yaml"
+  /groups/recipients/{groupId}:
+    $ref: "/paths/groups/groups-recipients-{groupId}.yaml"
+  /groups/confirmCreation/{draftId}:
+    $ref: "/paths/groups/groups-confirmCreation-{draftId}.yaml"
+  /groups/modifyGroup/{groupId}:
+    $ref: "/paths/groups/groups-modifyGroup-{groupId}.yaml"
+  /groups/{groupId}/recipients/{recipientId}:
+    $ref: "/paths/groups/groups-{groupId}-recipients-{recipientId}.yaml"
+  /groups/deleteGroup/{groupId}:
+    $ref: "/paths/groups/groups-deleteGroup-{groupId}.yaml"
+
+  /templates/create:
+    $ref: "/paths/templates/templates-create.yaml"
+  /templates/{templateId}:
+    $ref: "/paths/templates/templates-{templateId}.yaml"
+  /templates:
+    $ref: "/paths/templates/template.yaml"
+  /templates/confirmCreation/{draftId}:
+    $ref: "/paths/templates/templates-confirmCreation-{draftId}.yaml"
+  /templates/modifyTemplate/{templateId}:
+    $ref: "/paths/templates/templates-modifyTemplate-{templateId}.yaml"
+  /templates/deleteTemplate/{templateId}:
+    $ref: "/paths/templates/templates-deleteTemplate-{templateId}.yaml"
+
+  /notifications:
+    $ref: "paths/notifications/notifications.yaml"
+  /notifications/pending:
+    $ref: "paths/notifications/notifications-pending.yaml"
+  /notifications/completed:
+    $ref: "paths/notifications/notifications-completed.yaml"
+  /notifications/send:
+    $ref: "paths/notifications/notifications-send.yaml"
+  /notifications/{notificationId}:
+    $ref: "paths/notifications/notifications-{notificationId}.yaml"
+security:
+  - bearerAuth: []
