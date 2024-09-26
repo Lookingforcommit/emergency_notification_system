@@ -4,6 +4,13 @@ delete:
   summary: Delete a recipient
   description: Delete a recipient
   operationId: deleteRecipient
+  parameters:
+    - in: path
+      name: recipientId
+      schema:
+        type: string
+      required: true
+      description: String ID of a recipient to delete
   responses:
     "200":
       description: Successful operation

@@ -4,6 +4,13 @@ delete:
   summary: Delete a recipient group
   description: Delete a recipient group
   operationId: deleteRecipientGroup
+  parameters:
+    - in: path
+      name: groupId
+      schema:
+        type: string
+      required: true
+      description: String ID of a recipient group to delete
   responses:
     "200":
       description: Successful operation

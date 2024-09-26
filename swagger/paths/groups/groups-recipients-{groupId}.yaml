@@ -1,9 +1,16 @@
 get:
   tags:
     - groups
-  summary: Get recipients of a group by its id
-  description: Get recipients of a group by its id
+  summary: Get all recipients of a group by its id
+  description: Get all recipients of a group by its id
   operationId: getGroupRecipients
+  parameters:
+    - in: path
+      name: groupId
+      schema:
+        type: string
+      required: true
+      description: String ID of a group to get recipients from
   responses:
     "200":
       description: Successful operation

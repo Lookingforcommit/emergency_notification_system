@@ -4,6 +4,13 @@ put:
   summary: Modify a recipient
   description: Modify a recipient
   operationId: modifyRecipient
+  parameters:
+    - in: path
+      name: recipientId
+      schema:
+        type: string
+      required: true
+      description: String ID of a recipient to modify
   requestBody:
     description: Replace recipient contents with given json
     content:

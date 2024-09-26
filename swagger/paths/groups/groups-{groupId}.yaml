@@ -4,6 +4,13 @@ get:
   summary: Get a recipient group by its id
   description: Get a recipient group by its id
   operationId: getRecipientGroup
+  parameters:
+    - in: path
+      name: groupId
+      schema:
+        type: string
+      required: true
+      description: String ID of a recipient group to get
   responses:
     "200":
       description: Successful operation

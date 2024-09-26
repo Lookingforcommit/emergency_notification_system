@@ -4,6 +4,13 @@ put:
   summary: Modify a recipient group
   description: Modify a recipient group
   operationId: modifyRecipientGroup
+  parameters:
+    - in: path
+      name: groupId
+      schema:
+        type: string
+      required: true
+      description: String ID of a recipient group to modify
   requestBody:
     description: Replace recipient group contents with given json
     content:

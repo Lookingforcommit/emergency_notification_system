@@ -4,6 +4,13 @@ get:
   summary: Get a recipient by its id
   description: Get a recipient by its id
   operationId: getRecipient
+  parameters:
+    - in: path
+      name: recipientId
+      schema:
+        type: string
+      required: true
+      description: String ID of a recipient to get
   responses:
     "200":
       description: Successful operation

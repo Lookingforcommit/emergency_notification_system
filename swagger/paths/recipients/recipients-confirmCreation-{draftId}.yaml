@@ -4,6 +4,13 @@ put:
   summary: Confirm a recipient creation
   description: Confirm previously created recipient draft
   operationId: confirmRecipientCreation
+  parameters:
+    - in: path
+      name: draftId
+      schema:
+        type: string
+      required: true
+      description: String ID of a draft to confirm
   responses:
     "200":
       description: Successful operation
