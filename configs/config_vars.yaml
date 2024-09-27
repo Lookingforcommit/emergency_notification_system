@@ -6,4 +6,4 @@ is-testing: false
 
 server-port: 8080
 
-dbconnection: 'postgresql://emergency_notification_system_user:password@localhost:5432/emergency_notification_system_db_1'
+dbconnection: 'postgresql://emergency_notification_system_user:password@localhost:5432/emergency_notification_system_ens_schema'

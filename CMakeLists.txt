@@ -3,7 +3,7 @@ project(emergency_notification_system CXX)
 
 
 # Adding userver dependency
-find_package(userver COMPONENTS core postgresql QUIET)
+find_package(userver COMPONENTS core postgresql chaotic QUIET)
 if(NOT userver_FOUND)  # Fallback to subdirectory usage
     # Enable userver libraries that are needed in this project
     set(USERVER_FEATURE_POSTGRESQL ON CACHE BOOL "" FORCE)
@@ -26,16 +26,18 @@ userver_setup_environment()
 
 # Common sources
 add_library(${PROJECT_NAME}_objs OBJECT
-    src/hello.hpp
-    src/hello.cpp
+        src/hello.hpp
+        src/hello.cpp
+        src/schemas/schemas.cpp
+        src/schemas/schemas.hpp
+        src/schemas/schemas_fwd.hpp
+        src/schemas/schemas_parsers.ipp
 )
 target_link_libraries(${PROJECT_NAME}_objs PUBLIC userver::postgresql)
-
 
 # The Service
 add_executable(${PROJECT_NAME} src/main.cpp)
 target_link_libraries(${PROJECT_NAME} PRIVATE ${PROJECT_NAME}_objs)
-
 
 # Unit Tests
 add_executable(${PROJECT_NAME}_unittest
@@ -72,3 +74,24 @@ file(GLOB CONFIGS_FILES ${CMAKE_CURRENT_SOURCE_DIR}/configs/*.yaml ${CMAKE_CURRE
 
 install(TARGETS ${PROJECT_NAME} DESTINATION ${CMAKE_INSTALL_BINDIR} COMPONENT ${PROJECT_NAME})
 install(FILES ${CONFIGS_FILES} DESTINATION ${CMAKE_INSTALL_SYSCONFDIR}/${PROJECT_NAME} COMPONENT ${PROJECT_NAME})
+
+
+# Chaotic codegen
+file(GLOB_RECURSE SCHEMAS ${CMAKE_CURRENT_SOURCE_DIR}/swagger/schemas.yaml)
+userver_target_generate_chaotic(${PROJECT_NAME}-chgen
+        ARGS
+        # Map '/components/schemas/*' JSONSchema types to C++ types in 'samples::hello' namespace
+        -n "/components/schemas/([^/]*)/=schemas::{0}"
+        -f "(.*)={0}"
+        # Don't call clang-format
+        --clang-format=
+        # Generate serializers for responses
+        --generate-serializers
+        OUTPUT_DIR
+        ${CMAKE_CURRENT_BINARY_DIR}/src
+        SCHEMAS
+        ${SCHEMAS}
+        RELATIVE_TO
+        ${CMAKE_CURRENT_SOURCE_DIR}
+)
+target_link_libraries(${PROJECT_NAME}_objs PUBLIC ${PROJECT_NAME}-chgen)
