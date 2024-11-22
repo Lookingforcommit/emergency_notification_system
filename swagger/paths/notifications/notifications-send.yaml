@@ -14,7 +14,7 @@ put:
             type: array
             items:
               type: string
-    "400":
+    "401":
       $ref: "/../../responses.yaml/#/components/responses/Unauthorized"
     "429":
       $ref: "/../../responses.yaml/#/components/responses/TooManyRequests"

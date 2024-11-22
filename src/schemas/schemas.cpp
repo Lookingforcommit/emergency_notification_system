@@ -8,14 +8,14 @@
 
 namespace schemas {
 
-bool operator==(const schemas::BaseNotificationTemplate& lhs,
-                const schemas::BaseNotificationTemplate& rhs) {
+bool operator==(const schemas::BaseNotificationTemplate &lhs,
+                const schemas::BaseNotificationTemplate &rhs) {
   return lhs.name == rhs.name && lhs.message_text == rhs.message_text;
 }
 
-USERVER_NAMESPACE::logging::LogHelper& operator<<(
-    USERVER_NAMESPACE::logging::LogHelper& lh,
-    const schemas::BaseNotificationTemplate& value) {
+USERVER_NAMESPACE::logging::LogHelper &operator<<(
+    USERVER_NAMESPACE::logging::LogHelper &lh,
+    const schemas::BaseNotificationTemplate &value) {
   return lh << ToString(USERVER_NAMESPACE::formats::json::ValueBuilder(value)
                             .ExtractValue());
 }
@@ -23,12 +23,12 @@ USERVER_NAMESPACE::logging::LogHelper& operator<<(
 BaseNotificationTemplate Parse(
     USERVER_NAMESPACE::formats::json::Value json,
     USERVER_NAMESPACE::formats::parse::To<schemas::BaseNotificationTemplate>
-        to) {
+    to) {
   return Parse<USERVER_NAMESPACE::formats::json::Value>(std::move(json), to);
 }
 
 USERVER_NAMESPACE::formats::json::Value Serialize(
-    [[maybe_unused]] const schemas::BaseNotificationTemplate& value,
+    [[maybe_unused]] const schemas::BaseNotificationTemplate &value,
     USERVER_NAMESPACE::formats::serialize::To<
         USERVER_NAMESPACE::formats::json::Value>) {
   USERVER_NAMESPACE::formats::json::ValueBuilder vb =
@@ -44,16 +44,16 @@ USERVER_NAMESPACE::formats::json::Value Serialize(
   return vb.ExtractValue();
 }
 
-bool operator==(const schemas::BaseRecipient& lhs,
-                const schemas::BaseRecipient& rhs) {
+bool operator==(const schemas::BaseRecipient &lhs,
+                const schemas::BaseRecipient &rhs) {
   return lhs.name == rhs.name && lhs.email == rhs.email &&
-         lhs.phone_number == rhs.phone_number &&
-         lhs.telegram_username == rhs.telegram_username;
+      lhs.phone_number == rhs.phone_number &&
+      lhs.telegram_username == rhs.telegram_username;
 }
 
-USERVER_NAMESPACE::logging::LogHelper& operator<<(
-    USERVER_NAMESPACE::logging::LogHelper& lh,
-    const schemas::BaseRecipient& value) {
+USERVER_NAMESPACE::logging::LogHelper &operator<<(
+    USERVER_NAMESPACE::logging::LogHelper &lh,
+    const schemas::BaseRecipient &value) {
   return lh << ToString(USERVER_NAMESPACE::formats::json::ValueBuilder(value)
                             .ExtractValue());
 }
@@ -65,7 +65,7 @@ BaseRecipient Parse(
 }
 
 USERVER_NAMESPACE::formats::json::Value Serialize(
-    [[maybe_unused]] const schemas::BaseRecipient& value,
+    [[maybe_unused]] const schemas::BaseRecipient &value,
     USERVER_NAMESPACE::formats::serialize::To<
         USERVER_NAMESPACE::formats::json::Value>) {
   USERVER_NAMESPACE::formats::json::ValueBuilder vb =
@@ -92,16 +92,16 @@ USERVER_NAMESPACE::formats::json::Value Serialize(
   return vb.ExtractValue();
 }
 
-bool operator==(const schemas::BaseRecipientGroup& lhs,
-                const schemas::BaseRecipientGroup& rhs) {
+bool operator==(const schemas::BaseRecipientGroup &lhs,
+                const schemas::BaseRecipientGroup &rhs) {
   return lhs.name == rhs.name &&
-         lhs.notification_template_id == rhs.notification_template_id &&
-         lhs.active == rhs.active;
+      lhs.notification_template_id == rhs.notification_template_id &&
+      lhs.active == rhs.active;
 }
 
-USERVER_NAMESPACE::logging::LogHelper& operator<<(
-    USERVER_NAMESPACE::logging::LogHelper& lh,
-    const schemas::BaseRecipientGroup& value) {
+USERVER_NAMESPACE::logging::LogHelper &operator<<(
+    USERVER_NAMESPACE::logging::LogHelper &lh,
+    const schemas::BaseRecipientGroup &value) {
   return lh << ToString(USERVER_NAMESPACE::formats::json::ValueBuilder(value)
                             .ExtractValue());
 }
@@ -113,7 +113,7 @@ BaseRecipientGroup Parse(
 }
 
 USERVER_NAMESPACE::formats::json::Value Serialize(
-    [[maybe_unused]] const schemas::BaseRecipientGroup& value,
+    [[maybe_unused]] const schemas::BaseRecipientGroup &value,
     USERVER_NAMESPACE::formats::serialize::To<
         USERVER_NAMESPACE::formats::json::Value>) {
   USERVER_NAMESPACE::formats::json::ValueBuilder vb =
@@ -132,24 +132,24 @@ USERVER_NAMESPACE::formats::json::Value Serialize(
   return vb.ExtractValue();
 }
 
-bool operator==(const schemas::Notification& lhs,
-                const schemas::Notification& rhs) {
+bool operator==(const schemas::Notification &lhs,
+                const schemas::Notification &rhs) {
   return lhs.master_id == rhs.master_id &&
-         lhs.recipient_id == rhs.recipient_id && lhs.group_id == rhs.group_id &&
-         lhs.type == rhs.type &&
-         lhs.creation_timestamp == rhs.creation_timestamp &&
-         lhs.completion_timestamp == rhs.completion_timestamp;
+      lhs.recipient_id == rhs.recipient_id && lhs.group_id == rhs.group_id &&
+      lhs.type == rhs.type &&
+      lhs.creation_timestamp == rhs.creation_timestamp &&
+      lhs.completion_timestamp == rhs.completion_timestamp;
 }
 
-USERVER_NAMESPACE::logging::LogHelper& operator<<(
-    USERVER_NAMESPACE::logging::LogHelper& lh,
-    const schemas::Notification::Type& value) {
+USERVER_NAMESPACE::logging::LogHelper &operator<<(
+    USERVER_NAMESPACE::logging::LogHelper &lh,
+    const schemas::Notification::Type &value) {
   return lh << ToString(value);
 }
 
-USERVER_NAMESPACE::logging::LogHelper& operator<<(
-    USERVER_NAMESPACE::logging::LogHelper& lh,
-    const schemas::Notification& value) {
+USERVER_NAMESPACE::logging::LogHelper &operator<<(
+    USERVER_NAMESPACE::logging::LogHelper &lh,
+    const schemas::Notification &value) {
   return lh << ToString(USERVER_NAMESPACE::formats::json::ValueBuilder(value)
                             .ExtractValue());
 }
@@ -185,7 +185,7 @@ schemas::Notification::Type Parse(
 }
 
 USERVER_NAMESPACE::formats::json::Value Serialize(
-    const schemas::Notification::Type& value,
+    const schemas::Notification::Type &value,
     USERVER_NAMESPACE::formats::serialize::To<
         USERVER_NAMESPACE::formats::json::Value>) {
   return USERVER_NAMESPACE::formats::json::ValueBuilder(ToString(value))
@@ -193,7 +193,7 @@ USERVER_NAMESPACE::formats::json::Value Serialize(
 }
 
 USERVER_NAMESPACE::formats::json::Value Serialize(
-    [[maybe_unused]] const schemas::Notification& value,
+    [[maybe_unused]] const schemas::Notification &value,
     USERVER_NAMESPACE::formats::serialize::To<
         USERVER_NAMESPACE::formats::json::Value>) {
   USERVER_NAMESPACE::formats::json::ValueBuilder vb =
@@ -231,29 +231,29 @@ std::string ToString(schemas::Notification::Type value) {
   throw std::runtime_error("Bad enum value");
 }
 
-bool operator==(const schemas::ReturnedNotificationTemplate_P1& lhs,
-                const schemas::ReturnedNotificationTemplate_P1& rhs) {
+bool operator==(const schemas::ReturnedNotificationTemplate_P1 &lhs,
+                const schemas::ReturnedNotificationTemplate_P1 &rhs) {
   return lhs.master_id == rhs.master_id && lhs.extra == rhs.extra;
 }
 
-bool operator==(const schemas::ReturnedNotificationTemplate& lhs,
-                const schemas::ReturnedNotificationTemplate& rhs) {
-  return static_cast<const schemas::BaseNotificationTemplate&>(lhs) ==
-             static_cast<const schemas::BaseNotificationTemplate&>(rhs) &&
-         static_cast<const schemas::ReturnedNotificationTemplate_P1&>(lhs) ==
-             static_cast<const schemas::ReturnedNotificationTemplate_P1&>(rhs);
+bool operator==(const schemas::ReturnedNotificationTemplate &lhs,
+                const schemas::ReturnedNotificationTemplate &rhs) {
+  return static_cast<const schemas::BaseNotificationTemplate &>(lhs) ==
+      static_cast<const schemas::BaseNotificationTemplate &>(rhs) &&
+      static_cast<const schemas::ReturnedNotificationTemplate_P1 &>(lhs) ==
+          static_cast<const schemas::ReturnedNotificationTemplate_P1 &>(rhs);
 }
 
-USERVER_NAMESPACE::logging::LogHelper& operator<<(
-    USERVER_NAMESPACE::logging::LogHelper& lh,
-    const schemas::ReturnedNotificationTemplate_P1& value) {
+USERVER_NAMESPACE::logging::LogHelper &operator<<(
+    USERVER_NAMESPACE::logging::LogHelper &lh,
+    const schemas::ReturnedNotificationTemplate_P1 &value) {
   return lh << ToString(USERVER_NAMESPACE::formats::json::ValueBuilder(value)
                             .ExtractValue());
 }
 
-USERVER_NAMESPACE::logging::LogHelper& operator<<(
-    USERVER_NAMESPACE::logging::LogHelper& lh,
-    const schemas::ReturnedNotificationTemplate& value) {
+USERVER_NAMESPACE::logging::LogHelper &operator<<(
+    USERVER_NAMESPACE::logging::LogHelper &lh,
+    const schemas::ReturnedNotificationTemplate &value) {
   return lh << ToString(USERVER_NAMESPACE::formats::json::ValueBuilder(value)
                             .ExtractValue());
 }
@@ -262,19 +262,19 @@ ReturnedNotificationTemplate_P1 Parse(
     USERVER_NAMESPACE::formats::json::Value json,
     USERVER_NAMESPACE::formats::parse::To<
         schemas::ReturnedNotificationTemplate_P1>
-        to) {
+    to) {
   return Parse<USERVER_NAMESPACE::formats::json::Value>(std::move(json), to);
 }
 
 ReturnedNotificationTemplate Parse(
     USERVER_NAMESPACE::formats::json::Value json,
     USERVER_NAMESPACE::formats::parse::To<schemas::ReturnedNotificationTemplate>
-        to) {
+    to) {
   return Parse<USERVER_NAMESPACE::formats::json::Value>(std::move(json), to);
 }
 
 USERVER_NAMESPACE::formats::json::Value Serialize(
-    [[maybe_unused]] const schemas::ReturnedNotificationTemplate_P1& value,
+    [[maybe_unused]] const schemas::ReturnedNotificationTemplate_P1 &value,
     USERVER_NAMESPACE::formats::serialize::To<
         USERVER_NAMESPACE::formats::json::Value>) {
   USERVER_NAMESPACE::formats::json::ValueBuilder vb = value.extra;
@@ -286,7 +286,7 @@ USERVER_NAMESPACE::formats::json::Value Serialize(
 }
 
 USERVER_NAMESPACE::formats::json::Value Serialize(
-    const schemas::ReturnedNotificationTemplate& value,
+    const schemas::ReturnedNotificationTemplate &value,
     USERVER_NAMESPACE::formats::serialize::To<
         USERVER_NAMESPACE::formats::json::Value>) {
   USERVER_NAMESPACE::formats::json::ValueBuilder vb =
@@ -304,29 +304,29 @@ USERVER_NAMESPACE::formats::json::Value Serialize(
   return vb.ExtractValue();
 }
 
-bool operator==(const schemas::NotificationTemplateDraft_P1& lhs,
-                const schemas::NotificationTemplateDraft_P1& rhs) {
+bool operator==(const schemas::NotificationTemplateDraft_P1 &lhs,
+                const schemas::NotificationTemplateDraft_P1 &rhs) {
   return lhs.draft_id == rhs.draft_id && lhs.extra == rhs.extra;
 }
 
-bool operator==(const schemas::NotificationTemplateDraft& lhs,
-                const schemas::NotificationTemplateDraft& rhs) {
-  return static_cast<const schemas::ReturnedNotificationTemplate&>(lhs) ==
-             static_cast<const schemas::ReturnedNotificationTemplate&>(rhs) &&
-         static_cast<const schemas::NotificationTemplateDraft_P1&>(lhs) ==
-             static_cast<const schemas::NotificationTemplateDraft_P1&>(rhs);
+bool operator==(const schemas::NotificationTemplateDraft &lhs,
+                const schemas::NotificationTemplateDraft &rhs) {
+  return static_cast<const schemas::ReturnedNotificationTemplate &>(lhs) ==
+      static_cast<const schemas::ReturnedNotificationTemplate &>(rhs) &&
+      static_cast<const schemas::NotificationTemplateDraft_P1 &>(lhs) ==
+          static_cast<const schemas::NotificationTemplateDraft_P1 &>(rhs);
 }
 
-USERVER_NAMESPACE::logging::LogHelper& operator<<(
-    USERVER_NAMESPACE::logging::LogHelper& lh,
-    const schemas::NotificationTemplateDraft_P1& value) {
+USERVER_NAMESPACE::logging::LogHelper &operator<<(
+    USERVER_NAMESPACE::logging::LogHelper &lh,
+    const schemas::NotificationTemplateDraft_P1 &value) {
   return lh << ToString(USERVER_NAMESPACE::formats::json::ValueBuilder(value)
                             .ExtractValue());
 }
 
-USERVER_NAMESPACE::logging::LogHelper& operator<<(
-    USERVER_NAMESPACE::logging::LogHelper& lh,
-    const schemas::NotificationTemplateDraft& value) {
+USERVER_NAMESPACE::logging::LogHelper &operator<<(
+    USERVER_NAMESPACE::logging::LogHelper &lh,
+    const schemas::NotificationTemplateDraft &value) {
   return lh << ToString(USERVER_NAMESPACE::formats::json::ValueBuilder(value)
                             .ExtractValue());
 }
@@ -335,19 +335,19 @@ NotificationTemplateDraft_P1 Parse(
     USERVER_NAMESPACE::formats::json::Value json,
     USERVER_NAMESPACE::formats::parse::To<
         schemas::NotificationTemplateDraft_P1>
-        to) {
+    to) {
   return Parse<USERVER_NAMESPACE::formats::json::Value>(std::move(json), to);
 }
 
 NotificationTemplateDraft Parse(
     USERVER_NAMESPACE::formats::json::Value json,
     USERVER_NAMESPACE::formats::parse::To<schemas::NotificationTemplateDraft>
-        to) {
+    to) {
   return Parse<USERVER_NAMESPACE::formats::json::Value>(std::move(json), to);
 }
 
 USERVER_NAMESPACE::formats::json::Value Serialize(
-    [[maybe_unused]] const schemas::NotificationTemplateDraft_P1& value,
+    [[maybe_unused]] const schemas::NotificationTemplateDraft_P1 &value,
     USERVER_NAMESPACE::formats::serialize::To<
         USERVER_NAMESPACE::formats::json::Value>) {
   USERVER_NAMESPACE::formats::json::ValueBuilder vb = value.extra;
@@ -359,7 +359,7 @@ USERVER_NAMESPACE::formats::json::Value Serialize(
 }
 
 USERVER_NAMESPACE::formats::json::Value Serialize(
-    const schemas::NotificationTemplateDraft& value,
+    const schemas::NotificationTemplateDraft &value,
     USERVER_NAMESPACE::formats::serialize::To<
         USERVER_NAMESPACE::formats::json::Value>) {
   USERVER_NAMESPACE::formats::json::ValueBuilder vb =
@@ -377,30 +377,30 @@ USERVER_NAMESPACE::formats::json::Value Serialize(
   return vb.ExtractValue();
 }
 
-bool operator==(const schemas::NotificationTemplateWithId_P1& lhs,
-                const schemas::NotificationTemplateWithId_P1& rhs) {
+bool operator==(const schemas::NotificationTemplateWithId_P1 &lhs,
+                const schemas::NotificationTemplateWithId_P1 &rhs) {
   return lhs.notification_template_id == rhs.notification_template_id &&
-         lhs.extra == rhs.extra;
+      lhs.extra == rhs.extra;
 }
 
-bool operator==(const schemas::NotificationTemplateWithId& lhs,
-                const schemas::NotificationTemplateWithId& rhs) {
-  return static_cast<const schemas::ReturnedNotificationTemplate&>(lhs) ==
-             static_cast<const schemas::ReturnedNotificationTemplate&>(rhs) &&
-         static_cast<const schemas::NotificationTemplateWithId_P1&>(lhs) ==
-             static_cast<const schemas::NotificationTemplateWithId_P1&>(rhs);
+bool operator==(const schemas::NotificationTemplateWithId &lhs,
+                const schemas::NotificationTemplateWithId &rhs) {
+  return static_cast<const schemas::ReturnedNotificationTemplate &>(lhs) ==
+      static_cast<const schemas::ReturnedNotificationTemplate &>(rhs) &&
+      static_cast<const schemas::NotificationTemplateWithId_P1 &>(lhs) ==
+          static_cast<const schemas::NotificationTemplateWithId_P1 &>(rhs);
 }
 
-USERVER_NAMESPACE::logging::LogHelper& operator<<(
-    USERVER_NAMESPACE::logging::LogHelper& lh,
-    const schemas::NotificationTemplateWithId_P1& value) {
+USERVER_NAMESPACE::logging::LogHelper &operator<<(
+    USERVER_NAMESPACE::logging::LogHelper &lh,
+    const schemas::NotificationTemplateWithId_P1 &value) {
   return lh << ToString(USERVER_NAMESPACE::formats::json::ValueBuilder(value)
                             .ExtractValue());
 }
 
-USERVER_NAMESPACE::logging::LogHelper& operator<<(
-    USERVER_NAMESPACE::logging::LogHelper& lh,
-    const schemas::NotificationTemplateWithId& value) {
+USERVER_NAMESPACE::logging::LogHelper &operator<<(
+    USERVER_NAMESPACE::logging::LogHelper &lh,
+    const schemas::NotificationTemplateWithId &value) {
   return lh << ToString(USERVER_NAMESPACE::formats::json::ValueBuilder(value)
                             .ExtractValue());
 }
@@ -409,19 +409,19 @@ NotificationTemplateWithId_P1 Parse(
     USERVER_NAMESPACE::formats::json::Value json,
     USERVER_NAMESPACE::formats::parse::To<
         schemas::NotificationTemplateWithId_P1>
-        to) {
+    to) {
   return Parse<USERVER_NAMESPACE::formats::json::Value>(std::move(json), to);
 }
 
 NotificationTemplateWithId Parse(
     USERVER_NAMESPACE::formats::json::Value json,
     USERVER_NAMESPACE::formats::parse::To<schemas::NotificationTemplateWithId>
-        to) {
+    to) {
   return Parse<USERVER_NAMESPACE::formats::json::Value>(std::move(json), to);
 }
 
 USERVER_NAMESPACE::formats::json::Value Serialize(
-    [[maybe_unused]] const schemas::NotificationTemplateWithId_P1& value,
+    [[maybe_unused]] const schemas::NotificationTemplateWithId_P1 &value,
     USERVER_NAMESPACE::formats::serialize::To<
         USERVER_NAMESPACE::formats::json::Value>) {
   USERVER_NAMESPACE::formats::json::ValueBuilder vb = value.extra;
@@ -434,7 +434,7 @@ USERVER_NAMESPACE::formats::json::Value Serialize(
 }
 
 USERVER_NAMESPACE::formats::json::Value Serialize(
-    const schemas::NotificationTemplateWithId& value,
+    const schemas::NotificationTemplateWithId &value,
     USERVER_NAMESPACE::formats::serialize::To<
         USERVER_NAMESPACE::formats::json::Value>) {
   USERVER_NAMESPACE::formats::json::ValueBuilder vb =
@@ -452,35 +452,35 @@ USERVER_NAMESPACE::formats::json::Value Serialize(
   return vb.ExtractValue();
 }
 
-bool operator==(const schemas::NotificationTemplateWithoutId_P1& lhs,
-                const schemas::NotificationTemplateWithoutId_P1& rhs) {
-  (void)lhs;
-  (void)rhs;
+bool operator==(const schemas::NotificationTemplateWithoutId_P1 &lhs,
+                const schemas::NotificationTemplateWithoutId_P1 &rhs) {
+  (void) lhs;
+  (void) rhs;
 
   return
 
       lhs.extra == rhs.extra;
 }
 
-bool operator==(const schemas::NotificationTemplateWithoutId& lhs,
-                const schemas::NotificationTemplateWithoutId& rhs) {
-  return static_cast<const schemas::BaseNotificationTemplate&>(lhs) ==
-             static_cast<const schemas::BaseNotificationTemplate&>(rhs) &&
-         static_cast<const schemas::NotificationTemplateWithoutId_P1&>(lhs) ==
-             static_cast<const schemas::NotificationTemplateWithoutId_P1&>(
-                 rhs);
+bool operator==(const schemas::NotificationTemplateWithoutId &lhs,
+                const schemas::NotificationTemplateWithoutId &rhs) {
+  return static_cast<const schemas::BaseNotificationTemplate &>(lhs) ==
+      static_cast<const schemas::BaseNotificationTemplate &>(rhs) &&
+      static_cast<const schemas::NotificationTemplateWithoutId_P1 &>(lhs) ==
+          static_cast<const schemas::NotificationTemplateWithoutId_P1 &>(
+              rhs);
 }
 
-USERVER_NAMESPACE::logging::LogHelper& operator<<(
-    USERVER_NAMESPACE::logging::LogHelper& lh,
-    const schemas::NotificationTemplateWithoutId_P1& value) {
+USERVER_NAMESPACE::logging::LogHelper &operator<<(
+    USERVER_NAMESPACE::logging::LogHelper &lh,
+    const schemas::NotificationTemplateWithoutId_P1 &value) {
   return lh << ToString(USERVER_NAMESPACE::formats::json::ValueBuilder(value)
                             .ExtractValue());
 }
 
-USERVER_NAMESPACE::logging::LogHelper& operator<<(
-    USERVER_NAMESPACE::logging::LogHelper& lh,
-    const schemas::NotificationTemplateWithoutId& value) {
+USERVER_NAMESPACE::logging::LogHelper &operator<<(
+    USERVER_NAMESPACE::logging::LogHelper &lh,
+    const schemas::NotificationTemplateWithoutId &value) {
   return lh << ToString(USERVER_NAMESPACE::formats::json::ValueBuilder(value)
                             .ExtractValue());
 }
@@ -489,7 +489,7 @@ NotificationTemplateWithoutId_P1 Parse(
     USERVER_NAMESPACE::formats::json::Value json,
     USERVER_NAMESPACE::formats::parse::To<
         schemas::NotificationTemplateWithoutId_P1>
-        to) {
+    to) {
   return Parse<USERVER_NAMESPACE::formats::json::Value>(std::move(json), to);
 }
 
@@ -497,12 +497,12 @@ NotificationTemplateWithoutId Parse(
     USERVER_NAMESPACE::formats::json::Value json,
     USERVER_NAMESPACE::formats::parse::To<
         schemas::NotificationTemplateWithoutId>
-        to) {
+    to) {
   return Parse<USERVER_NAMESPACE::formats::json::Value>(std::move(json), to);
 }
 
 USERVER_NAMESPACE::formats::json::Value Serialize(
-    [[maybe_unused]] const schemas::NotificationTemplateWithoutId_P1& value,
+    [[maybe_unused]] const schemas::NotificationTemplateWithoutId_P1 &value,
     USERVER_NAMESPACE::formats::serialize::To<
         USERVER_NAMESPACE::formats::json::Value>) {
   USERVER_NAMESPACE::formats::json::ValueBuilder vb = value.extra;
@@ -511,7 +511,7 @@ USERVER_NAMESPACE::formats::json::Value Serialize(
 }
 
 USERVER_NAMESPACE::formats::json::Value Serialize(
-    const schemas::NotificationTemplateWithoutId& value,
+    const schemas::NotificationTemplateWithoutId &value,
     USERVER_NAMESPACE::formats::serialize::To<
         USERVER_NAMESPACE::formats::json::Value>) {
   USERVER_NAMESPACE::formats::json::ValueBuilder vb =
@@ -529,29 +529,29 @@ USERVER_NAMESPACE::formats::json::Value Serialize(
   return vb.ExtractValue();
 }
 
-bool operator==(const schemas::ReturnedRecipient_P1& lhs,
-                const schemas::ReturnedRecipient_P1& rhs) {
+bool operator==(const schemas::ReturnedRecipient_P1 &lhs,
+                const schemas::ReturnedRecipient_P1 &rhs) {
   return lhs.master_id == rhs.master_id && lhs.extra == rhs.extra;
 }
 
-bool operator==(const schemas::ReturnedRecipient& lhs,
-                const schemas::ReturnedRecipient& rhs) {
-  return static_cast<const schemas::BaseRecipient&>(lhs) ==
-             static_cast<const schemas::BaseRecipient&>(rhs) &&
-         static_cast<const schemas::ReturnedRecipient_P1&>(lhs) ==
-             static_cast<const schemas::ReturnedRecipient_P1&>(rhs);
+bool operator==(const schemas::ReturnedRecipient &lhs,
+                const schemas::ReturnedRecipient &rhs) {
+  return static_cast<const schemas::BaseRecipient &>(lhs) ==
+      static_cast<const schemas::BaseRecipient &>(rhs) &&
+      static_cast<const schemas::ReturnedRecipient_P1 &>(lhs) ==
+          static_cast<const schemas::ReturnedRecipient_P1 &>(rhs);
 }
 
-USERVER_NAMESPACE::logging::LogHelper& operator<<(
-    USERVER_NAMESPACE::logging::LogHelper& lh,
-    const schemas::ReturnedRecipient_P1& value) {
+USERVER_NAMESPACE::logging::LogHelper &operator<<(
+    USERVER_NAMESPACE::logging::LogHelper &lh,
+    const schemas::ReturnedRecipient_P1 &value) {
   return lh << ToString(USERVER_NAMESPACE::formats::json::ValueBuilder(value)
                             .ExtractValue());
 }
 
-USERVER_NAMESPACE::logging::LogHelper& operator<<(
-    USERVER_NAMESPACE::logging::LogHelper& lh,
-    const schemas::ReturnedRecipient& value) {
+USERVER_NAMESPACE::logging::LogHelper &operator<<(
+    USERVER_NAMESPACE::logging::LogHelper &lh,
+    const schemas::ReturnedRecipient &value) {
   return lh << ToString(USERVER_NAMESPACE::formats::json::ValueBuilder(value)
                             .ExtractValue());
 }
@@ -569,7 +569,7 @@ ReturnedRecipient Parse(
 }
 
 USERVER_NAMESPACE::formats::json::Value Serialize(
-    [[maybe_unused]] const schemas::ReturnedRecipient_P1& value,
+    [[maybe_unused]] const schemas::ReturnedRecipient_P1 &value,
     USERVER_NAMESPACE::formats::serialize::To<
         USERVER_NAMESPACE::formats::json::Value>) {
   USERVER_NAMESPACE::formats::json::ValueBuilder vb = value.extra;
@@ -581,7 +581,7 @@ USERVER_NAMESPACE::formats::json::Value Serialize(
 }
 
 USERVER_NAMESPACE::formats::json::Value Serialize(
-    const schemas::ReturnedRecipient& value,
+    const schemas::ReturnedRecipient &value,
     USERVER_NAMESPACE::formats::serialize::To<
         USERVER_NAMESPACE::formats::json::Value>) {
   USERVER_NAMESPACE::formats::json::ValueBuilder vb =
@@ -599,29 +599,29 @@ USERVER_NAMESPACE::formats::json::Value Serialize(
   return vb.ExtractValue();
 }
 
-bool operator==(const schemas::RecipientDraft_P1& lhs,
-                const schemas::RecipientDraft_P1& rhs) {
+bool operator==(const schemas::RecipientDraft_P1 &lhs,
+                const schemas::RecipientDraft_P1 &rhs) {
   return lhs.draft_id == rhs.draft_id && lhs.extra == rhs.extra;
 }
 
-bool operator==(const schemas::RecipientDraft& lhs,
-                const schemas::RecipientDraft& rhs) {
-  return static_cast<const schemas::ReturnedRecipient&>(lhs) ==
-             static_cast<const schemas::ReturnedRecipient&>(rhs) &&
-         static_cast<const schemas::RecipientDraft_P1&>(lhs) ==
-             static_cast<const schemas::RecipientDraft_P1&>(rhs);
+bool operator==(const schemas::RecipientDraft &lhs,
+                const schemas::RecipientDraft &rhs) {
+  return static_cast<const schemas::ReturnedRecipient &>(lhs) ==
+      static_cast<const schemas::ReturnedRecipient &>(rhs) &&
+      static_cast<const schemas::RecipientDraft_P1 &>(lhs) ==
+          static_cast<const schemas::RecipientDraft_P1 &>(rhs);
 }
 
-USERVER_NAMESPACE::logging::LogHelper& operator<<(
-    USERVER_NAMESPACE::logging::LogHelper& lh,
-    const schemas::RecipientDraft_P1& value) {
+USERVER_NAMESPACE::logging::LogHelper &operator<<(
+    USERVER_NAMESPACE::logging::LogHelper &lh,
+    const schemas::RecipientDraft_P1 &value) {
   return lh << ToString(USERVER_NAMESPACE::formats::json::ValueBuilder(value)
                             .ExtractValue());
 }
 
-USERVER_NAMESPACE::logging::LogHelper& operator<<(
-    USERVER_NAMESPACE::logging::LogHelper& lh,
-    const schemas::RecipientDraft& value) {
+USERVER_NAMESPACE::logging::LogHelper &operator<<(
+    USERVER_NAMESPACE::logging::LogHelper &lh,
+    const schemas::RecipientDraft &value) {
   return lh << ToString(USERVER_NAMESPACE::formats::json::ValueBuilder(value)
                             .ExtractValue());
 }
@@ -639,7 +639,7 @@ RecipientDraft Parse(
 }
 
 USERVER_NAMESPACE::formats::json::Value Serialize(
-    [[maybe_unused]] const schemas::RecipientDraft_P1& value,
+    [[maybe_unused]] const schemas::RecipientDraft_P1 &value,
     USERVER_NAMESPACE::formats::serialize::To<
         USERVER_NAMESPACE::formats::json::Value>) {
   USERVER_NAMESPACE::formats::json::ValueBuilder vb = value.extra;
@@ -651,7 +651,7 @@ USERVER_NAMESPACE::formats::json::Value Serialize(
 }
 
 USERVER_NAMESPACE::formats::json::Value Serialize(
-    const schemas::RecipientDraft& value,
+    const schemas::RecipientDraft &value,
     USERVER_NAMESPACE::formats::serialize::To<
         USERVER_NAMESPACE::formats::json::Value>) {
   USERVER_NAMESPACE::formats::json::ValueBuilder vb =
@@ -669,29 +669,29 @@ USERVER_NAMESPACE::formats::json::Value Serialize(
   return vb.ExtractValue();
 }
 
-bool operator==(const schemas::ReturnedRecipientGroup_P1& lhs,
-                const schemas::ReturnedRecipientGroup_P1& rhs) {
+bool operator==(const schemas::ReturnedRecipientGroup_P1 &lhs,
+                const schemas::ReturnedRecipientGroup_P1 &rhs) {
   return lhs.master_id == rhs.master_id && lhs.extra == rhs.extra;
 }
 
-bool operator==(const schemas::ReturnedRecipientGroup& lhs,
-                const schemas::ReturnedRecipientGroup& rhs) {
-  return static_cast<const schemas::BaseRecipientGroup&>(lhs) ==
-             static_cast<const schemas::BaseRecipientGroup&>(rhs) &&
-         static_cast<const schemas::ReturnedRecipientGroup_P1&>(lhs) ==
-             static_cast<const schemas::ReturnedRecipientGroup_P1&>(rhs);
+bool operator==(const schemas::ReturnedRecipientGroup &lhs,
+                const schemas::ReturnedRecipientGroup &rhs) {
+  return static_cast<const schemas::BaseRecipientGroup &>(lhs) ==
+      static_cast<const schemas::BaseRecipientGroup &>(rhs) &&
+      static_cast<const schemas::ReturnedRecipientGroup_P1 &>(lhs) ==
+          static_cast<const schemas::ReturnedRecipientGroup_P1 &>(rhs);
 }
 
-USERVER_NAMESPACE::logging::LogHelper& operator<<(
-    USERVER_NAMESPACE::logging::LogHelper& lh,
-    const schemas::ReturnedRecipientGroup_P1& value) {
+USERVER_NAMESPACE::logging::LogHelper &operator<<(
+    USERVER_NAMESPACE::logging::LogHelper &lh,
+    const schemas::ReturnedRecipientGroup_P1 &value) {
   return lh << ToString(USERVER_NAMESPACE::formats::json::ValueBuilder(value)
                             .ExtractValue());
 }
 
-USERVER_NAMESPACE::logging::LogHelper& operator<<(
-    USERVER_NAMESPACE::logging::LogHelper& lh,
-    const schemas::ReturnedRecipientGroup& value) {
+USERVER_NAMESPACE::logging::LogHelper &operator<<(
+    USERVER_NAMESPACE::logging::LogHelper &lh,
+    const schemas::ReturnedRecipientGroup &value) {
   return lh << ToString(USERVER_NAMESPACE::formats::json::ValueBuilder(value)
                             .ExtractValue());
 }
@@ -699,7 +699,7 @@ USERVER_NAMESPACE::logging::LogHelper& operator<<(
 ReturnedRecipientGroup_P1 Parse(
     USERVER_NAMESPACE::formats::json::Value json,
     USERVER_NAMESPACE::formats::parse::To<schemas::ReturnedRecipientGroup_P1>
-        to) {
+    to) {
   return Parse<USERVER_NAMESPACE::formats::json::Value>(std::move(json), to);
 }
 
@@ -710,7 +710,7 @@ ReturnedRecipientGroup Parse(
 }
 
 USERVER_NAMESPACE::formats::json::Value Serialize(
-    [[maybe_unused]] const schemas::ReturnedRecipientGroup_P1& value,
+    [[maybe_unused]] const schemas::ReturnedRecipientGroup_P1 &value,
     USERVER_NAMESPACE::formats::serialize::To<
         USERVER_NAMESPACE::formats::json::Value>) {
   USERVER_NAMESPACE::formats::json::ValueBuilder vb = value.extra;
@@ -722,7 +722,7 @@ USERVER_NAMESPACE::formats::json::Value Serialize(
 }
 
 USERVER_NAMESPACE::formats::json::Value Serialize(
-    const schemas::ReturnedRecipientGroup& value,
+    const schemas::ReturnedRecipientGroup &value,
     USERVER_NAMESPACE::formats::serialize::To<
         USERVER_NAMESPACE::formats::json::Value>) {
   USERVER_NAMESPACE::formats::json::ValueBuilder vb =
@@ -740,29 +740,29 @@ USERVER_NAMESPACE::formats::json::Value Serialize(
   return vb.ExtractValue();
 }
 
-bool operator==(const schemas::RecipientGroupDraft_P1& lhs,
-                const schemas::RecipientGroupDraft_P1& rhs) {
+bool operator==(const schemas::RecipientGroupDraft_P1 &lhs,
+                const schemas::RecipientGroupDraft_P1 &rhs) {
   return lhs.draft_id == rhs.draft_id && lhs.extra == rhs.extra;
 }
 
-bool operator==(const schemas::RecipientGroupDraft& lhs,
-                const schemas::RecipientGroupDraft& rhs) {
-  return static_cast<const schemas::ReturnedRecipientGroup&>(lhs) ==
-             static_cast<const schemas::ReturnedRecipientGroup&>(rhs) &&
-         static_cast<const schemas::RecipientGroupDraft_P1&>(lhs) ==
-             static_cast<const schemas::RecipientGroupDraft_P1&>(rhs);
+bool operator==(const schemas::RecipientGroupDraft &lhs,
+                const schemas::RecipientGroupDraft &rhs) {
+  return static_cast<const schemas::ReturnedRecipientGroup &>(lhs) ==
+      static_cast<const schemas::ReturnedRecipientGroup &>(rhs) &&
+      static_cast<const schemas::RecipientGroupDraft_P1 &>(lhs) ==
+          static_cast<const schemas::RecipientGroupDraft_P1 &>(rhs);
 }
 
-USERVER_NAMESPACE::logging::LogHelper& operator<<(
-    USERVER_NAMESPACE::logging::LogHelper& lh,
-    const schemas::RecipientGroupDraft_P1& value) {
+USERVER_NAMESPACE::logging::LogHelper &operator<<(
+    USERVER_NAMESPACE::logging::LogHelper &lh,
+    const schemas::RecipientGroupDraft_P1 &value) {
   return lh << ToString(USERVER_NAMESPACE::formats::json::ValueBuilder(value)
                             .ExtractValue());
 }
 
-USERVER_NAMESPACE::logging::LogHelper& operator<<(
-    USERVER_NAMESPACE::logging::LogHelper& lh,
-    const schemas::RecipientGroupDraft& value) {
+USERVER_NAMESPACE::logging::LogHelper &operator<<(
+    USERVER_NAMESPACE::logging::LogHelper &lh,
+    const schemas::RecipientGroupDraft &value) {
   return lh << ToString(USERVER_NAMESPACE::formats::json::ValueBuilder(value)
                             .ExtractValue());
 }
@@ -770,7 +770,7 @@ USERVER_NAMESPACE::logging::LogHelper& operator<<(
 RecipientGroupDraft_P1 Parse(
     USERVER_NAMESPACE::formats::json::Value json,
     USERVER_NAMESPACE::formats::parse::To<schemas::RecipientGroupDraft_P1>
-        to) {
+    to) {
   return Parse<USERVER_NAMESPACE::formats::json::Value>(std::move(json), to);
 }
 
@@ -781,7 +781,7 @@ RecipientGroupDraft Parse(
 }
 
 USERVER_NAMESPACE::formats::json::Value Serialize(
-    [[maybe_unused]] const schemas::RecipientGroupDraft_P1& value,
+    [[maybe_unused]] const schemas::RecipientGroupDraft_P1 &value,
     USERVER_NAMESPACE::formats::serialize::To<
         USERVER_NAMESPACE::formats::json::Value>) {
   USERVER_NAMESPACE::formats::json::ValueBuilder vb = value.extra;
@@ -793,7 +793,7 @@ USERVER_NAMESPACE::formats::json::Value Serialize(
 }
 
 USERVER_NAMESPACE::formats::json::Value Serialize(
-    const schemas::RecipientGroupDraft& value,
+    const schemas::RecipientGroupDraft &value,
     USERVER_NAMESPACE::formats::serialize::To<
         USERVER_NAMESPACE::formats::json::Value>) {
   USERVER_NAMESPACE::formats::json::ValueBuilder vb =
@@ -811,30 +811,30 @@ USERVER_NAMESPACE::formats::json::Value Serialize(
   return vb.ExtractValue();
 }
 
-bool operator==(const schemas::RecipientGroupWithId_P1& lhs,
-                const schemas::RecipientGroupWithId_P1& rhs) {
+bool operator==(const schemas::RecipientGroupWithId_P1 &lhs,
+                const schemas::RecipientGroupWithId_P1 &rhs) {
   return lhs.recipient_group_id == rhs.recipient_group_id &&
-         lhs.extra == rhs.extra;
+      lhs.extra == rhs.extra;
 }
 
-bool operator==(const schemas::RecipientGroupWithId& lhs,
-                const schemas::RecipientGroupWithId& rhs) {
-  return static_cast<const schemas::ReturnedRecipientGroup&>(lhs) ==
-             static_cast<const schemas::ReturnedRecipientGroup&>(rhs) &&
-         static_cast<const schemas::RecipientGroupWithId_P1&>(lhs) ==
-             static_cast<const schemas::RecipientGroupWithId_P1&>(rhs);
+bool operator==(const schemas::RecipientGroupWithId &lhs,
+                const schemas::RecipientGroupWithId &rhs) {
+  return static_cast<const schemas::ReturnedRecipientGroup &>(lhs) ==
+      static_cast<const schemas::ReturnedRecipientGroup &>(rhs) &&
+      static_cast<const schemas::RecipientGroupWithId_P1 &>(lhs) ==
+          static_cast<const schemas::RecipientGroupWithId_P1 &>(rhs);
 }
 
-USERVER_NAMESPACE::logging::LogHelper& operator<<(
-    USERVER_NAMESPACE::logging::LogHelper& lh,
-    const schemas::RecipientGroupWithId_P1& value) {
+USERVER_NAMESPACE::logging::LogHelper &operator<<(
+    USERVER_NAMESPACE::logging::LogHelper &lh,
+    const schemas::RecipientGroupWithId_P1 &value) {
   return lh << ToString(USERVER_NAMESPACE::formats::json::ValueBuilder(value)
                             .ExtractValue());
 }
 
-USERVER_NAMESPACE::logging::LogHelper& operator<<(
-    USERVER_NAMESPACE::logging::LogHelper& lh,
-    const schemas::RecipientGroupWithId& value) {
+USERVER_NAMESPACE::logging::LogHelper &operator<<(
+    USERVER_NAMESPACE::logging::LogHelper &lh,
+    const schemas::RecipientGroupWithId &value) {
   return lh << ToString(USERVER_NAMESPACE::formats::json::ValueBuilder(value)
                             .ExtractValue());
 }
@@ -842,7 +842,7 @@ USERVER_NAMESPACE::logging::LogHelper& operator<<(
 RecipientGroupWithId_P1 Parse(
     USERVER_NAMESPACE::formats::json::Value json,
     USERVER_NAMESPACE::formats::parse::To<schemas::RecipientGroupWithId_P1>
-        to) {
+    to) {
   return Parse<USERVER_NAMESPACE::formats::json::Value>(std::move(json), to);
 }
 
@@ -853,7 +853,7 @@ RecipientGroupWithId Parse(
 }
 
 USERVER_NAMESPACE::formats::json::Value Serialize(
-    [[maybe_unused]] const schemas::RecipientGroupWithId_P1& value,
+    [[maybe_unused]] const schemas::RecipientGroupWithId_P1 &value,
     USERVER_NAMESPACE::formats::serialize::To<
         USERVER_NAMESPACE::formats::json::Value>) {
   USERVER_NAMESPACE::formats::json::ValueBuilder vb = value.extra;
@@ -865,7 +865,7 @@ USERVER_NAMESPACE::formats::json::Value Serialize(
 }
 
 USERVER_NAMESPACE::formats::json::Value Serialize(
-    const schemas::RecipientGroupWithId& value,
+    const schemas::RecipientGroupWithId &value,
     USERVER_NAMESPACE::formats::serialize::To<
         USERVER_NAMESPACE::formats::json::Value>) {
   USERVER_NAMESPACE::formats::json::ValueBuilder vb =
@@ -883,34 +883,34 @@ USERVER_NAMESPACE::formats::json::Value Serialize(
   return vb.ExtractValue();
 }
 
-bool operator==(const schemas::RecipientGroupWithoutId_P1& lhs,
-                const schemas::RecipientGroupWithoutId_P1& rhs) {
-  (void)lhs;
-  (void)rhs;
+bool operator==(const schemas::RecipientGroupWithoutId_P1 &lhs,
+                const schemas::RecipientGroupWithoutId_P1 &rhs) {
+  (void) lhs;
+  (void) rhs;
 
   return
 
       lhs.extra == rhs.extra;
 }
 
-bool operator==(const schemas::RecipientGroupWithoutId& lhs,
-                const schemas::RecipientGroupWithoutId& rhs) {
-  return static_cast<const schemas::BaseRecipientGroup&>(lhs) ==
-             static_cast<const schemas::BaseRecipientGroup&>(rhs) &&
-         static_cast<const schemas::RecipientGroupWithoutId_P1&>(lhs) ==
-             static_cast<const schemas::RecipientGroupWithoutId_P1&>(rhs);
+bool operator==(const schemas::RecipientGroupWithoutId &lhs,
+                const schemas::RecipientGroupWithoutId &rhs) {
+  return static_cast<const schemas::BaseRecipientGroup &>(lhs) ==
+      static_cast<const schemas::BaseRecipientGroup &>(rhs) &&
+      static_cast<const schemas::RecipientGroupWithoutId_P1 &>(lhs) ==
+          static_cast<const schemas::RecipientGroupWithoutId_P1 &>(rhs);
 }
 
-USERVER_NAMESPACE::logging::LogHelper& operator<<(
-    USERVER_NAMESPACE::logging::LogHelper& lh,
-    const schemas::RecipientGroupWithoutId_P1& value) {
+USERVER_NAMESPACE::logging::LogHelper &operator<<(
+    USERVER_NAMESPACE::logging::LogHelper &lh,
+    const schemas::RecipientGroupWithoutId_P1 &value) {
   return lh << ToString(USERVER_NAMESPACE::formats::json::ValueBuilder(value)
                             .ExtractValue());
 }
 
-USERVER_NAMESPACE::logging::LogHelper& operator<<(
-    USERVER_NAMESPACE::logging::LogHelper& lh,
-    const schemas::RecipientGroupWithoutId& value) {
+USERVER_NAMESPACE::logging::LogHelper &operator<<(
+    USERVER_NAMESPACE::logging::LogHelper &lh,
+    const schemas::RecipientGroupWithoutId &value) {
   return lh << ToString(USERVER_NAMESPACE::formats::json::ValueBuilder(value)
                             .ExtractValue());
 }
@@ -918,19 +918,19 @@ USERVER_NAMESPACE::logging::LogHelper& operator<<(
 RecipientGroupWithoutId_P1 Parse(
     USERVER_NAMESPACE::formats::json::Value json,
     USERVER_NAMESPACE::formats::parse::To<schemas::RecipientGroupWithoutId_P1>
-        to) {
+    to) {
   return Parse<USERVER_NAMESPACE::formats::json::Value>(std::move(json), to);
 }
 
 RecipientGroupWithoutId Parse(
     USERVER_NAMESPACE::formats::json::Value json,
     USERVER_NAMESPACE::formats::parse::To<schemas::RecipientGroupWithoutId>
-        to) {
+    to) {
   return Parse<USERVER_NAMESPACE::formats::json::Value>(std::move(json), to);
 }
 
 USERVER_NAMESPACE::formats::json::Value Serialize(
-    [[maybe_unused]] const schemas::RecipientGroupWithoutId_P1& value,
+    [[maybe_unused]] const schemas::RecipientGroupWithoutId_P1 &value,
     USERVER_NAMESPACE::formats::serialize::To<
         USERVER_NAMESPACE::formats::json::Value>) {
   USERVER_NAMESPACE::formats::json::ValueBuilder vb = value.extra;
@@ -939,7 +939,7 @@ USERVER_NAMESPACE::formats::json::Value Serialize(
 }
 
 USERVER_NAMESPACE::formats::json::Value Serialize(
-    const schemas::RecipientGroupWithoutId& value,
+    const schemas::RecipientGroupWithoutId &value,
     USERVER_NAMESPACE::formats::serialize::To<
         USERVER_NAMESPACE::formats::json::Value>) {
   USERVER_NAMESPACE::formats::json::ValueBuilder vb =
@@ -957,29 +957,29 @@ USERVER_NAMESPACE::formats::json::Value Serialize(
   return vb.ExtractValue();
 }
 
-bool operator==(const schemas::RecipientWithId_P1& lhs,
-                const schemas::RecipientWithId_P1& rhs) {
+bool operator==(const schemas::RecipientWithId_P1 &lhs,
+                const schemas::RecipientWithId_P1 &rhs) {
   return lhs.recipient_id == rhs.recipient_id && lhs.extra == rhs.extra;
 }
 
-bool operator==(const schemas::RecipientWithId& lhs,
-                const schemas::RecipientWithId& rhs) {
-  return static_cast<const schemas::ReturnedRecipient&>(lhs) ==
-             static_cast<const schemas::ReturnedRecipient&>(rhs) &&
-         static_cast<const schemas::RecipientWithId_P1&>(lhs) ==
-             static_cast<const schemas::RecipientWithId_P1&>(rhs);
+bool operator==(const schemas::RecipientWithId &lhs,
+                const schemas::RecipientWithId &rhs) {
+  return static_cast<const schemas::ReturnedRecipient &>(lhs) ==
+      static_cast<const schemas::ReturnedRecipient &>(rhs) &&
+      static_cast<const schemas::RecipientWithId_P1 &>(lhs) ==
+          static_cast<const schemas::RecipientWithId_P1 &>(rhs);
 }
 
-USERVER_NAMESPACE::logging::LogHelper& operator<<(
-    USERVER_NAMESPACE::logging::LogHelper& lh,
-    const schemas::RecipientWithId_P1& value) {
+USERVER_NAMESPACE::logging::LogHelper &operator<<(
+    USERVER_NAMESPACE::logging::LogHelper &lh,
+    const schemas::RecipientWithId_P1 &value) {
   return lh << ToString(USERVER_NAMESPACE::formats::json::ValueBuilder(value)
                             .ExtractValue());
 }
 
-USERVER_NAMESPACE::logging::LogHelper& operator<<(
-    USERVER_NAMESPACE::logging::LogHelper& lh,
-    const schemas::RecipientWithId& value) {
+USERVER_NAMESPACE::logging::LogHelper &operator<<(
+    USERVER_NAMESPACE::logging::LogHelper &lh,
+    const schemas::RecipientWithId &value) {
   return lh << ToString(USERVER_NAMESPACE::formats::json::ValueBuilder(value)
                             .ExtractValue());
 }
@@ -997,7 +997,7 @@ RecipientWithId Parse(
 }
 
 USERVER_NAMESPACE::formats::json::Value Serialize(
-    [[maybe_unused]] const schemas::RecipientWithId_P1& value,
+    [[maybe_unused]] const schemas::RecipientWithId_P1 &value,
     USERVER_NAMESPACE::formats::serialize::To<
         USERVER_NAMESPACE::formats::json::Value>) {
   USERVER_NAMESPACE::formats::json::ValueBuilder vb = value.extra;
@@ -1009,7 +1009,7 @@ USERVER_NAMESPACE::formats::json::Value Serialize(
 }
 
 USERVER_NAMESPACE::formats::json::Value Serialize(
-    const schemas::RecipientWithId& value,
+    const schemas::RecipientWithId &value,
     USERVER_NAMESPACE::formats::serialize::To<
         USERVER_NAMESPACE::formats::json::Value>) {
   USERVER_NAMESPACE::formats::json::ValueBuilder vb =
@@ -1027,34 +1027,34 @@ USERVER_NAMESPACE::formats::json::Value Serialize(
   return vb.ExtractValue();
 }
 
-bool operator==(const schemas::RecipientWithoutId_P1& lhs,
-                const schemas::RecipientWithoutId_P1& rhs) {
-  (void)lhs;
-  (void)rhs;
+bool operator==(const schemas::RecipientWithoutId_P1 &lhs,
+                const schemas::RecipientWithoutId_P1 &rhs) {
+  (void) lhs;
+  (void) rhs;
 
   return
 
       lhs.extra == rhs.extra;
 }
 
-bool operator==(const schemas::RecipientWithoutId& lhs,
-                const schemas::RecipientWithoutId& rhs) {
-  return static_cast<const schemas::BaseRecipient&>(lhs) ==
-             static_cast<const schemas::BaseRecipient&>(rhs) &&
-         static_cast<const schemas::RecipientWithoutId_P1&>(lhs) ==
-             static_cast<const schemas::RecipientWithoutId_P1&>(rhs);
+bool operator==(const schemas::RecipientWithoutId &lhs,
+                const schemas::RecipientWithoutId &rhs) {
+  return static_cast<const schemas::BaseRecipient &>(lhs) ==
+      static_cast<const schemas::BaseRecipient &>(rhs) &&
+      static_cast<const schemas::RecipientWithoutId_P1 &>(lhs) ==
+          static_cast<const schemas::RecipientWithoutId_P1 &>(rhs);
 }
 
-USERVER_NAMESPACE::logging::LogHelper& operator<<(
-    USERVER_NAMESPACE::logging::LogHelper& lh,
-    const schemas::RecipientWithoutId_P1& value) {
+USERVER_NAMESPACE::logging::LogHelper &operator<<(
+    USERVER_NAMESPACE::logging::LogHelper &lh,
+    const schemas::RecipientWithoutId_P1 &value) {
   return lh << ToString(USERVER_NAMESPACE::formats::json::ValueBuilder(value)
                             .ExtractValue());
 }
 
-USERVER_NAMESPACE::logging::LogHelper& operator<<(
-    USERVER_NAMESPACE::logging::LogHelper& lh,
-    const schemas::RecipientWithoutId& value) {
+USERVER_NAMESPACE::logging::LogHelper &operator<<(
+    USERVER_NAMESPACE::logging::LogHelper &lh,
+    const schemas::RecipientWithoutId &value) {
   return lh << ToString(USERVER_NAMESPACE::formats::json::ValueBuilder(value)
                             .ExtractValue());
 }
@@ -1072,7 +1072,7 @@ RecipientWithoutId Parse(
 }
 
 USERVER_NAMESPACE::formats::json::Value Serialize(
-    [[maybe_unused]] const schemas::RecipientWithoutId_P1& value,
+    [[maybe_unused]] const schemas::RecipientWithoutId_P1 &value,
     USERVER_NAMESPACE::formats::serialize::To<
         USERVER_NAMESPACE::formats::json::Value>) {
   USERVER_NAMESPACE::formats::json::ValueBuilder vb = value.extra;
@@ -1081,7 +1081,7 @@ USERVER_NAMESPACE::formats::json::Value Serialize(
 }
 
 USERVER_NAMESPACE::formats::json::Value Serialize(
-    const schemas::RecipientWithoutId& value,
+    const schemas::RecipientWithoutId &value,
     USERVER_NAMESPACE::formats::serialize::To<
         USERVER_NAMESPACE::formats::json::Value>) {
   USERVER_NAMESPACE::formats::json::ValueBuilder vb =
@@ -1099,12 +1099,12 @@ USERVER_NAMESPACE::formats::json::Value Serialize(
   return vb.ExtractValue();
 }
 
-bool operator==(const schemas::User& lhs, const schemas::User& rhs) {
+bool operator==(const schemas::User &lhs, const schemas::User &rhs) {
   return lhs.name == rhs.name && lhs.password == rhs.password;
 }
 
-USERVER_NAMESPACE::logging::LogHelper& operator<<(
-    USERVER_NAMESPACE::logging::LogHelper& lh, const schemas::User& value) {
+USERVER_NAMESPACE::logging::LogHelper &operator<<(
+    USERVER_NAMESPACE::logging::LogHelper &lh, const schemas::User &value) {
   return lh << ToString(USERVER_NAMESPACE::formats::json::ValueBuilder(value)
                             .ExtractValue());
 }
@@ -1115,7 +1115,7 @@ User Parse(USERVER_NAMESPACE::formats::json::Value json,
 }
 
 USERVER_NAMESPACE::formats::json::Value Serialize(
-    [[maybe_unused]] const schemas::User& value,
+    [[maybe_unused]] const schemas::User &value,
     USERVER_NAMESPACE::formats::serialize::To<
         USERVER_NAMESPACE::formats::json::Value>) {
   USERVER_NAMESPACE::formats::json::ValueBuilder vb =

@@ -7,7 +7,7 @@ put:
   responses:
     "200":
       description: Successful operation
-    "400":
+    "401":
       $ref: "/../../responses.yaml/#/components/responses/Unauthorized"
     "429":
       $ref: "/../../responses.yaml/#/components/responses/TooManyRequests"

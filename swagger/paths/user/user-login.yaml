@@ -18,6 +18,8 @@ post:
             type: array
             items:
               $ref: "/../..//schemas.yaml/#/components/schemas/JWTString"
+    "401":
+      "description": "Incorrect password"
     "404":
       "description": "User not found"
     "429":

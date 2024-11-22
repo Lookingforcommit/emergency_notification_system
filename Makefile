@@ -29,20 +29,20 @@ build_release/CMakeCache.txt: cmake-release
 # Build using cmake
 .PHONY: build-debug build-release
 build-debug build-release: build-%: build_%/CMakeCache.txt
-	cmake --build build_$* -j $(NPROCS) --target emergency_notification_system
+	cmake --build build_$* -j $(NPROCS) --target ens
 
 # Test
 .PHONY: test-debug test-release
 test-debug test-release: test-%: build-%
-	cmake --build build_$* -j $(NPROCS) --target emergency_notification_system_unittest
-	cmake --build build_$* -j $(NPROCS) --target emergency_notification_system_benchmark
+	cmake --build build_$* -j $(NPROCS) --target ens_unittest
+	cmake --build build_$* -j $(NPROCS) --target ens_benchmark
 	cd build_$* && ((test -t 1 && GTEST_COLOR=1 PYTEST_ADDOPTS="--color=yes" ctest -V) || ctest -V)
 	pycodestyle tests
 
 # Start the service (via testsuite service runner)
 .PHONY: service-start-debug service-start-release
 service-start-debug service-start-release: service-start-%: build-%
-	cmake --build build_$* -v --target start-emergency_notification_system
+	cmake --build build_$* -v --target start-ens
 
 # Cleanup data
 .PHONY: clean-debug clean-release
@@ -58,7 +58,7 @@ dist-clean:
 # Install
 .PHONY: install-debug install-release
 install-debug install-release: install-%: build-%
-	cmake --install build_$* -v --component emergency_notification_system
+	cmake --install build_$* -v --component ens
 
 .PHONY: install
 install: install-release
@@ -75,19 +75,19 @@ export DB_CONNECTION := postgresql://${POSTGRES_USER}:${POSTGRES_PASSWORD}@servi
 # Internal hidden targets that are used only in docker environment
 --in-docker-start-debug --in-docker-start-release: --in-docker-start-%: install-%
 	psql ${DB_CONNECTION} -f ./postgresql/data/initial_data.sql
-	/home/user/.local/bin/emergency_notification_system \
-		--config /home/user/.local/etc/emergency_notification_system/static_config.yaml \
-		--config_vars /home/user/.local/etc/emergency_notification_system/config_vars.docker.yaml
+	/home/user/.local/bin/ens \
+		--config /home/user/.local/etc/ens/static_config.yaml \
+		--config_vars /home/user/.local/etc/ens/config_vars.docker.yaml
 
 # Build and run service in docker environment
 .PHONY: docker-start-service-debug docker-start-service-release
 docker-start-service-debug docker-start-service-release: docker-start-service-%:
-	$(DOCKER_COMPOSE) run -p 8080:8080 --rm emergency_notification_system-container make -- --in-docker-start-$*
+	$(DOCKER_COMPOSE) run -p 8080:8080 --rm ens-container make -- --in-docker-start-$*
 
 # Start targets makefile in docker environment
 .PHONY: docker-cmake-debug docker-build-debug docker-test-debug docker-clean-debug docker-install-debug docker-cmake-release docker-build-release docker-test-release docker-clean-release docker-install-release
 docker-cmake-debug docker-build-debug docker-test-debug docker-clean-debug docker-install-debug docker-cmake-release docker-build-release docker-test-release docker-clean-release docker-install-release: docker-%:
-	$(DOCKER_COMPOSE) run --rm emergency_notification_system-container make $*
+	$(DOCKER_COMPOSE) run --rm ens-container make $*
 
 # Stop docker container and remove PG data
 .PHONY: docker-clean-data

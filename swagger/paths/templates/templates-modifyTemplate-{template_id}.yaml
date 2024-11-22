@@ -24,7 +24,7 @@ put:
         application/json:
           schema:
             $ref: "/../../schemas.yaml/#/components/schemas/NotificationTemplateWithId"
-    "400":
+    "401":
       $ref: "/../../responses.yaml/#/components/responses/Unauthorized"
     "404":
       "description": "Notification template not found"

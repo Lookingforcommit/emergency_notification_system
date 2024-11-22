@@ -14,7 +14,7 @@ delete:
   responses:
     "200":
       description: Successful operation
-    "400":
+    "401":
       $ref: "/../../responses.yaml/#/components/responses/Unauthorized"
     "404":
       "description": "Recipient group not found"

@@ -67,17 +67,17 @@ jobs:
           - name: Test run after install
             if: matrix.make == 'test-release'
             run: >-
-                ./local_installation/bin/emergency_notification_system
-                --config=./local_installation/etc/emergency_notification_system/static_config.yaml
-                --config_vars=./local_installation/etc/emergency_notification_system/config_vars.yaml
+                ./local_installation/bin/ens
+                --config=./local_installation/etc/ens/static_config.yaml
+                --config_vars=./local_installation/etc/ens/config_vars.yaml
                 &
 
           - name: Check work run service
             if: matrix.make == 'test-release'
             run: |
-                ps aux | grep emergency_notification_system | grep config && curl http://localhost:8080/ping -v
+                ps aux | grep ens | grep config && curl http://localhost:8080/ping -v
 
           - name: Stop all
             if: matrix.make == 'test-release'
             run: |
-                killall emergency_notification_system
+                killall ens

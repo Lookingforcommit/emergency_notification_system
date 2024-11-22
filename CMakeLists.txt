@@ -1,5 +1,5 @@
 cmake_minimum_required(VERSION 3.12)
-project(emergency_notification_system CXX)
+project(ens CXX)
 
 
 # Adding userver dependency
@@ -7,6 +7,7 @@ find_package(userver COMPONENTS core postgresql chaotic QUIET)
 if(NOT userver_FOUND)  # Fallback to subdirectory usage
     # Enable userver libraries that are needed in this project
     set(USERVER_FEATURE_POSTGRESQL ON CACHE BOOL "" FORCE)
+    set(USERVER_FEATURE_CHAOTIC ON CACHE BOOL "" FORCE)
 
     # Compatibility mode: some systems don't support these features
     set(USERVER_FEATURE_CRYPTOPP_BLAKE2 OFF CACHE BOOL "" FORCE)
@@ -25,40 +26,46 @@ userver_setup_environment()
 
 
 # Common sources
+include_directories(src)
 add_library(${PROJECT_NAME}_objs OBJECT
-        src/hello.hpp
-        src/hello.cpp
         src/schemas/schemas.cpp
         src/schemas/schemas.hpp
         src/schemas/schemas_fwd.hpp
         src/schemas/schemas_parsers.ipp
+        src/users/users.hpp
+        src/users/users.cpp
+        src/users/auth.cpp
+        src/users/auth.hpp
+        src/users/handlers.cpp
+        src/users/handlers.hpp
 )
 target_link_libraries(${PROJECT_NAME}_objs PUBLIC userver::postgresql)
+
+
+# Third-party
+set(JWT_BUILD_EXAMPLES OFF)
+add_subdirectory(third_party/jwt-cpp)
+target_include_directories(${PROJECT_NAME}_objs PUBLIC jwt-cpp)
+target_link_libraries(${PROJECT_NAME}_objs PUBLIC jwt-cpp)
+
 
 # The Service
 add_executable(${PROJECT_NAME} src/main.cpp)
 target_link_libraries(${PROJECT_NAME} PRIVATE ${PROJECT_NAME}_objs)
 
-# Unit Tests
-add_executable(${PROJECT_NAME}_unittest
-    src/hello_test.cpp
-)
-target_link_libraries(${PROJECT_NAME}_unittest PRIVATE ${PROJECT_NAME}_objs userver::utest)
-add_google_tests(${PROJECT_NAME}_unittest)
-
-
-# Benchmarks
-add_executable(${PROJECT_NAME}_benchmark
-    src/hello_benchmark.cpp
-)
-target_link_libraries(${PROJECT_NAME}_benchmark PRIVATE ${PROJECT_NAME}_objs userver::ubench)
-add_google_benchmark_tests(${PROJECT_NAME}_benchmark)
-
 
 # Functional Tests
 include(UserverTestsuite)
 
-userver_testsuite_add_simple()
+userver_testsuite_add(
+        SERVICE_TARGET ${PROJECT_NAME}
+        WORKING_DIRECTORY ${CMAKE_CURRENT_SOURCE_DIR}/tests
+        PYTHON_BINARY ${TESTSUITE_PYTHON_BINARY}
+        PYTEST_ARGS
+        --service-config=${CMAKE_CURRENT_SOURCE_DIR}/configs/static_config.yaml
+        --service-binary=${CMAKE_CURRENT_BINARY_DIR}/${PROJECT_NAME}
+        --service-config-vars=${CMAKE_CURRENT_SOURCE_DIR}/configs/config_vars.testing.yaml
+)
 
 
 # Install
@@ -77,21 +84,22 @@ install(FILES ${CONFIGS_FILES} DESTINATION ${CMAKE_INSTALL_SYSCONFDIR}/${PROJECT
 
 
 # Chaotic codegen
-file(GLOB_RECURSE SCHEMAS ${CMAKE_CURRENT_SOURCE_DIR}/swagger/schemas.yaml)
-userver_target_generate_chaotic(${PROJECT_NAME}-chgen
-        ARGS
-        # Map '/components/schemas/*' JSONSchema types to C++ types in 'samples::hello' namespace
-        -n "/components/schemas/([^/]*)/=schemas::{0}"
-        -f "(.*)={0}"
-        # Don't call clang-format
-        --clang-format=
-        # Generate serializers for responses
-        --generate-serializers
-        OUTPUT_DIR
-        ${CMAKE_CURRENT_BINARY_DIR}/src
-        SCHEMAS
-        ${SCHEMAS}
-        RELATIVE_TO
-        ${CMAKE_CURRENT_SOURCE_DIR}
-)
-target_link_libraries(${PROJECT_NAME}_objs PUBLIC ${PROJECT_NAME}-chgen)
+target_link_libraries(${PROJECT_NAME}_objs PUBLIC userver::chaotic)
+#file(GLOB_RECURSE SCHEMAS ${CMAKE_CURRENT_SOURCE_DIR}/swagger/schemas.yaml)
+#userver_target_generate_chaotic(${PROJECT_NAME}-chgen
+#        ARGS
+#        # Map '/components/schemas/*' JSONSchema types to C++ types in 'samples::hello' namespace
+#        -n "/components/schemas/([^/]*)/=schemas::{0}"
+#        -f "(.*)={0}"
+#        # Don't call clang-format
+#        --clang-format=
+#        # Generate serializers for responses
+#        --generate-serializers
+#        OUTPUT_DIR
+#        ${CMAKE_CURRENT_BINARY_DIR}/src
+#        SCHEMAS
+#        ${SCHEMAS}
+#        RELATIVE_TO
+#        ${CMAKE_CURRENT_SOURCE_DIR}
+#)
+#target_link_libraries(${PROJECT_NAME}_objs PUBLIC ${PROJECT_NAME}-chgen)

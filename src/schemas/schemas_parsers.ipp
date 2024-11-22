@@ -13,11 +13,11 @@ namespace schemas {
 
 static constexpr USERVER_NAMESPACE::utils::TrivialSet
     kschemas_BaseNotificationTemplate_PropertiesNames = [](auto selector) {
-      return selector().template Type<std::string_view>().Case("name").Case(
-          "message_text");
-    };
+  return selector().template Type<std::string_view>().Case("name").Case(
+      "message_text");
+};
 
-template <typename Value>
+template<typename Value>
 schemas::BaseNotificationTemplate Parse(
     Value value,
     USERVER_NAMESPACE::formats::parse::To<schemas::BaseNotificationTemplate>) {
@@ -42,15 +42,15 @@ schemas::BaseNotificationTemplate Parse(
 
 static constexpr USERVER_NAMESPACE::utils::TrivialSet
     kschemas_BaseRecipient_PropertiesNames = [](auto selector) {
-      return selector()
-          .template Type<std::string_view>()
-          .Case("name")
-          .Case("email")
-          .Case("phone_number")
-          .Case("telegram_username");
-    };
+  return selector()
+      .template Type<std::string_view>()
+      .Case("name")
+      .Case("email")
+      .Case("phone_number")
+      .Case("telegram_username");
+};
 
-template <typename Value>
+template<typename Value>
 schemas::BaseRecipient Parse(
     Value value,
     USERVER_NAMESPACE::formats::parse::To<schemas::BaseRecipient>) {
@@ -63,8 +63,8 @@ schemas::BaseRecipient Parse(
       value["name"]
           .template As<USERVER_NAMESPACE::chaotic::Primitive<std::string>>();
   res.email = value["email"]
-                  .template As<std::optional<
-                      USERVER_NAMESPACE::chaotic::Primitive<std::string>>>();
+      .template As<std::optional<
+          USERVER_NAMESPACE::chaotic::Primitive<std::string>>>();
   res.phone_number =
       value["phone_number"]
           .template As<std::optional<
@@ -82,14 +82,14 @@ schemas::BaseRecipient Parse(
 
 static constexpr USERVER_NAMESPACE::utils::TrivialSet
     kschemas_BaseRecipientGroup_PropertiesNames = [](auto selector) {
-      return selector()
-          .template Type<std::string_view>()
-          .Case("name")
-          .Case("notification_template_id")
-          .Case("active");
-    };
+  return selector()
+      .template Type<std::string_view>()
+      .Case("name")
+      .Case("notification_template_id")
+      .Case("active");
+};
 
-template <typename Value>
+template<typename Value>
 schemas::BaseRecipientGroup Parse(
     Value value,
     USERVER_NAMESPACE::formats::parse::To<schemas::BaseRecipientGroup>) {
@@ -106,7 +106,7 @@ schemas::BaseRecipientGroup Parse(
           .template As<std::optional<
               USERVER_NAMESPACE::chaotic::Primitive<std::string>>>();
   res.active = value["active"]
-                   .template As<USERVER_NAMESPACE::chaotic::Primitive<bool>>();
+      .template As<USERVER_NAMESPACE::chaotic::Primitive<bool>>();
 
   USERVER_NAMESPACE::chaotic::ValidateNoAdditionalProperties(
       value, kschemas_BaseRecipientGroup_PropertiesNames);
@@ -116,26 +116,26 @@ schemas::BaseRecipientGroup Parse(
 
 static constexpr USERVER_NAMESPACE::utils::TrivialBiMap
     kschemas_Notification_Type_Mapping = [](auto selector) {
-      return selector()
-          .template Type<schemas::Notification::Type, std::string_view>()
-          .Case(schemas::Notification::Type::kTelegram, "Telegram")
-          .Case(schemas::Notification::Type::kSms, "SMS")
-          .Case(schemas::Notification::Type::kMail, "Mail");
-    };
+  return selector()
+      .template Type<schemas::Notification::Type, std::string_view>()
+      .Case(schemas::Notification::Type::kTelegram, "Telegram")
+      .Case(schemas::Notification::Type::kSms, "SMS")
+      .Case(schemas::Notification::Type::kMail, "Mail");
+};
 
 static constexpr USERVER_NAMESPACE::utils::TrivialSet
     kschemas_Notification_PropertiesNames = [](auto selector) {
-      return selector()
-          .template Type<std::string_view>()
-          .Case("master_id")
-          .Case("recipient_id")
-          .Case("group_id")
-          .Case("type")
-          .Case("creation_timestamp")
-          .Case("completion_timestamp");
-    };
+  return selector()
+      .template Type<std::string_view>()
+      .Case("master_id")
+      .Case("recipient_id")
+      .Case("group_id")
+      .Case("type")
+      .Case("creation_timestamp")
+      .Case("completion_timestamp");
+};
 
-template <typename Value>
+template<typename Value>
 schemas::Notification::Type Parse(
     Value val,
     USERVER_NAMESPACE::formats::parse::To<schemas::Notification::Type>) {
@@ -151,7 +151,7 @@ schemas::Notification::Type Parse(
       val);
 }
 
-template <typename Value>
+template<typename Value>
 schemas::Notification Parse(
     Value value, USERVER_NAMESPACE::formats::parse::To<schemas::Notification>) {
   value.CheckNotMissing();
@@ -169,8 +169,8 @@ schemas::Notification Parse(
       value["group_id"]
           .template As<USERVER_NAMESPACE::chaotic::Primitive<std::string>>();
   res.type = value["type"]
-                 .template As<USERVER_NAMESPACE::chaotic::Primitive<
-                     schemas::Notification::Type>>();
+      .template As<USERVER_NAMESPACE::chaotic::Primitive<
+          schemas::Notification::Type>>();
   res.creation_timestamp =
       value["creation_timestamp"]
           .template As<USERVER_NAMESPACE::chaotic::Primitive<std::string>>();
@@ -186,14 +186,14 @@ schemas::Notification Parse(
 
 static constexpr USERVER_NAMESPACE::utils::TrivialSet
     kschemas_ReturnedNotificationTemplate_P1_PropertiesNames =
-        [](auto selector) {
-          return selector().template Type<std::string_view>().Case("master_id");
-        };
+    [](auto selector) {
+      return selector().template Type<std::string_view>().Case("master_id");
+    };
 
-template <typename Value>
+template<typename Value>
 schemas::ReturnedNotificationTemplate_P1 Parse(
     Value value, USERVER_NAMESPACE::formats::parse::To<
-                     schemas::ReturnedNotificationTemplate_P1>) {
+    schemas::ReturnedNotificationTemplate_P1>) {
   value.CheckNotMissing();
   value.CheckObjectOrNull();
 
@@ -209,10 +209,10 @@ schemas::ReturnedNotificationTemplate_P1 Parse(
   return res;
 }
 
-template <typename Value>
+template<typename Value>
 schemas::ReturnedNotificationTemplate Parse(
     Value value, USERVER_NAMESPACE::formats::parse::To<
-                     schemas::ReturnedNotificationTemplate>) {
+    schemas::ReturnedNotificationTemplate>) {
   return schemas::ReturnedNotificationTemplate(
       value.template As<schemas::BaseNotificationTemplate>(),
       value.template As<schemas::ReturnedNotificationTemplate_P1>());
@@ -220,13 +220,13 @@ schemas::ReturnedNotificationTemplate Parse(
 
 static constexpr USERVER_NAMESPACE::utils::TrivialSet
     kschemas_NotificationTemplateDraft_P1_PropertiesNames = [](auto selector) {
-      return selector().template Type<std::string_view>().Case("draft_id");
-    };
+  return selector().template Type<std::string_view>().Case("draft_id");
+};
 
-template <typename Value>
+template<typename Value>
 schemas::NotificationTemplateDraft_P1 Parse(
     Value value, USERVER_NAMESPACE::formats::parse::To<
-                     schemas::NotificationTemplateDraft_P1>) {
+    schemas::NotificationTemplateDraft_P1>) {
   value.CheckNotMissing();
   value.CheckObjectOrNull();
 
@@ -242,7 +242,7 @@ schemas::NotificationTemplateDraft_P1 Parse(
   return res;
 }
 
-template <typename Value>
+template<typename Value>
 schemas::NotificationTemplateDraft Parse(
     Value value,
     USERVER_NAMESPACE::formats::parse::To<schemas::NotificationTemplateDraft>) {
@@ -253,14 +253,14 @@ schemas::NotificationTemplateDraft Parse(
 
 static constexpr USERVER_NAMESPACE::utils::TrivialSet
     kschemas_NotificationTemplateWithId_P1_PropertiesNames = [](auto selector) {
-      return selector().template Type<std::string_view>().Case(
-          "notification_template_id");
-    };
+  return selector().template Type<std::string_view>().Case(
+      "notification_template_id");
+};
 
-template <typename Value>
+template<typename Value>
 schemas::NotificationTemplateWithId_P1 Parse(
     Value value, USERVER_NAMESPACE::formats::parse::To<
-                     schemas::NotificationTemplateWithId_P1>) {
+    schemas::NotificationTemplateWithId_P1>) {
   value.CheckNotMissing();
   value.CheckObjectOrNull();
 
@@ -276,10 +276,10 @@ schemas::NotificationTemplateWithId_P1 Parse(
   return res;
 }
 
-template <typename Value>
+template<typename Value>
 schemas::NotificationTemplateWithId Parse(
     Value value, USERVER_NAMESPACE::formats::parse::To<
-                     schemas::NotificationTemplateWithId>) {
+    schemas::NotificationTemplateWithId>) {
   return schemas::NotificationTemplateWithId(
       value.template As<schemas::ReturnedNotificationTemplate>(),
       value.template As<schemas::NotificationTemplateWithId_P1>());
@@ -287,14 +287,14 @@ schemas::NotificationTemplateWithId Parse(
 
 static constexpr USERVER_NAMESPACE::utils::TrivialSet
     kschemas_NotificationTemplateWithoutId_P1_PropertiesNames =
-        [](auto selector) {
-          return selector().template Type<std::string_view>();
-        };
+    [](auto selector) {
+      return selector().template Type<std::string_view>();
+    };
 
-template <typename Value>
+template<typename Value>
 schemas::NotificationTemplateWithoutId_P1 Parse(
     Value value, USERVER_NAMESPACE::formats::parse::To<
-                     schemas::NotificationTemplateWithoutId_P1>) {
+    schemas::NotificationTemplateWithoutId_P1>) {
   value.CheckNotMissing();
   value.CheckObjectOrNull();
 
@@ -306,10 +306,10 @@ schemas::NotificationTemplateWithoutId_P1 Parse(
   return res;
 }
 
-template <typename Value>
+template<typename Value>
 schemas::NotificationTemplateWithoutId Parse(
     Value value, USERVER_NAMESPACE::formats::parse::To<
-                     schemas::NotificationTemplateWithoutId>) {
+    schemas::NotificationTemplateWithoutId>) {
   return schemas::NotificationTemplateWithoutId(
       value.template As<schemas::BaseNotificationTemplate>(),
       value.template As<schemas::NotificationTemplateWithoutId_P1>());
@@ -317,10 +317,10 @@ schemas::NotificationTemplateWithoutId Parse(
 
 static constexpr USERVER_NAMESPACE::utils::TrivialSet
     kschemas_ReturnedRecipient_P1_PropertiesNames = [](auto selector) {
-      return selector().template Type<std::string_view>().Case("master_id");
-    };
+  return selector().template Type<std::string_view>().Case("master_id");
+};
 
-template <typename Value>
+template<typename Value>
 schemas::ReturnedRecipient_P1 Parse(
     Value value,
     USERVER_NAMESPACE::formats::parse::To<schemas::ReturnedRecipient_P1>) {
@@ -339,7 +339,7 @@ schemas::ReturnedRecipient_P1 Parse(
   return res;
 }
 
-template <typename Value>
+template<typename Value>
 schemas::ReturnedRecipient Parse(
     Value value,
     USERVER_NAMESPACE::formats::parse::To<schemas::ReturnedRecipient>) {
@@ -350,10 +350,10 @@ schemas::ReturnedRecipient Parse(
 
 static constexpr USERVER_NAMESPACE::utils::TrivialSet
     kschemas_RecipientDraft_P1_PropertiesNames = [](auto selector) {
-      return selector().template Type<std::string_view>().Case("draft_id");
-    };
+  return selector().template Type<std::string_view>().Case("draft_id");
+};
 
-template <typename Value>
+template<typename Value>
 schemas::RecipientDraft_P1 Parse(
     Value value,
     USERVER_NAMESPACE::formats::parse::To<schemas::RecipientDraft_P1>) {
@@ -372,7 +372,7 @@ schemas::RecipientDraft_P1 Parse(
   return res;
 }
 
-template <typename Value>
+template<typename Value>
 schemas::RecipientDraft Parse(
     Value value,
     USERVER_NAMESPACE::formats::parse::To<schemas::RecipientDraft>) {
@@ -383,13 +383,13 @@ schemas::RecipientDraft Parse(
 
 static constexpr USERVER_NAMESPACE::utils::TrivialSet
     kschemas_ReturnedRecipientGroup_P1_PropertiesNames = [](auto selector) {
-      return selector().template Type<std::string_view>().Case("master_id");
-    };
+  return selector().template Type<std::string_view>().Case("master_id");
+};
 
-template <typename Value>
+template<typename Value>
 schemas::ReturnedRecipientGroup_P1 Parse(
     Value value, USERVER_NAMESPACE::formats::parse::To<
-                     schemas::ReturnedRecipientGroup_P1>) {
+    schemas::ReturnedRecipientGroup_P1>) {
   value.CheckNotMissing();
   value.CheckObjectOrNull();
 
@@ -405,7 +405,7 @@ schemas::ReturnedRecipientGroup_P1 Parse(
   return res;
 }
 
-template <typename Value>
+template<typename Value>
 schemas::ReturnedRecipientGroup Parse(
     Value value,
     USERVER_NAMESPACE::formats::parse::To<schemas::ReturnedRecipientGroup>) {
@@ -416,10 +416,10 @@ schemas::ReturnedRecipientGroup Parse(
 
 static constexpr USERVER_NAMESPACE::utils::TrivialSet
     kschemas_RecipientGroupDraft_P1_PropertiesNames = [](auto selector) {
-      return selector().template Type<std::string_view>().Case("draft_id");
-    };
+  return selector().template Type<std::string_view>().Case("draft_id");
+};
 
-template <typename Value>
+template<typename Value>
 schemas::RecipientGroupDraft_P1 Parse(
     Value value,
     USERVER_NAMESPACE::formats::parse::To<schemas::RecipientGroupDraft_P1>) {
@@ -438,7 +438,7 @@ schemas::RecipientGroupDraft_P1 Parse(
   return res;
 }
 
-template <typename Value>
+template<typename Value>
 schemas::RecipientGroupDraft Parse(
     Value value,
     USERVER_NAMESPACE::formats::parse::To<schemas::RecipientGroupDraft>) {
@@ -449,11 +449,11 @@ schemas::RecipientGroupDraft Parse(
 
 static constexpr USERVER_NAMESPACE::utils::TrivialSet
     kschemas_RecipientGroupWithId_P1_PropertiesNames = [](auto selector) {
-      return selector().template Type<std::string_view>().Case(
-          "recipient_group_id");
-    };
+  return selector().template Type<std::string_view>().Case(
+      "recipient_group_id");
+};
 
-template <typename Value>
+template<typename Value>
 schemas::RecipientGroupWithId_P1 Parse(
     Value value,
     USERVER_NAMESPACE::formats::parse::To<schemas::RecipientGroupWithId_P1>) {
@@ -472,7 +472,7 @@ schemas::RecipientGroupWithId_P1 Parse(
   return res;
 }
 
-template <typename Value>
+template<typename Value>
 schemas::RecipientGroupWithId Parse(
     Value value,
     USERVER_NAMESPACE::formats::parse::To<schemas::RecipientGroupWithId>) {
@@ -483,13 +483,13 @@ schemas::RecipientGroupWithId Parse(
 
 static constexpr USERVER_NAMESPACE::utils::TrivialSet
     kschemas_RecipientGroupWithoutId_P1_PropertiesNames = [](auto selector) {
-      return selector().template Type<std::string_view>();
-    };
+  return selector().template Type<std::string_view>();
+};
 
-template <typename Value>
+template<typename Value>
 schemas::RecipientGroupWithoutId_P1 Parse(
     Value value, USERVER_NAMESPACE::formats::parse::To<
-                     schemas::RecipientGroupWithoutId_P1>) {
+    schemas::RecipientGroupWithoutId_P1>) {
   value.CheckNotMissing();
   value.CheckObjectOrNull();
 
@@ -501,7 +501,7 @@ schemas::RecipientGroupWithoutId_P1 Parse(
   return res;
 }
 
-template <typename Value>
+template<typename Value>
 schemas::RecipientGroupWithoutId Parse(
     Value value,
     USERVER_NAMESPACE::formats::parse::To<schemas::RecipientGroupWithoutId>) {
@@ -512,10 +512,10 @@ schemas::RecipientGroupWithoutId Parse(
 
 static constexpr USERVER_NAMESPACE::utils::TrivialSet
     kschemas_RecipientWithId_P1_PropertiesNames = [](auto selector) {
-      return selector().template Type<std::string_view>().Case("recipient_id");
-    };
+  return selector().template Type<std::string_view>().Case("recipient_id");
+};
 
-template <typename Value>
+template<typename Value>
 schemas::RecipientWithId_P1 Parse(
     Value value,
     USERVER_NAMESPACE::formats::parse::To<schemas::RecipientWithId_P1>) {
@@ -534,7 +534,7 @@ schemas::RecipientWithId_P1 Parse(
   return res;
 }
 
-template <typename Value>
+template<typename Value>
 schemas::RecipientWithId Parse(
     Value value,
     USERVER_NAMESPACE::formats::parse::To<schemas::RecipientWithId>) {
@@ -545,10 +545,10 @@ schemas::RecipientWithId Parse(
 
 static constexpr USERVER_NAMESPACE::utils::TrivialSet
     kschemas_RecipientWithoutId_P1_PropertiesNames = [](auto selector) {
-      return selector().template Type<std::string_view>();
-    };
+  return selector().template Type<std::string_view>();
+};
 
-template <typename Value>
+template<typename Value>
 schemas::RecipientWithoutId_P1 Parse(
     Value value,
     USERVER_NAMESPACE::formats::parse::To<schemas::RecipientWithoutId_P1>) {
@@ -563,7 +563,7 @@ schemas::RecipientWithoutId_P1 Parse(
   return res;
 }
 
-template <typename Value>
+template<typename Value>
 schemas::RecipientWithoutId Parse(
     Value value,
     USERVER_NAMESPACE::formats::parse::To<schemas::RecipientWithoutId>) {
@@ -574,11 +574,11 @@ schemas::RecipientWithoutId Parse(
 
 static constexpr USERVER_NAMESPACE::utils::TrivialSet
     kschemas_User_PropertiesNames = [](auto selector) {
-      return selector().template Type<std::string_view>().Case("name").Case(
-          "password");
-    };
+  return selector().template Type<std::string_view>().Case("name").Case(
+      "password");
+};
 
-template <typename Value>
+template<typename Value>
 schemas::User Parse(Value value,
                     USERVER_NAMESPACE::formats::parse::To<schemas::User>) {
   value.CheckNotMissing();

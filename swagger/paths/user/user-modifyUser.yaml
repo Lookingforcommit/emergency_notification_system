@@ -13,8 +13,10 @@ put:
   responses:
     "200":
       description: Successful operation
-    "400":
+    "401":
       $ref: "/../../responses.yaml/#/components/responses/Unauthorized"
+    "404":
+      "description": "User not found"
     "422":
       "description": "Invalid json"
     "429":

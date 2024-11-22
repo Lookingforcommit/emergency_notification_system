@@ -14,19 +14,19 @@ struct BaseNotificationTemplate {
   std::optional<std::string> message_text{};
 };
 
-bool operator==(const schemas::BaseNotificationTemplate& lhs,
-                const schemas::BaseNotificationTemplate& rhs);
+bool operator==(const schemas::BaseNotificationTemplate &lhs,
+                const schemas::BaseNotificationTemplate &rhs);
 
-USERVER_NAMESPACE::logging::LogHelper& operator<<(
-    USERVER_NAMESPACE::logging::LogHelper& lh,
-    const schemas::BaseNotificationTemplate& value);
+USERVER_NAMESPACE::logging::LogHelper &operator<<(
+    USERVER_NAMESPACE::logging::LogHelper &lh,
+    const schemas::BaseNotificationTemplate &value);
 
 BaseNotificationTemplate Parse(
     USERVER_NAMESPACE::formats::json::Value json,
     USERVER_NAMESPACE::formats::parse::To<schemas::BaseNotificationTemplate>);
 
 USERVER_NAMESPACE::formats::json::Value Serialize(
-    const schemas::BaseNotificationTemplate& value,
+    const schemas::BaseNotificationTemplate &value,
     USERVER_NAMESPACE::formats::serialize::To<
         USERVER_NAMESPACE::formats::json::Value>);
 
@@ -38,19 +38,19 @@ struct BaseRecipient {
   std::optional<std::string> telegram_username{};
 };
 
-bool operator==(const schemas::BaseRecipient& lhs,
-                const schemas::BaseRecipient& rhs);
+bool operator==(const schemas::BaseRecipient &lhs,
+                const schemas::BaseRecipient &rhs);
 
-USERVER_NAMESPACE::logging::LogHelper& operator<<(
-    USERVER_NAMESPACE::logging::LogHelper& lh,
-    const schemas::BaseRecipient& value);
+USERVER_NAMESPACE::logging::LogHelper &operator<<(
+    USERVER_NAMESPACE::logging::LogHelper &lh,
+    const schemas::BaseRecipient &value);
 
 BaseRecipient Parse(
     USERVER_NAMESPACE::formats::json::Value json,
     USERVER_NAMESPACE::formats::parse::To<schemas::BaseRecipient>);
 
 USERVER_NAMESPACE::formats::json::Value Serialize(
-    const schemas::BaseRecipient& value,
+    const schemas::BaseRecipient &value,
     USERVER_NAMESPACE::formats::serialize::To<
         USERVER_NAMESPACE::formats::json::Value>);
 
@@ -61,19 +61,19 @@ struct BaseRecipientGroup {
   bool active{};
 };
 
-bool operator==(const schemas::BaseRecipientGroup& lhs,
-                const schemas::BaseRecipientGroup& rhs);
+bool operator==(const schemas::BaseRecipientGroup &lhs,
+                const schemas::BaseRecipientGroup &rhs);
 
-USERVER_NAMESPACE::logging::LogHelper& operator<<(
-    USERVER_NAMESPACE::logging::LogHelper& lh,
-    const schemas::BaseRecipientGroup& value);
+USERVER_NAMESPACE::logging::LogHelper &operator<<(
+    USERVER_NAMESPACE::logging::LogHelper &lh,
+    const schemas::BaseRecipientGroup &value);
 
 BaseRecipientGroup Parse(
     USERVER_NAMESPACE::formats::json::Value json,
     USERVER_NAMESPACE::formats::parse::To<schemas::BaseRecipientGroup>);
 
 USERVER_NAMESPACE::formats::json::Value Serialize(
-    const schemas::BaseRecipientGroup& value,
+    const schemas::BaseRecipientGroup &value,
     USERVER_NAMESPACE::formats::serialize::To<
         USERVER_NAMESPACE::formats::json::Value>);
 
@@ -101,16 +101,16 @@ struct Notification {
   std::string completion_timestamp{};
 };
 
-bool operator==(const schemas::Notification& lhs,
-                const schemas::Notification& rhs);
+bool operator==(const schemas::Notification &lhs,
+                const schemas::Notification &rhs);
 
-USERVER_NAMESPACE::logging::LogHelper& operator<<(
-    USERVER_NAMESPACE::logging::LogHelper& lh,
-    const schemas::Notification::Type& value);
+USERVER_NAMESPACE::logging::LogHelper &operator<<(
+    USERVER_NAMESPACE::logging::LogHelper &lh,
+    const schemas::Notification::Type &value);
 
-USERVER_NAMESPACE::logging::LogHelper& operator<<(
-    USERVER_NAMESPACE::logging::LogHelper& lh,
-    const schemas::Notification& value);
+USERVER_NAMESPACE::logging::LogHelper &operator<<(
+    USERVER_NAMESPACE::logging::LogHelper &lh,
+    const schemas::Notification &value);
 
 Notification::Type Parse(
     USERVER_NAMESPACE::formats::json::Value json,
@@ -129,12 +129,12 @@ Notification::Type Parse(
     USERVER_NAMESPACE::formats::parse::To<schemas::Notification::Type>);
 
 USERVER_NAMESPACE::formats::json::Value Serialize(
-    const schemas::Notification::Type& value,
+    const schemas::Notification::Type &value,
     USERVER_NAMESPACE::formats::serialize::To<
         USERVER_NAMESPACE::formats::json::Value>);
 
 USERVER_NAMESPACE::formats::json::Value Serialize(
-    const schemas::Notification& value,
+    const schemas::Notification &value,
     USERVER_NAMESPACE::formats::serialize::To<
         USERVER_NAMESPACE::formats::json::Value>);
 
@@ -154,25 +154,25 @@ struct ReturnedNotificationTemplate
       public schemas::ReturnedNotificationTemplate_P1 {
   ReturnedNotificationTemplate() = default;
 
-  ReturnedNotificationTemplate(schemas::BaseNotificationTemplate&& a0,
-                               schemas::ReturnedNotificationTemplate_P1&& a1)
+  ReturnedNotificationTemplate(schemas::BaseNotificationTemplate &&a0,
+                               schemas::ReturnedNotificationTemplate_P1 &&a1)
       : schemas::BaseNotificationTemplate(std::move(a0)),
         schemas::ReturnedNotificationTemplate_P1(std::move(a1)) {}
 };
 
-bool operator==(const schemas::ReturnedNotificationTemplate_P1& lhs,
-                const schemas::ReturnedNotificationTemplate_P1& rhs);
+bool operator==(const schemas::ReturnedNotificationTemplate_P1 &lhs,
+                const schemas::ReturnedNotificationTemplate_P1 &rhs);
 
-bool operator==(const schemas::ReturnedNotificationTemplate& lhs,
-                const schemas::ReturnedNotificationTemplate& rhs);
+bool operator==(const schemas::ReturnedNotificationTemplate &lhs,
+                const schemas::ReturnedNotificationTemplate &rhs);
 
-USERVER_NAMESPACE::logging::LogHelper& operator<<(
-    USERVER_NAMESPACE::logging::LogHelper& lh,
-    const schemas::ReturnedNotificationTemplate_P1& value);
+USERVER_NAMESPACE::logging::LogHelper &operator<<(
+    USERVER_NAMESPACE::logging::LogHelper &lh,
+    const schemas::ReturnedNotificationTemplate_P1 &value);
 
-USERVER_NAMESPACE::logging::LogHelper& operator<<(
-    USERVER_NAMESPACE::logging::LogHelper& lh,
-    const schemas::ReturnedNotificationTemplate& value);
+USERVER_NAMESPACE::logging::LogHelper &operator<<(
+    USERVER_NAMESPACE::logging::LogHelper &lh,
+    const schemas::ReturnedNotificationTemplate &value);
 
 ReturnedNotificationTemplate_P1 Parse(
     USERVER_NAMESPACE::formats::json::Value json,
@@ -184,12 +184,12 @@ ReturnedNotificationTemplate Parse(USERVER_NAMESPACE::formats::json::Value json,
                                        schemas::ReturnedNotificationTemplate>);
 
 USERVER_NAMESPACE::formats::json::Value Serialize(
-    const schemas::ReturnedNotificationTemplate_P1& value,
+    const schemas::ReturnedNotificationTemplate_P1 &value,
     USERVER_NAMESPACE::formats::serialize::To<
         USERVER_NAMESPACE::formats::json::Value>);
 
 USERVER_NAMESPACE::formats::json::Value Serialize(
-    const schemas::ReturnedNotificationTemplate& value,
+    const schemas::ReturnedNotificationTemplate &value,
     USERVER_NAMESPACE::formats::serialize::To<
         USERVER_NAMESPACE::formats::json::Value>);
 
@@ -206,25 +206,25 @@ struct NotificationTemplateDraft
       public schemas::NotificationTemplateDraft_P1 {
   NotificationTemplateDraft() = default;
 
-  NotificationTemplateDraft(schemas::ReturnedNotificationTemplate&& a0,
-                            schemas::NotificationTemplateDraft_P1&& a1)
+  NotificationTemplateDraft(schemas::ReturnedNotificationTemplate &&a0,
+                            schemas::NotificationTemplateDraft_P1 &&a1)
       : schemas::ReturnedNotificationTemplate(std::move(a0)),
         schemas::NotificationTemplateDraft_P1(std::move(a1)) {}
 };
 
-bool operator==(const schemas::NotificationTemplateDraft_P1& lhs,
-                const schemas::NotificationTemplateDraft_P1& rhs);
+bool operator==(const schemas::NotificationTemplateDraft_P1 &lhs,
+                const schemas::NotificationTemplateDraft_P1 &rhs);
 
-bool operator==(const schemas::NotificationTemplateDraft& lhs,
-                const schemas::NotificationTemplateDraft& rhs);
+bool operator==(const schemas::NotificationTemplateDraft &lhs,
+                const schemas::NotificationTemplateDraft &rhs);
 
-USERVER_NAMESPACE::logging::LogHelper& operator<<(
-    USERVER_NAMESPACE::logging::LogHelper& lh,
-    const schemas::NotificationTemplateDraft_P1& value);
+USERVER_NAMESPACE::logging::LogHelper &operator<<(
+    USERVER_NAMESPACE::logging::LogHelper &lh,
+    const schemas::NotificationTemplateDraft_P1 &value);
 
-USERVER_NAMESPACE::logging::LogHelper& operator<<(
-    USERVER_NAMESPACE::logging::LogHelper& lh,
-    const schemas::NotificationTemplateDraft& value);
+USERVER_NAMESPACE::logging::LogHelper &operator<<(
+    USERVER_NAMESPACE::logging::LogHelper &lh,
+    const schemas::NotificationTemplateDraft &value);
 
 NotificationTemplateDraft_P1 Parse(
     USERVER_NAMESPACE::formats::json::Value json,
@@ -236,12 +236,12 @@ NotificationTemplateDraft Parse(
     USERVER_NAMESPACE::formats::parse::To<schemas::NotificationTemplateDraft>);
 
 USERVER_NAMESPACE::formats::json::Value Serialize(
-    const schemas::NotificationTemplateDraft_P1& value,
+    const schemas::NotificationTemplateDraft_P1 &value,
     USERVER_NAMESPACE::formats::serialize::To<
         USERVER_NAMESPACE::formats::json::Value>);
 
 USERVER_NAMESPACE::formats::json::Value Serialize(
-    const schemas::NotificationTemplateDraft& value,
+    const schemas::NotificationTemplateDraft &value,
     USERVER_NAMESPACE::formats::serialize::To<
         USERVER_NAMESPACE::formats::json::Value>);
 
@@ -258,25 +258,25 @@ struct NotificationTemplateWithId
       public schemas::NotificationTemplateWithId_P1 {
   NotificationTemplateWithId() = default;
 
-  NotificationTemplateWithId(schemas::ReturnedNotificationTemplate&& a0,
-                             schemas::NotificationTemplateWithId_P1&& a1)
+  NotificationTemplateWithId(schemas::ReturnedNotificationTemplate &&a0,
+                             schemas::NotificationTemplateWithId_P1 &&a1)
       : schemas::ReturnedNotificationTemplate(std::move(a0)),
         schemas::NotificationTemplateWithId_P1(std::move(a1)) {}
 };
 
-bool operator==(const schemas::NotificationTemplateWithId_P1& lhs,
-                const schemas::NotificationTemplateWithId_P1& rhs);
+bool operator==(const schemas::NotificationTemplateWithId_P1 &lhs,
+                const schemas::NotificationTemplateWithId_P1 &rhs);
 
-bool operator==(const schemas::NotificationTemplateWithId& lhs,
-                const schemas::NotificationTemplateWithId& rhs);
+bool operator==(const schemas::NotificationTemplateWithId &lhs,
+                const schemas::NotificationTemplateWithId &rhs);
 
-USERVER_NAMESPACE::logging::LogHelper& operator<<(
-    USERVER_NAMESPACE::logging::LogHelper& lh,
-    const schemas::NotificationTemplateWithId_P1& value);
+USERVER_NAMESPACE::logging::LogHelper &operator<<(
+    USERVER_NAMESPACE::logging::LogHelper &lh,
+    const schemas::NotificationTemplateWithId_P1 &value);
 
-USERVER_NAMESPACE::logging::LogHelper& operator<<(
-    USERVER_NAMESPACE::logging::LogHelper& lh,
-    const schemas::NotificationTemplateWithId& value);
+USERVER_NAMESPACE::logging::LogHelper &operator<<(
+    USERVER_NAMESPACE::logging::LogHelper &lh,
+    const schemas::NotificationTemplateWithId &value);
 
 NotificationTemplateWithId_P1 Parse(
     USERVER_NAMESPACE::formats::json::Value json,
@@ -288,12 +288,12 @@ NotificationTemplateWithId Parse(
     USERVER_NAMESPACE::formats::parse::To<schemas::NotificationTemplateWithId>);
 
 USERVER_NAMESPACE::formats::json::Value Serialize(
-    const schemas::NotificationTemplateWithId_P1& value,
+    const schemas::NotificationTemplateWithId_P1 &value,
     USERVER_NAMESPACE::formats::serialize::To<
         USERVER_NAMESPACE::formats::json::Value>);
 
 USERVER_NAMESPACE::formats::json::Value Serialize(
-    const schemas::NotificationTemplateWithId& value,
+    const schemas::NotificationTemplateWithId &value,
     USERVER_NAMESPACE::formats::serialize::To<
         USERVER_NAMESPACE::formats::json::Value>);
 
@@ -311,25 +311,25 @@ struct NotificationTemplateWithoutId
       public schemas::NotificationTemplateWithoutId_P1 {
   NotificationTemplateWithoutId() = default;
 
-  NotificationTemplateWithoutId(schemas::BaseNotificationTemplate&& a0,
-                                schemas::NotificationTemplateWithoutId_P1&& a1)
+  NotificationTemplateWithoutId(schemas::BaseNotificationTemplate &&a0,
+                                schemas::NotificationTemplateWithoutId_P1 &&a1)
       : schemas::BaseNotificationTemplate(std::move(a0)),
         schemas::NotificationTemplateWithoutId_P1(std::move(a1)) {}
 };
 
-bool operator==(const schemas::NotificationTemplateWithoutId_P1& lhs,
-                const schemas::NotificationTemplateWithoutId_P1& rhs);
+bool operator==(const schemas::NotificationTemplateWithoutId_P1 &lhs,
+                const schemas::NotificationTemplateWithoutId_P1 &rhs);
 
-bool operator==(const schemas::NotificationTemplateWithoutId& lhs,
-                const schemas::NotificationTemplateWithoutId& rhs);
+bool operator==(const schemas::NotificationTemplateWithoutId &lhs,
+                const schemas::NotificationTemplateWithoutId &rhs);
 
-USERVER_NAMESPACE::logging::LogHelper& operator<<(
-    USERVER_NAMESPACE::logging::LogHelper& lh,
-    const schemas::NotificationTemplateWithoutId_P1& value);
+USERVER_NAMESPACE::logging::LogHelper &operator<<(
+    USERVER_NAMESPACE::logging::LogHelper &lh,
+    const schemas::NotificationTemplateWithoutId_P1 &value);
 
-USERVER_NAMESPACE::logging::LogHelper& operator<<(
-    USERVER_NAMESPACE::logging::LogHelper& lh,
-    const schemas::NotificationTemplateWithoutId& value);
+USERVER_NAMESPACE::logging::LogHelper &operator<<(
+    USERVER_NAMESPACE::logging::LogHelper &lh,
+    const schemas::NotificationTemplateWithoutId &value);
 
 NotificationTemplateWithoutId_P1 Parse(
     USERVER_NAMESPACE::formats::json::Value json,
@@ -342,12 +342,12 @@ NotificationTemplateWithoutId Parse(
         schemas::NotificationTemplateWithoutId>);
 
 USERVER_NAMESPACE::formats::json::Value Serialize(
-    const schemas::NotificationTemplateWithoutId_P1& value,
+    const schemas::NotificationTemplateWithoutId_P1 &value,
     USERVER_NAMESPACE::formats::serialize::To<
         USERVER_NAMESPACE::formats::json::Value>);
 
 USERVER_NAMESPACE::formats::json::Value Serialize(
-    const schemas::NotificationTemplateWithoutId& value,
+    const schemas::NotificationTemplateWithoutId &value,
     USERVER_NAMESPACE::formats::serialize::To<
         USERVER_NAMESPACE::formats::json::Value>);
 
@@ -362,25 +362,25 @@ struct ReturnedRecipient : public schemas::BaseRecipient,
                            public schemas::ReturnedRecipient_P1 {
   ReturnedRecipient() = default;
 
-  ReturnedRecipient(schemas::BaseRecipient&& a0,
-                    schemas::ReturnedRecipient_P1&& a1)
+  ReturnedRecipient(schemas::BaseRecipient &&a0,
+                    schemas::ReturnedRecipient_P1 &&a1)
       : schemas::BaseRecipient(std::move(a0)),
         schemas::ReturnedRecipient_P1(std::move(a1)) {}
 };
 
-bool operator==(const schemas::ReturnedRecipient_P1& lhs,
-                const schemas::ReturnedRecipient_P1& rhs);
+bool operator==(const schemas::ReturnedRecipient_P1 &lhs,
+                const schemas::ReturnedRecipient_P1 &rhs);
 
-bool operator==(const schemas::ReturnedRecipient& lhs,
-                const schemas::ReturnedRecipient& rhs);
+bool operator==(const schemas::ReturnedRecipient &lhs,
+                const schemas::ReturnedRecipient &rhs);
 
-USERVER_NAMESPACE::logging::LogHelper& operator<<(
-    USERVER_NAMESPACE::logging::LogHelper& lh,
-    const schemas::ReturnedRecipient_P1& value);
+USERVER_NAMESPACE::logging::LogHelper &operator<<(
+    USERVER_NAMESPACE::logging::LogHelper &lh,
+    const schemas::ReturnedRecipient_P1 &value);
 
-USERVER_NAMESPACE::logging::LogHelper& operator<<(
-    USERVER_NAMESPACE::logging::LogHelper& lh,
-    const schemas::ReturnedRecipient& value);
+USERVER_NAMESPACE::logging::LogHelper &operator<<(
+    USERVER_NAMESPACE::logging::LogHelper &lh,
+    const schemas::ReturnedRecipient &value);
 
 ReturnedRecipient_P1 Parse(
     USERVER_NAMESPACE::formats::json::Value json,
@@ -391,12 +391,12 @@ ReturnedRecipient Parse(
     USERVER_NAMESPACE::formats::parse::To<schemas::ReturnedRecipient>);
 
 USERVER_NAMESPACE::formats::json::Value Serialize(
-    const schemas::ReturnedRecipient_P1& value,
+    const schemas::ReturnedRecipient_P1 &value,
     USERVER_NAMESPACE::formats::serialize::To<
         USERVER_NAMESPACE::formats::json::Value>);
 
 USERVER_NAMESPACE::formats::json::Value Serialize(
-    const schemas::ReturnedRecipient& value,
+    const schemas::ReturnedRecipient &value,
     USERVER_NAMESPACE::formats::serialize::To<
         USERVER_NAMESPACE::formats::json::Value>);
 
@@ -412,25 +412,25 @@ struct RecipientDraft : public schemas::ReturnedRecipient,
                         public schemas::RecipientDraft_P1 {
   RecipientDraft() = default;
 
-  RecipientDraft(schemas::ReturnedRecipient&& a0,
-                 schemas::RecipientDraft_P1&& a1)
+  RecipientDraft(schemas::ReturnedRecipient &&a0,
+                 schemas::RecipientDraft_P1 &&a1)
       : schemas::ReturnedRecipient(std::move(a0)),
         schemas::RecipientDraft_P1(std::move(a1)) {}
 };
 
-bool operator==(const schemas::RecipientDraft_P1& lhs,
-                const schemas::RecipientDraft_P1& rhs);
+bool operator==(const schemas::RecipientDraft_P1 &lhs,
+                const schemas::RecipientDraft_P1 &rhs);
 
-bool operator==(const schemas::RecipientDraft& lhs,
-                const schemas::RecipientDraft& rhs);
+bool operator==(const schemas::RecipientDraft &lhs,
+                const schemas::RecipientDraft &rhs);
 
-USERVER_NAMESPACE::logging::LogHelper& operator<<(
-    USERVER_NAMESPACE::logging::LogHelper& lh,
-    const schemas::RecipientDraft_P1& value);
+USERVER_NAMESPACE::logging::LogHelper &operator<<(
+    USERVER_NAMESPACE::logging::LogHelper &lh,
+    const schemas::RecipientDraft_P1 &value);
 
-USERVER_NAMESPACE::logging::LogHelper& operator<<(
-    USERVER_NAMESPACE::logging::LogHelper& lh,
-    const schemas::RecipientDraft& value);
+USERVER_NAMESPACE::logging::LogHelper &operator<<(
+    USERVER_NAMESPACE::logging::LogHelper &lh,
+    const schemas::RecipientDraft &value);
 
 RecipientDraft_P1 Parse(
     USERVER_NAMESPACE::formats::json::Value json,
@@ -441,12 +441,12 @@ RecipientDraft Parse(
     USERVER_NAMESPACE::formats::parse::To<schemas::RecipientDraft>);
 
 USERVER_NAMESPACE::formats::json::Value Serialize(
-    const schemas::RecipientDraft_P1& value,
+    const schemas::RecipientDraft_P1 &value,
     USERVER_NAMESPACE::formats::serialize::To<
         USERVER_NAMESPACE::formats::json::Value>);
 
 USERVER_NAMESPACE::formats::json::Value Serialize(
-    const schemas::RecipientDraft& value,
+    const schemas::RecipientDraft &value,
     USERVER_NAMESPACE::formats::serialize::To<
         USERVER_NAMESPACE::formats::json::Value>);
 
@@ -461,25 +461,25 @@ struct ReturnedRecipientGroup : public schemas::BaseRecipientGroup,
                                 public schemas::ReturnedRecipientGroup_P1 {
   ReturnedRecipientGroup() = default;
 
-  ReturnedRecipientGroup(schemas::BaseRecipientGroup&& a0,
-                         schemas::ReturnedRecipientGroup_P1&& a1)
+  ReturnedRecipientGroup(schemas::BaseRecipientGroup &&a0,
+                         schemas::ReturnedRecipientGroup_P1 &&a1)
       : schemas::BaseRecipientGroup(std::move(a0)),
         schemas::ReturnedRecipientGroup_P1(std::move(a1)) {}
 };
 
-bool operator==(const schemas::ReturnedRecipientGroup_P1& lhs,
-                const schemas::ReturnedRecipientGroup_P1& rhs);
+bool operator==(const schemas::ReturnedRecipientGroup_P1 &lhs,
+                const schemas::ReturnedRecipientGroup_P1 &rhs);
 
-bool operator==(const schemas::ReturnedRecipientGroup& lhs,
-                const schemas::ReturnedRecipientGroup& rhs);
+bool operator==(const schemas::ReturnedRecipientGroup &lhs,
+                const schemas::ReturnedRecipientGroup &rhs);
 
-USERVER_NAMESPACE::logging::LogHelper& operator<<(
-    USERVER_NAMESPACE::logging::LogHelper& lh,
-    const schemas::ReturnedRecipientGroup_P1& value);
+USERVER_NAMESPACE::logging::LogHelper &operator<<(
+    USERVER_NAMESPACE::logging::LogHelper &lh,
+    const schemas::ReturnedRecipientGroup_P1 &value);
 
-USERVER_NAMESPACE::logging::LogHelper& operator<<(
-    USERVER_NAMESPACE::logging::LogHelper& lh,
-    const schemas::ReturnedRecipientGroup& value);
+USERVER_NAMESPACE::logging::LogHelper &operator<<(
+    USERVER_NAMESPACE::logging::LogHelper &lh,
+    const schemas::ReturnedRecipientGroup &value);
 
 ReturnedRecipientGroup_P1 Parse(
     USERVER_NAMESPACE::formats::json::Value json,
@@ -490,12 +490,12 @@ ReturnedRecipientGroup Parse(
     USERVER_NAMESPACE::formats::parse::To<schemas::ReturnedRecipientGroup>);
 
 USERVER_NAMESPACE::formats::json::Value Serialize(
-    const schemas::ReturnedRecipientGroup_P1& value,
+    const schemas::ReturnedRecipientGroup_P1 &value,
     USERVER_NAMESPACE::formats::serialize::To<
         USERVER_NAMESPACE::formats::json::Value>);
 
 USERVER_NAMESPACE::formats::json::Value Serialize(
-    const schemas::ReturnedRecipientGroup& value,
+    const schemas::ReturnedRecipientGroup &value,
     USERVER_NAMESPACE::formats::serialize::To<
         USERVER_NAMESPACE::formats::json::Value>);
 
@@ -511,25 +511,25 @@ struct RecipientGroupDraft : public schemas::ReturnedRecipientGroup,
                              public schemas::RecipientGroupDraft_P1 {
   RecipientGroupDraft() = default;
 
-  RecipientGroupDraft(schemas::ReturnedRecipientGroup&& a0,
-                      schemas::RecipientGroupDraft_P1&& a1)
+  RecipientGroupDraft(schemas::ReturnedRecipientGroup &&a0,
+                      schemas::RecipientGroupDraft_P1 &&a1)
       : schemas::ReturnedRecipientGroup(std::move(a0)),
         schemas::RecipientGroupDraft_P1(std::move(a1)) {}
 };
 
-bool operator==(const schemas::RecipientGroupDraft_P1& lhs,
-                const schemas::RecipientGroupDraft_P1& rhs);
+bool operator==(const schemas::RecipientGroupDraft_P1 &lhs,
+                const schemas::RecipientGroupDraft_P1 &rhs);
 
-bool operator==(const schemas::RecipientGroupDraft& lhs,
-                const schemas::RecipientGroupDraft& rhs);
+bool operator==(const schemas::RecipientGroupDraft &lhs,
+                const schemas::RecipientGroupDraft &rhs);
 
-USERVER_NAMESPACE::logging::LogHelper& operator<<(
-    USERVER_NAMESPACE::logging::LogHelper& lh,
-    const schemas::RecipientGroupDraft_P1& value);
+USERVER_NAMESPACE::logging::LogHelper &operator<<(
+    USERVER_NAMESPACE::logging::LogHelper &lh,
+    const schemas::RecipientGroupDraft_P1 &value);
 
-USERVER_NAMESPACE::logging::LogHelper& operator<<(
-    USERVER_NAMESPACE::logging::LogHelper& lh,
-    const schemas::RecipientGroupDraft& value);
+USERVER_NAMESPACE::logging::LogHelper &operator<<(
+    USERVER_NAMESPACE::logging::LogHelper &lh,
+    const schemas::RecipientGroupDraft &value);
 
 RecipientGroupDraft_P1 Parse(
     USERVER_NAMESPACE::formats::json::Value json,
@@ -540,12 +540,12 @@ RecipientGroupDraft Parse(
     USERVER_NAMESPACE::formats::parse::To<schemas::RecipientGroupDraft>);
 
 USERVER_NAMESPACE::formats::json::Value Serialize(
-    const schemas::RecipientGroupDraft_P1& value,
+    const schemas::RecipientGroupDraft_P1 &value,
     USERVER_NAMESPACE::formats::serialize::To<
         USERVER_NAMESPACE::formats::json::Value>);
 
 USERVER_NAMESPACE::formats::json::Value Serialize(
-    const schemas::RecipientGroupDraft& value,
+    const schemas::RecipientGroupDraft &value,
     USERVER_NAMESPACE::formats::serialize::To<
         USERVER_NAMESPACE::formats::json::Value>);
 
@@ -561,25 +561,25 @@ struct RecipientGroupWithId : public schemas::ReturnedRecipientGroup,
                               public schemas::RecipientGroupWithId_P1 {
   RecipientGroupWithId() = default;
 
-  RecipientGroupWithId(schemas::ReturnedRecipientGroup&& a0,
-                       schemas::RecipientGroupWithId_P1&& a1)
+  RecipientGroupWithId(schemas::ReturnedRecipientGroup &&a0,
+                       schemas::RecipientGroupWithId_P1 &&a1)
       : schemas::ReturnedRecipientGroup(std::move(a0)),
         schemas::RecipientGroupWithId_P1(std::move(a1)) {}
 };
 
-bool operator==(const schemas::RecipientGroupWithId_P1& lhs,
-                const schemas::RecipientGroupWithId_P1& rhs);
+bool operator==(const schemas::RecipientGroupWithId_P1 &lhs,
+                const schemas::RecipientGroupWithId_P1 &rhs);
 
-bool operator==(const schemas::RecipientGroupWithId& lhs,
-                const schemas::RecipientGroupWithId& rhs);
+bool operator==(const schemas::RecipientGroupWithId &lhs,
+                const schemas::RecipientGroupWithId &rhs);
 
-USERVER_NAMESPACE::logging::LogHelper& operator<<(
-    USERVER_NAMESPACE::logging::LogHelper& lh,
-    const schemas::RecipientGroupWithId_P1& value);
+USERVER_NAMESPACE::logging::LogHelper &operator<<(
+    USERVER_NAMESPACE::logging::LogHelper &lh,
+    const schemas::RecipientGroupWithId_P1 &value);
 
-USERVER_NAMESPACE::logging::LogHelper& operator<<(
-    USERVER_NAMESPACE::logging::LogHelper& lh,
-    const schemas::RecipientGroupWithId& value);
+USERVER_NAMESPACE::logging::LogHelper &operator<<(
+    USERVER_NAMESPACE::logging::LogHelper &lh,
+    const schemas::RecipientGroupWithId &value);
 
 RecipientGroupWithId_P1 Parse(
     USERVER_NAMESPACE::formats::json::Value json,
@@ -590,12 +590,12 @@ RecipientGroupWithId Parse(
     USERVER_NAMESPACE::formats::parse::To<schemas::RecipientGroupWithId>);
 
 USERVER_NAMESPACE::formats::json::Value Serialize(
-    const schemas::RecipientGroupWithId_P1& value,
+    const schemas::RecipientGroupWithId_P1 &value,
     USERVER_NAMESPACE::formats::serialize::To<
         USERVER_NAMESPACE::formats::json::Value>);
 
 USERVER_NAMESPACE::formats::json::Value Serialize(
-    const schemas::RecipientGroupWithId& value,
+    const schemas::RecipientGroupWithId &value,
     USERVER_NAMESPACE::formats::serialize::To<
         USERVER_NAMESPACE::formats::json::Value>);
 
@@ -611,41 +611,41 @@ struct RecipientGroupWithoutId : public schemas::BaseRecipientGroup,
                                  public schemas::RecipientGroupWithoutId_P1 {
   RecipientGroupWithoutId() = default;
 
-  RecipientGroupWithoutId(schemas::BaseRecipientGroup&& a0,
-                          schemas::RecipientGroupWithoutId_P1&& a1)
+  RecipientGroupWithoutId(schemas::BaseRecipientGroup &&a0,
+                          schemas::RecipientGroupWithoutId_P1 &&a1)
       : schemas::BaseRecipientGroup(std::move(a0)),
         schemas::RecipientGroupWithoutId_P1(std::move(a1)) {}
 };
 
-bool operator==(const schemas::RecipientGroupWithoutId_P1& lhs,
-                const schemas::RecipientGroupWithoutId_P1& rhs);
+bool operator==(const schemas::RecipientGroupWithoutId_P1 &lhs,
+                const schemas::RecipientGroupWithoutId_P1 &rhs);
 
-bool operator==(const schemas::RecipientGroupWithoutId& lhs,
-                const schemas::RecipientGroupWithoutId& rhs);
+bool operator==(const schemas::RecipientGroupWithoutId &lhs,
+                const schemas::RecipientGroupWithoutId &rhs);
 
-USERVER_NAMESPACE::logging::LogHelper& operator<<(
-    USERVER_NAMESPACE::logging::LogHelper& lh,
-    const schemas::RecipientGroupWithoutId_P1& value);
+USERVER_NAMESPACE::logging::LogHelper &operator<<(
+    USERVER_NAMESPACE::logging::LogHelper &lh,
+    const schemas::RecipientGroupWithoutId_P1 &value);
 
-USERVER_NAMESPACE::logging::LogHelper& operator<<(
-    USERVER_NAMESPACE::logging::LogHelper& lh,
-    const schemas::RecipientGroupWithoutId& value);
+USERVER_NAMESPACE::logging::LogHelper &operator<<(
+    USERVER_NAMESPACE::logging::LogHelper &lh,
+    const schemas::RecipientGroupWithoutId &value);
 
 RecipientGroupWithoutId_P1 Parse(USERVER_NAMESPACE::formats::json::Value json,
-                                  USERVER_NAMESPACE::formats::parse::To<
-                                      schemas::RecipientGroupWithoutId_P1>);
+                                 USERVER_NAMESPACE::formats::parse::To<
+                                     schemas::RecipientGroupWithoutId_P1>);
 
 RecipientGroupWithoutId Parse(
     USERVER_NAMESPACE::formats::json::Value json,
     USERVER_NAMESPACE::formats::parse::To<schemas::RecipientGroupWithoutId>);
 
 USERVER_NAMESPACE::formats::json::Value Serialize(
-    const schemas::RecipientGroupWithoutId_P1& value,
+    const schemas::RecipientGroupWithoutId_P1 &value,
     USERVER_NAMESPACE::formats::serialize::To<
         USERVER_NAMESPACE::formats::json::Value>);
 
 USERVER_NAMESPACE::formats::json::Value Serialize(
-    const schemas::RecipientGroupWithoutId& value,
+    const schemas::RecipientGroupWithoutId &value,
     USERVER_NAMESPACE::formats::serialize::To<
         USERVER_NAMESPACE::formats::json::Value>);
 
@@ -661,25 +661,25 @@ struct RecipientWithId : public schemas::ReturnedRecipient,
                          public schemas::RecipientWithId_P1 {
   RecipientWithId() = default;
 
-  RecipientWithId(schemas::ReturnedRecipient&& a0,
-                  schemas::RecipientWithId_P1&& a1)
+  RecipientWithId(schemas::ReturnedRecipient &&a0,
+                  schemas::RecipientWithId_P1 &&a1)
       : schemas::ReturnedRecipient(std::move(a0)),
         schemas::RecipientWithId_P1(std::move(a1)) {}
 };
 
-bool operator==(const schemas::RecipientWithId_P1& lhs,
-                const schemas::RecipientWithId_P1& rhs);
+bool operator==(const schemas::RecipientWithId_P1 &lhs,
+                const schemas::RecipientWithId_P1 &rhs);
 
-bool operator==(const schemas::RecipientWithId& lhs,
-                const schemas::RecipientWithId& rhs);
+bool operator==(const schemas::RecipientWithId &lhs,
+                const schemas::RecipientWithId &rhs);
 
-USERVER_NAMESPACE::logging::LogHelper& operator<<(
-    USERVER_NAMESPACE::logging::LogHelper& lh,
-    const schemas::RecipientWithId_P1& value);
+USERVER_NAMESPACE::logging::LogHelper &operator<<(
+    USERVER_NAMESPACE::logging::LogHelper &lh,
+    const schemas::RecipientWithId_P1 &value);
 
-USERVER_NAMESPACE::logging::LogHelper& operator<<(
-    USERVER_NAMESPACE::logging::LogHelper& lh,
-    const schemas::RecipientWithId& value);
+USERVER_NAMESPACE::logging::LogHelper &operator<<(
+    USERVER_NAMESPACE::logging::LogHelper &lh,
+    const schemas::RecipientWithId &value);
 
 RecipientWithId_P1 Parse(
     USERVER_NAMESPACE::formats::json::Value json,
@@ -690,12 +690,12 @@ RecipientWithId Parse(
     USERVER_NAMESPACE::formats::parse::To<schemas::RecipientWithId>);
 
 USERVER_NAMESPACE::formats::json::Value Serialize(
-    const schemas::RecipientWithId_P1& value,
+    const schemas::RecipientWithId_P1 &value,
     USERVER_NAMESPACE::formats::serialize::To<
         USERVER_NAMESPACE::formats::json::Value>);
 
 USERVER_NAMESPACE::formats::json::Value Serialize(
-    const schemas::RecipientWithId& value,
+    const schemas::RecipientWithId &value,
     USERVER_NAMESPACE::formats::serialize::To<
         USERVER_NAMESPACE::formats::json::Value>);
 
@@ -710,25 +710,25 @@ struct RecipientWithoutId : public schemas::BaseRecipient,
                             public schemas::RecipientWithoutId_P1 {
   RecipientWithoutId() = default;
 
-  RecipientWithoutId(schemas::BaseRecipient&& a0,
-                     schemas::RecipientWithoutId_P1&& a1)
+  RecipientWithoutId(schemas::BaseRecipient &&a0,
+                     schemas::RecipientWithoutId_P1 &&a1)
       : schemas::BaseRecipient(std::move(a0)),
         schemas::RecipientWithoutId_P1(std::move(a1)) {}
 };
 
-bool operator==(const schemas::RecipientWithoutId_P1& lhs,
-                const schemas::RecipientWithoutId_P1& rhs);
+bool operator==(const schemas::RecipientWithoutId_P1 &lhs,
+                const schemas::RecipientWithoutId_P1 &rhs);
 
-bool operator==(const schemas::RecipientWithoutId& lhs,
-                const schemas::RecipientWithoutId& rhs);
+bool operator==(const schemas::RecipientWithoutId &lhs,
+                const schemas::RecipientWithoutId &rhs);
 
-USERVER_NAMESPACE::logging::LogHelper& operator<<(
-    USERVER_NAMESPACE::logging::LogHelper& lh,
-    const schemas::RecipientWithoutId_P1& value);
+USERVER_NAMESPACE::logging::LogHelper &operator<<(
+    USERVER_NAMESPACE::logging::LogHelper &lh,
+    const schemas::RecipientWithoutId_P1 &value);
 
-USERVER_NAMESPACE::logging::LogHelper& operator<<(
-    USERVER_NAMESPACE::logging::LogHelper& lh,
-    const schemas::RecipientWithoutId& value);
+USERVER_NAMESPACE::logging::LogHelper &operator<<(
+    USERVER_NAMESPACE::logging::LogHelper &lh,
+    const schemas::RecipientWithoutId &value);
 
 RecipientWithoutId_P1 Parse(
     USERVER_NAMESPACE::formats::json::Value json,
@@ -739,31 +739,31 @@ RecipientWithoutId Parse(
     USERVER_NAMESPACE::formats::parse::To<schemas::RecipientWithoutId>);
 
 USERVER_NAMESPACE::formats::json::Value Serialize(
-    const schemas::RecipientWithoutId_P1& value,
+    const schemas::RecipientWithoutId_P1 &value,
     USERVER_NAMESPACE::formats::serialize::To<
         USERVER_NAMESPACE::formats::json::Value>);
 
 USERVER_NAMESPACE::formats::json::Value Serialize(
-    const schemas::RecipientWithoutId& value,
+    const schemas::RecipientWithoutId &value,
     USERVER_NAMESPACE::formats::serialize::To<
         USERVER_NAMESPACE::formats::json::Value>);
 
-// User login schema
+// User Login schema
 struct User {
   std::string name{};
   std::string password{};
 };
 
-bool operator==(const schemas::User& lhs, const schemas::User& rhs);
+bool operator==(const schemas::User &lhs, const schemas::User &rhs);
 
-USERVER_NAMESPACE::logging::LogHelper& operator<<(
-    USERVER_NAMESPACE::logging::LogHelper& lh, const schemas::User& value);
+USERVER_NAMESPACE::logging::LogHelper &operator<<(
+    USERVER_NAMESPACE::logging::LogHelper &lh, const schemas::User &value);
 
 User Parse(USERVER_NAMESPACE::formats::json::Value json,
            USERVER_NAMESPACE::formats::parse::To<schemas::User>);
 
 USERVER_NAMESPACE::formats::json::Value Serialize(
-    const schemas::User& value, USERVER_NAMESPACE::formats::serialize::To<
-                                    USERVER_NAMESPACE::formats::json::Value>);
+    const schemas::User &value, USERVER_NAMESPACE::formats::serialize::To<
+    USERVER_NAMESPACE::formats::json::Value>);
 
 }  // namespace schemas

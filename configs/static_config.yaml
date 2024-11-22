@@ -32,11 +32,18 @@ components_manager:
                     network_timeout_ms: 750
                     statement_timeout_ms: 500
 
+        default-secdist-provider: # Component that loads configuration of hosts and passwords
+            config: configs/secure_data.json  # Values are supposed to be stored in this file
+        secdist:
+            provider: default-secdist-provider
+
         testsuite-support: {}
 
         http-client:
             load-enabled: $is-testing
             fs-task-processor: fs-task-processor
+        jwt-manager: {}
+        user-manager: {}
 
         tests-control:
             load-enabled: $is-testing
@@ -50,12 +57,28 @@ components_manager:
             throttling_enabled: false
             url_trailing_slash: strict-match
 
-        handler-hello:                    # Finally! Our handler.
-            path: /v1/hello               # Registering handler by URL '/v1/hello'.
-            method: POST                  # It will only reply to POST requests.
-            task_processor: main-task-processor  # Run it on CPU bound task processor
+        handler-user-create:
+            path: /user/create
+            method: POST
+            task_processor: main-task-processor
+        handler-user-login:
+            path: /user/login
+            method: POST
+            task_processor: main-task-processor
+        handler-user-modifyUser:
+            path: /user/modifyUser
+            method: PUT
+            task_processor: main-task-processor
+        handler-user-refreshToken:
+            path: /user/refreshToken
+            method: PUT
+            task_processor: main-task-processor
+        handler-user-delete:
+            path: /user/deleteUser
+            method: DELETE
+            task_processor: main-task-processor
 
-        postgres-db-1:
+        postgres-ens:
             dbconnection: $dbconnection
             dbconnection#env: DB_CONNECTION
             blocking_task_processor: fs-task-processor
