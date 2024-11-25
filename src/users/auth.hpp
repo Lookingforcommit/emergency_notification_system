@@ -30,6 +30,7 @@ struct JwtPair {
       : access_token(std::move(access_token)), refresh_token(std::move(refresh_token)) {};
 };
 
+std::unique_ptr<ens::users::PwdPair> HashPwd(const std::string &password, const std::string &salt);
 std::unique_ptr<PwdPair> HashPwd(const std::string &password);
 std::string GenerateSalt();
 

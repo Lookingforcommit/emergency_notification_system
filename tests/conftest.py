@@ -7,6 +7,7 @@ from testsuite.databases.pgsql import discover
 
 pytest_plugins = ['pytest_userver.plugins.postgresql']
 
+# TODO: get rid of secdist workaround
 USERVER_CONFIG_HOOKS = ['prepare_service_config']
 SERVICE_SOURCE_DIR = pathlib.Path(__file__).parent.parent
 

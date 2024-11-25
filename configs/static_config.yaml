@@ -74,7 +74,7 @@ components_manager:
             method: PUT
             task_processor: main-task-processor
         handler-user-delete:
-            path: /user/deleteUser
+            path: /user
             method: DELETE
             task_processor: main-task-processor
 

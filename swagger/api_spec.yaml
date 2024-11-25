@@ -5,7 +5,7 @@ info:
     This is a REST API for emergency notification system project. 
     You can find out more about it at [github](https://github.com/Lookingforcommit/emergency_notification_system).
     All the endpoints (except for authorization and authentication) require user JWT token to be provided. JWT token 
-    should be provided in http headers in format: "Authorization: Bearer <token>"
+    should be provided in http headers in format: "Authorization: YOUR_JWT_TOKEN"
   contact:
     email: artyomsh628691@gmail.com
   version: 1.0.0
@@ -29,8 +29,6 @@ paths:
     $ref: "paths/user/user-modifyUser.yaml"
   /user/refreshToken:
     $ref: "paths/user/user-refreshToken.yaml"
-  /user/logout:
-    $ref: "paths/user/user-logout.yaml"
   /user:
     $ref: "paths/user/user.yaml"
 

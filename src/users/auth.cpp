@@ -20,6 +20,15 @@ std::string ens::users::GenerateSalt() {
   return userver::utils::encoding::ToHex(salt.data(), salt.size());
 }
 
+// Hash password with passed salt
+std::unique_ptr<ens::users::PwdPair> ens::users::HashPwd(const std::string &password, const std::string &salt) {
+  std::string salted_password = password + salt;
+  auto hash = userver::crypto::hash::Sha512(salted_password);
+  PwdPair pwd_pair = PwdPair(hash, salt);
+  return std::make_unique<PwdPair>(pwd_pair);
+}
+
+// Hash password with random salt
 std::unique_ptr<ens::users::PwdPair> ens::users::HashPwd(const std::string &password) {
   std::string salt = GenerateSalt();
   std::string salted_password = password + salt;
@@ -46,25 +55,28 @@ std::unique_ptr<ens::users::JwtPair> ens::users::JwtManager::GenerateJwtPair(con
 
 userver::yaml_config::Schema ens::users::JwtManager::GetStaticConfigSchema() {
   return userver::yaml_config::MergeSchemas<userver::components::ComponentBase>(R"(
-type: object
-description: Component for jwt verification logic
-additionalProperties: false
-properties: {}
-)");
+    type: object
+    description: Component for jwt verification logic
+    additionalProperties: false
+    properties: {}
+  )");
 }
 
 // Verify jwt and return user id
 std::string ens::users::JwtManager::VerifyJwt(const std::string &token) {
   auto verifier = jwt::verify()
       .allow_algorithm(jwt::algorithm::hs256{this->_secdist_config._jwt_secret});
-  auto decoded = jwt::decode(token);
   try {
+    auto decoded = jwt::decode(token);
     verifier.verify(decoded);
+    return decoded.get_payload_claim("user_id").as_string();
+  }
+  catch (const std::invalid_argument &e) {
+    throw JwtVerificationException{};
   }
   catch (const jwt::error::signature_verification_exception &e) {
     throw JwtVerificationException{};
   }
-  return decoded.get_payload_claim("user_id").as_string();
 }
 
 void ens::users::AppendJwtManager(userver::components::ComponentList &component_list) {

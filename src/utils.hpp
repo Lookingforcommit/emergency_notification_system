@@ -6,8 +6,7 @@
 #include <userver/utils/strong_typedef.hpp>
 
 namespace utils {
-const std::string DB_NAME = "ens";
-const std::string DB_COMPONENT_NAME = "postgres-" + DB_NAME;
+const std::string DB_COMPONENT_NAME = "postgres-ens";
 
 class ParsedSecdistConfig {
  public:
