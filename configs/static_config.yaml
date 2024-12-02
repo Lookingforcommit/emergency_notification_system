@@ -44,6 +44,7 @@ components_manager:
             fs-task-processor: fs-task-processor
         jwt-manager: {}
         user-manager: {}
+        recipients-manager: {}
 
         tests-control:
             load-enabled: $is-testing
@@ -75,6 +76,31 @@ components_manager:
             task_processor: main-task-processor
         handler-user-delete:
             path: /user
+            method: DELETE
+            task_processor: main-task-processor
+
+        handler-recipients-create:
+            path: /recipients/create
+            method: POST
+            task_processor: main-task-processor
+        handler-recipients-getById:
+            path: /recipients
+            method: GET
+            task_processor: main-task-processor
+        handler-recipients-getAll:
+            path: /recipients/all
+            method: GET
+            task_processor: main-task-processor
+        handler-recipients-confirmCreation:
+            path: /recipients/confirmCreation
+            method: PUT
+            task_processor: main-task-processor
+        handler-recipients-modifyRecipient:
+            path: /recipients/modifyRecipient
+            method: PUT
+            task_processor: main-task-processor
+        handler-recipients-deleteRecipient:
+            path: /recipients/deleteRecipient
             method: DELETE
             task_processor: main-task-processor
 

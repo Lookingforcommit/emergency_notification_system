@@ -17,7 +17,7 @@ services:
           - postgres
 
     ens-container:
-        image: ghcr.io/userver-framework/ubuntu-22.04-userver-pg:latest
+        image: ghcr.io/userver-framework/ubuntu-22.04-userver-pg:v2.4
         privileged: true
         environment:
           <<: *db_env

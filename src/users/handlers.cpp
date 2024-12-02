@@ -12,7 +12,9 @@
 #include "schemas/schemas.hpp"
 
 // TODO: Add a json schema for jwt pairs
-// TODO: catch Unknown property errors and throw 422
+// TODO: catch generic json_parse errors and throw 422
+// TODO: convert ids to boost here to catch bad_lexical_cast
+
 userver::formats::json::Value ens::users::UserCreateHandler::HandleRequestJsonThrow(const userver::server::http::HttpRequest &,
                                                                                     const userver::formats::json::Value &request_json,
                                                                                     userver::server::request::RequestContext &) const {
@@ -142,6 +144,7 @@ userver::formats::json::Value ens::users::UserRefreshTokenHandler::HandleRequest
   }
 }
 
+// TODO: catch token expired
 void ens::users::AppendUserRefreshTokenHandler(userver::components::ComponentList &component_list) {
   component_list.Append<UserRefreshTokenHandler>();
 }

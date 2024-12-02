@@ -32,35 +32,3 @@ put:
       $ref: "/../../responses.yaml/#/components/responses/InternalServerError"
     "503":
       $ref: "/../../responses.yaml/#/components/responses/ServiceUnavailable"
-delete:
-  tags:
-    - groups
-  summary: Delete a recipient from recipients group
-  description: Delete a recipient from recipients group
-  operationId: DeleteRecipientFromRecipientsGroup
-  parameters:
-    - in: path
-      name: group_id
-      schema:
-        type: string
-      required: true
-      description: String ID of a group to delete recipient from
-    - in: path
-      name: recipient_id
-      schema:
-        type: string
-      required: true
-      description: String ID of a recipient deleted from the group
-  responses:
-    "200":
-      description: Successful operation
-    "400":
-      $ref: "/../../responses.yaml/#/components/responses/Unauthorized"
-    "404":
-      "description": "Group or recipient not found/No such recipient in the target group"
-    "429":
-      $ref: "/../../responses.yaml/#/components/responses/TooManyRequests"
-    "500":
-      $ref: "/../../responses.yaml/#/components/responses/InternalServerError"
-    "503":
-      $ref: "/../../responses.yaml/#/components/responses/ServiceUnavailable"

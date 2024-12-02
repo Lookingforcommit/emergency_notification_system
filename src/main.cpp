@@ -8,9 +8,8 @@
 #include <userver/testsuite/testsuite_support.hpp>
 #include <userver/utils/daemon_run.hpp>
 
-#include "users/users.hpp"
-#include "users/auth.hpp"
 #include "users/handlers.hpp"
+#include "recipients/handlers.hpp"
 #include "utils.hpp"
 
 int main(int argc, char *argv[]) {
@@ -30,5 +29,12 @@ int main(int argc, char *argv[]) {
   ens::users::AppendUserModifyHandler(component_list);
   ens::users::AppendUserRefreshTokenHandler(component_list);
   ens::users::AppendUserDeleteHandler(component_list);
+  ens::recipients::AppendRecipientsManager(component_list);
+  ens::recipients::AppendRecipientCreateHandler(component_list);
+  ens::recipients::AppendRecipientGetByIdHandler(component_list);
+  ens::recipients::AppendRecipientGetAllHandler(component_list);
+  ens::recipients::AppendRecipientConfirmCreationHandler(component_list);
+  ens::recipients::AppendRecipientModifyHandler(component_list);
+  ens::recipients::AppendRecipientDeleteHandler(component_list);
   return userver::utils::DaemonMain(argc, argv, component_list);
 }

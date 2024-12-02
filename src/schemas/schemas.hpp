@@ -36,6 +36,13 @@ struct BaseRecipient {
   std::optional<std::string> email{};
   std::optional<std::string> phone_number{};
   std::optional<std::string> telegram_username{};
+  BaseRecipient(const std::string &name, const std::optional<std::string> &email,
+                const std::optional<std::string> &phone_number, const std::optional<std::string> &telegram_username)
+      : name(name),
+        email(email),
+        phone_number(phone_number),
+        telegram_username(telegram_username) {}
+  BaseRecipient() = default;
 };
 
 bool operator==(const schemas::BaseRecipient &lhs,
@@ -356,6 +363,8 @@ struct ReturnedRecipient_P1 {
   std::string master_id{};
 
   USERVER_NAMESPACE::formats::json::Value extra;
+  ReturnedRecipient_P1() = default;
+  ReturnedRecipient_P1(const std::string &master_id) : master_id(master_id) {}
 };
 
 struct ReturnedRecipient : public schemas::BaseRecipient,
@@ -365,7 +374,12 @@ struct ReturnedRecipient : public schemas::BaseRecipient,
   ReturnedRecipient(schemas::BaseRecipient &&a0,
                     schemas::ReturnedRecipient_P1 &&a1)
       : schemas::BaseRecipient(std::move(a0)),
-        schemas::ReturnedRecipient_P1(std::move(a1)) {}
+        schemas::ReturnedRecipient_P1(std::move(a1)) {};
+
+  ReturnedRecipient(const std::string &master_id, const std::string &name, const std::optional<std::string> &email,
+                    const std::optional<std::string> &phone_number, const std::optional<std::string> &telegram_username)
+      : BaseRecipient(name, email, phone_number, telegram_username),
+        ReturnedRecipient_P1(master_id) {};
 };
 
 bool operator==(const schemas::ReturnedRecipient_P1 &lhs,
@@ -406,6 +420,8 @@ struct RecipientDraft_P1 {
   std::string draft_id{};
 
   USERVER_NAMESPACE::formats::json::Value extra;
+  RecipientDraft_P1(const std::string &draft_id) : draft_id(draft_id) {}
+  RecipientDraft_P1() = default;
 };
 
 struct RecipientDraft : public schemas::ReturnedRecipient,
@@ -415,7 +431,13 @@ struct RecipientDraft : public schemas::ReturnedRecipient,
   RecipientDraft(schemas::ReturnedRecipient &&a0,
                  schemas::RecipientDraft_P1 &&a1)
       : schemas::ReturnedRecipient(std::move(a0)),
-        schemas::RecipientDraft_P1(std::move(a1)) {}
+        schemas::RecipientDraft_P1(std::move(a1)) {};
+
+  RecipientDraft(const std::string &draft_id, const std::string &master_id, const std::string &name,
+                 const std::optional<std::string> &email, const std::optional<std::string> &phone_number,
+                 const std::optional<std::string> &telegram_username)
+      : ReturnedRecipient(master_id, name, email, phone_number, telegram_username),
+        RecipientDraft_P1(draft_id) {};
 };
 
 bool operator==(const schemas::RecipientDraft_P1 &lhs,
@@ -655,6 +677,8 @@ struct RecipientWithId_P1 {
   std::string recipient_id{};
 
   USERVER_NAMESPACE::formats::json::Value extra;
+  RecipientWithId_P1(const std::string &recipient_id) : recipient_id(recipient_id) {};
+  RecipientWithId_P1() = default;
 };
 
 struct RecipientWithId : public schemas::ReturnedRecipient,
@@ -664,7 +688,13 @@ struct RecipientWithId : public schemas::ReturnedRecipient,
   RecipientWithId(schemas::ReturnedRecipient &&a0,
                   schemas::RecipientWithId_P1 &&a1)
       : schemas::ReturnedRecipient(std::move(a0)),
-        schemas::RecipientWithId_P1(std::move(a1)) {}
+        schemas::RecipientWithId_P1(std::move(a1)) {};
+
+  RecipientWithId(const std::string &recipient_id, const std::string &master_id, const std::string &name,
+                  const std::optional<std::string> &email, const std::optional<std::string> &phone_number,
+                  const std::optional<std::string> &telegram_username)
+      : ReturnedRecipient(master_id, name, email, phone_number, telegram_username),
+        RecipientWithId_P1(recipient_id) {};
 };
 
 bool operator==(const schemas::RecipientWithId_P1 &lhs,

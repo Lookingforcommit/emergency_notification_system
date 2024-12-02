@@ -34,58 +34,60 @@ paths:
 
   /recipients/create:
     $ref: "/paths/recipients/recipients-create.yaml"
-  /recipients/{recipient_id}:
-    $ref: "/paths/recipients/recipients-{recipient_id}.yaml"
+  /recipients/all:
+    $ref: "/paths/recipients/recipients-all.yaml"
   /recipients:
     $ref: "/paths/recipients/recipients.yaml"
-  /recipients/confirmCreation/{draft_id}:
-    $ref: "/paths/recipients/recipients-confirmCreation-{draft_id}.yaml"
-  /recipients/modifyRecipient/{recipient_id}:
-    $ref: "/paths/recipients/recipients-modifyRecipient-{recipient_id}.yaml"
-  /recipients/deleteRecipient/{recipient_id}:
-    $ref: "/paths/recipients/recipients-deleteRecipient-{recipient_id}.yaml"
+  /recipients/confirmCreation:
+    $ref: "/paths/recipients/recipients-confirmCreation.yaml"
+  /recipients/modifyRecipient:
+    $ref: "/paths/recipients/recipients-modifyRecipient.yaml"
+  /recipients/deleteRecipient:
+    $ref: "/paths/recipients/recipients-deleteRecipient.yaml"
 
   /groups/create:
     $ref: "/paths/groups/groups-create.yaml"
-  /groups:
-    $ref: "/paths/groups/groups.yaml"
+  /groups/all:
+    $ref: "/paths/groups/groups-all.yaml"
   /groups/active:
     $ref: "/paths/groups/groups-active.yaml"
-  /groups/{group_id}:
-    $ref: "/paths/groups/groups-{group_id}.yaml"
-  /groups/recipients/{group_id}:
-    $ref: "/paths/groups/groups-recipients-{group_id}.yaml"
-  /groups/confirmCreation/{draft_id}:
-    $ref: "/paths/groups/groups-confirmCreation-{draft_id}.yaml"
-  /groups/modifyGroup/{group_id}:
-    $ref: "/paths/groups/groups-modifyGroup-{group_id}.yaml"
-  /groups/{group_id}/recipients/{recipient_id}:
-    $ref: "/paths/groups/groups-{group_id}-recipients-{recipient_id}.yaml"
-  /groups/deleteGroup/{group_id}:
-    $ref: "/paths/groups/groups-deleteGroup-{group_id}.yaml"
+  /groups:
+    $ref: "/paths/groups/groups.yaml"
+  /groups/recipients:
+    $ref: "/paths/groups/groups-recipients.yaml"
+  /groups/confirmCreation:
+    $ref: "/paths/groups/groups-confirmCreation.yaml"
+  /groups/modifyGroup:
+    $ref: "/paths/groups/groups-modifyGroup.yaml"
+  /groups/addRecipient:
+    $ref: "/paths/groups/groups-addRecipient.yaml"
+  /groups/deleteRecipient:
+    $ref: "/paths/groups/groups-deleteRecipient.yaml"
+  /groups/deleteGroup:
+    $ref: "/paths/groups/groups-deleteGroup.yaml"
 
   /templates/create:
     $ref: "/paths/templates/templates-create.yaml"
-  /templates/{template_id}:
-    $ref: "/paths/templates/templates-{template_id}.yaml"
   /templates:
-    $ref: "/paths/templates/template.yaml"
-  /templates/confirmCreation/{draft_id}:
-    $ref: "/paths/templates/templates-confirmCreation-{draft_id}.yaml"
-  /templates/modifyTemplate/{template_id}:
-    $ref: "/paths/templates/templates-modifyTemplate-{template_id}.yaml"
-  /templates/deleteTemplate/{template_id}:
-    $ref: "/paths/templates/templates-deleteTemplate-{template_id}.yaml"
+    $ref: "/paths/templates/templates.yaml"
+  /templates/all:
+    $ref: "/paths/templates/templates-all.yaml"
+  /templates/confirmCreation:
+    $ref: "/paths/templates/templates-confirmCreation.yaml"
+  /templates/modifyTemplate:
+    $ref: "/paths/templates/templates-modifyTemplate.yaml"
+  /templates/deleteTemplate:
+    $ref: "/paths/templates/templates-deleteTemplate.yaml"
 
-  /notifications:
-    $ref: "paths/notifications/notifications.yaml"
+  /notifications/all:
+    $ref: "paths/notifications/notifications-all.yaml"
   /notifications/pending:
     $ref: "paths/notifications/notifications-pending.yaml"
   /notifications/completed:
     $ref: "paths/notifications/notifications-completed.yaml"
   /notifications/send:
     $ref: "paths/notifications/notifications-send.yaml"
-  /notifications/{notification_id}:
-    $ref: "paths/notifications/notifications-{notification_id}.yaml"
+  /notifications/cancelNotification:
+    $ref: "paths/notifications/notifications-cancelNotification.yaml"
 security:
   - bearerAuth: []

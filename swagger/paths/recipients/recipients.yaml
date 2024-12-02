@@ -1,18 +1,27 @@
 get:
   tags:
     - recipients
-  summary:  Get all the user's recipients
-  description: Get all the user's recipients
-  operationId: getRecipients
+  summary: Get a recipient by its id
+  description: Get a recipient by its id
+  operationId: getRecipient
+  parameters:
+    - in: path
+      name: recipient_id
+      schema:
+        type: string
+      required: true
+      description: String ID of a recipient to get
   responses:
     "200":
       description: Successful operation
       content:
         application/json:
           schema:
-            $ref: "/../../schemas.yaml/#/components/schemas/RecipientWithIdList"
+            $ref: "/../../schemas.yaml/#/components/schemas/RecipientWithId"
     "401":
       $ref: "/../../responses.yaml/#/components/responses/Unauthorized"
+    "404":
+      "description": "Recipient not found"
     "429":
       $ref: "/../../responses.yaml/#/components/responses/TooManyRequests"
     "500":

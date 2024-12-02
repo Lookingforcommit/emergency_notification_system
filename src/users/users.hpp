@@ -1,6 +1,6 @@
 #pragma once
 
-#include <cstdlib>
+#include <fmt/format.h>
 
 #include <userver/components/component.hpp>
 #include <userver/components/component_list.hpp>
@@ -41,26 +41,32 @@ void AppendUserManager(userver::components::ComponentList &component_list);
 
 class UserAlreadyExistsException : public std::exception {
  private:
-  const std::string MSG{"User already exists"};
+  const std::string FORMAT{"User already exists name={}"};
+  const std::string _msg;
  public:
+  UserAlreadyExistsException(const std::string &name) : _msg(fmt::format(this->FORMAT, name)) {};
   [[nodiscard]] const char *what() const
-  noexcept override { return MSG.c_str(); };
+  noexcept override { return this->_msg.c_str(); };
 };
 
 class UserNotFoundException : public std::exception {
  private:
-  const std::string MSG{"User does not exist"};
+  const std::string FORMAT{"User does not exist name={}"};
+  const std::string _msg;
  public:
+  UserNotFoundException(const std::string &name) : _msg(fmt::format(this->FORMAT, name)) {};
   [[nodiscard]] const char *what() const
-  noexcept override { return MSG.c_str(); };
+  noexcept override { return this->_msg.c_str(); };
 };
 
 class IncorrectPwdException : public std::exception {
  private:
-  const std::string MSG{"Incorrect password"};
+  const std::string FORMAT{"Incorrect password user_id={}"};
+  const std::string _msg;
  public:
+  IncorrectPwdException(const std::string &user_id) : _msg(fmt::format(this->FORMAT, user_id)) {};
   [[nodiscard]] const char *what() const
-  noexcept override { return MSG.c_str(); };
+  noexcept override { return this->_msg.c_str(); };
 };
 
 }  // namespace ens::users

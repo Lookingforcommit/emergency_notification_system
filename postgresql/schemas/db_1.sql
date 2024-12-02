@@ -6,7 +6,7 @@ DROP TABLE IF EXISTS ens_schema.user CASCADE;
 
 CREATE TABLE IF NOT EXISTS ens_schema.user
 (
-    name          TEXT NOT NULL,
+    name          TEXT UNIQUE NOT NULL,
     password_hash TEXT NOT NULL,
     password_salt TEXT NOT NULL,
     user_id       uuid PRIMARY KEY
@@ -20,7 +20,7 @@ CREATE TABLE IF NOT EXISTS ens_schema.notification_template
     message_text             TEXT,
     notification_template_id uuid PRIMARY KEY,
     master_id                uuid NOT NULL,
-    FOREIGN KEY (master_id) REFERENCES ens_schema.user (user_id)
+    FOREIGN KEY (master_id) REFERENCES ens_schema.user (user_id) ON DELETE CASCADE
 );
 
 DROP TABLE IF EXISTS ens_schema.notification_template_draft CASCADE;
@@ -43,7 +43,7 @@ CREATE TABLE IF NOT EXISTS ens_schema.recipient
     telegram_username TEXT,
     recipient_id      uuid PRIMARY KEY,
     master_id         uuid NOT NULL,
-    FOREIGN KEY (master_id) REFERENCES ens_schema.user (user_id)
+    FOREIGN KEY (master_id) REFERENCES ens_schema.user (user_id) ON DELETE CASCADE
 );
 
 DROP TABLE IF EXISTS ens_schema.recipient_draft CASCADE;
@@ -67,7 +67,7 @@ CREATE TABLE IF NOT EXISTS ens_schema.recipient_group
     recipient_group_id uuid PRIMARY KEY,
     master_id          uuid    NOT NULL,
     template_id        uuid    NOT NULL,
-    FOREIGN KEY (master_id) REFERENCES ens_schema.user (user_id),
+    FOREIGN KEY (master_id) REFERENCES ens_schema.user (user_id) ON DELETE CASCADE,
     FOREIGN KEY (template_id) REFERENCES ens_schema.notification_template (notification_template_id)
 );
 
@@ -89,8 +89,8 @@ CREATE TABLE IF NOT EXISTS ens_schema.recipient_recipient_group
     recipient_recipient_group TEXT PRIMARY KEY,
     recipient_id              uuid NOT NULL,
     recipient_group_id        uuid NOT NULL,
-    FOREIGN KEY (recipient_id) REFERENCES ens_schema.recipient (recipient_id),
-    FOREIGN KEY (recipient_group_id) REFERENCES ens_schema.recipient_group (recipient_group_id)
+    FOREIGN KEY (recipient_id) REFERENCES ens_schema.recipient (recipient_id) ON DELETE CASCADE,
+    FOREIGN KEY (recipient_group_id) REFERENCES ens_schema.recipient_group (recipient_group_id) ON DELETE CASCADE
 );
 
 DROP TABLE IF EXISTS ens_schema.notification CASCADE;

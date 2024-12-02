@@ -38,6 +38,10 @@ add_library(${PROJECT_NAME}_objs OBJECT
         src/users/auth.hpp
         src/users/handlers.cpp
         src/users/handlers.hpp
+        src/recipients/recipients.cpp
+        src/recipients/recipients.hpp
+        src/recipients/handlers.cpp
+        src/recipients/handlers.hpp
 )
 target_link_libraries(${PROJECT_NAME}_objs PUBLIC userver::postgresql)
 
@@ -58,6 +62,7 @@ target_link_libraries(${PROJECT_NAME} PRIVATE ${PROJECT_NAME}_objs)
 include(UserverTestsuite)
 
 userver_testsuite_add(
+        PYTHONPATH "${CMAKE_CURRENT_SOURCE_DIR}/tests"
         SERVICE_TARGET ${PROJECT_NAME}
         WORKING_DIRECTORY ${CMAKE_CURRENT_SOURCE_DIR}/tests
         PYTHON_BINARY ${TESTSUITE_PYTHON_BINARY}
