@@ -42,6 +42,10 @@ add_library(${PROJECT_NAME}_objs OBJECT
         src/recipients/recipients.hpp
         src/recipients/handlers.cpp
         src/recipients/handlers.hpp
+        src/templates/templates.cpp
+        src/templates/templates.hpp
+        src/templates/handlers.cpp
+        src/templates/handlers.hpp
 )
 target_link_libraries(${PROJECT_NAME}_objs PUBLIC userver::postgresql)
 

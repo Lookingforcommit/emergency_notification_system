@@ -38,7 +38,7 @@ class RecipientGetByIdHandler : public RecipientJsonHandlerBase {
   static constexpr std::string_view kName = "handler-recipients-getById";
   using RecipientJsonHandlerBase::RecipientJsonHandlerBase;
   userver::formats::json::Value HandleRequestJsonThrow(const userver::server::http::HttpRequest &request,
-                                                       const userver::formats::json::Value &request_json,
+                                                       const userver::formats::json::Value &,
                                                        userver::server::request::RequestContext &) const override;
 };
 
@@ -48,8 +48,8 @@ class RecipientGetAllHandler : public RecipientJsonHandlerBase {
  public:
   static constexpr std::string_view kName = "handler-recipients-getAll";
   using RecipientJsonHandlerBase::RecipientJsonHandlerBase;
-  userver::formats::json::Value HandleRequestJsonThrow(const userver::server::http::HttpRequest &,
-                                                       const userver::formats::json::Value &request_json,
+  userver::formats::json::Value HandleRequestJsonThrow(const userver::server::http::HttpRequest &request,
+                                                       const userver::formats::json::Value &,
                                                        userver::server::request::RequestContext &) const override;
 };
 

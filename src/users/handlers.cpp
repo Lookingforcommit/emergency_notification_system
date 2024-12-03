@@ -6,6 +6,9 @@
 #include <userver/server/handlers/exceptions.hpp>
 #include <userver/server/http/http_error.hpp>
 #include <userver/formats/json/schema.hpp>
+#include <boost/lexical_cast.hpp>
+#include <boost/uuid/uuid.hpp>
+#include <boost/uuid/uuid_io.hpp>
 
 #include "users.hpp"
 #include "auth.hpp"
@@ -13,7 +16,6 @@
 
 // TODO: Add a json schema for jwt pairs
 // TODO: catch generic json_parse errors and throw 422
-// TODO: convert ids to boost here to catch bad_lexical_cast
 
 userver::formats::json::Value ens::users::UserCreateHandler::HandleRequestJsonThrow(const userver::server::http::HttpRequest &,
                                                                                     const userver::formats::json::Value &request_json,
@@ -91,7 +93,7 @@ userver::formats::json::Value ens::users::UserModifyHandler::HandleRequestJsonTh
   const std::string &access_token = request.GetHeader("Authorization");
   try {
     schemas::User new_data = request_json.As<schemas::User>();
-    std::string user_id = _jwt_verif_manager.VerifyJwt(access_token);
+    boost::uuids::uuid user_id = _jwt_verif_manager.VerifyJwt(access_token);
     this->_user_manager.ModifyUser(user_id, new_data);
     return userver::formats::json::Value{};
   }
@@ -128,7 +130,7 @@ userver::formats::json::Value ens::users::UserRefreshTokenHandler::HandleRequest
                                                                                           userver::server::request::RequestContext &) const {
   const std::string &refresh_token = request.GetHeader("Authorization");
   try {
-    std::string user_id = _jwt_verif_manager.VerifyJwt(refresh_token);
+    boost::uuids::uuid user_id = _jwt_verif_manager.VerifyJwt(refresh_token);
     std::unique_ptr<ens::users::JwtPair> jwt_pair = this->_user_manager.RefreshToken(user_id);
     userver::formats::json::ValueBuilder builder;
     builder["access_token"] = jwt_pair->access_token;
@@ -154,7 +156,7 @@ userver::formats::json::Value ens::users::UserDeleteHandler::HandleRequestJsonTh
                                                                                     userver::server::request::RequestContext &) const {
   const std::string &access_token = request.GetHeader("Authorization");
   try {
-    std::string user_id = _jwt_verif_manager.VerifyJwt(access_token);
+    boost::uuids::uuid user_id = _jwt_verif_manager.VerifyJwt(access_token);
     this->_user_manager.DeleteUser(user_id);
     return userver::formats::json::Value{};
   }

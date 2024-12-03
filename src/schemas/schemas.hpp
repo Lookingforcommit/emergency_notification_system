@@ -12,6 +12,12 @@ namespace schemas {
 struct BaseNotificationTemplate {
   std::string name{};
   std::optional<std::string> message_text{};
+
+  BaseNotificationTemplate() = default;
+
+  BaseNotificationTemplate(const std::string &name, const std::optional<std::string> &message_text)
+  : name(name),
+    message_text(message_text) {};
 };
 
 bool operator==(const schemas::BaseNotificationTemplate &lhs,
@@ -154,6 +160,10 @@ struct ReturnedNotificationTemplate_P1 {
   std::string master_id{};
 
   USERVER_NAMESPACE::formats::json::Value extra;
+
+  ReturnedNotificationTemplate_P1() = default;
+
+  ReturnedNotificationTemplate_P1(const std::string &master_id) : master_id(master_id) {};
 };
 
 struct ReturnedNotificationTemplate
@@ -164,7 +174,12 @@ struct ReturnedNotificationTemplate
   ReturnedNotificationTemplate(schemas::BaseNotificationTemplate &&a0,
                                schemas::ReturnedNotificationTemplate_P1 &&a1)
       : schemas::BaseNotificationTemplate(std::move(a0)),
-        schemas::ReturnedNotificationTemplate_P1(std::move(a1)) {}
+        schemas::ReturnedNotificationTemplate_P1(std::move(a1)) {};
+
+  ReturnedNotificationTemplate(const std::string &master_id, const std::string &name,
+                               const std::optional<std::string> &message_text)
+      : BaseNotificationTemplate(name, message_text),
+        ReturnedNotificationTemplate_P1(master_id) {};
 };
 
 bool operator==(const schemas::ReturnedNotificationTemplate_P1 &lhs,
@@ -206,6 +221,10 @@ struct NotificationTemplateDraft_P1 {
   std::string draft_id{};
 
   USERVER_NAMESPACE::formats::json::Value extra;
+
+  NotificationTemplateDraft_P1() = default;
+
+  NotificationTemplateDraft_P1(const std::string &draft_id) : draft_id(draft_id) {};
 };
 
 struct NotificationTemplateDraft
@@ -216,7 +235,12 @@ struct NotificationTemplateDraft
   NotificationTemplateDraft(schemas::ReturnedNotificationTemplate &&a0,
                             schemas::NotificationTemplateDraft_P1 &&a1)
       : schemas::ReturnedNotificationTemplate(std::move(a0)),
-        schemas::NotificationTemplateDraft_P1(std::move(a1)) {}
+        schemas::NotificationTemplateDraft_P1(std::move(a1)) {};
+
+  NotificationTemplateDraft(const std::string &draft_id, const std::string &master_id, const std::string &name,
+                            const std::optional<std::string> &message_text)
+                            : ReturnedNotificationTemplate(master_id, name, message_text),
+                              NotificationTemplateDraft_P1(draft_id) {};
 };
 
 bool operator==(const schemas::NotificationTemplateDraft_P1 &lhs,
@@ -258,6 +282,11 @@ struct NotificationTemplateWithId_P1 {
   std::string notification_template_id{};
 
   USERVER_NAMESPACE::formats::json::Value extra;
+
+  NotificationTemplateWithId_P1() = default;
+
+  NotificationTemplateWithId_P1(const std::string &notification_template_id)
+  : notification_template_id(notification_template_id) {};
 };
 
 struct NotificationTemplateWithId
@@ -268,7 +297,12 @@ struct NotificationTemplateWithId
   NotificationTemplateWithId(schemas::ReturnedNotificationTemplate &&a0,
                              schemas::NotificationTemplateWithId_P1 &&a1)
       : schemas::ReturnedNotificationTemplate(std::move(a0)),
-        schemas::NotificationTemplateWithId_P1(std::move(a1)) {}
+        schemas::NotificationTemplateWithId_P1(std::move(a1)) {};
+
+  NotificationTemplateWithId(const std::string &notification_template_id, const std::string &master_id,
+                             const std::string &name, const std::optional<std::string> &message_text)
+                             : ReturnedNotificationTemplate(master_id, name, message_text),
+                               NotificationTemplateWithId_P1(notification_template_id) {};
 };
 
 bool operator==(const schemas::NotificationTemplateWithId_P1 &lhs,

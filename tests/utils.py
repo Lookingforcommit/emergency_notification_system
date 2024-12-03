@@ -185,3 +185,107 @@ async def db_get_recipients(rows_num: int, pgsql) -> typing.Optional[tuple]:
     )
     records = cursor.fetchmany(rows_num)
     return records
+
+
+async def create_template(service_client, name: str, message_text: str = "", access_token: str = ""):
+    payload = compact_dict({
+        "name": name,
+        "message_text": message_text,
+    })
+    headers = compact_dict({"Authorization": access_token})
+    response = await service_client.post(
+        '/templates/create',
+        data=json.dumps(payload),
+        headers=headers
+    )
+    return response
+
+
+async def get_template(service_client, template_id: str, access_token: str = ""):
+    params = {"template_id": template_id}
+    headers = compact_dict({"Authorization": access_token})
+    response = await service_client.get(
+        '/templates',
+        params=params,
+        headers=headers
+    )
+    return response
+
+
+async def get_templates(service_client, access_token: str = ""):
+    headers = compact_dict({"Authorization": access_token})
+    response = await service_client.get(
+        '/templates/all',
+        headers=headers
+    )
+    return response
+
+
+async def templates_confirm_creation(service_client, draft_id: str, access_token: str = ""):
+    params = {"draft_id": draft_id}
+    headers = compact_dict({"Authorization": access_token})
+    response = await service_client.put(
+        '/templates/confirmCreation',
+        params=params,
+        headers=headers,
+    )
+    return response
+
+
+async def modify_template(service_client, template_id: str, name: str, message_text: str = "", access_token: str = ""):
+    payload = compact_dict({
+        "name": name,
+        "message_text": message_text
+    })
+    params = {"template_id": template_id}
+    headers = compact_dict({"Authorization": access_token})
+    response = await service_client.put(
+        '/templates/modifyTemplate',
+        params=params,
+        headers=headers,
+        data=json.dumps(payload)
+    )
+    return response
+
+
+async def delete_template(service_client, template_id: str, access_token: str = ""):
+    params = {"template_id": template_id}
+    headers = compact_dict({"Authorization": access_token})
+    response = await service_client.delete(
+        '/templates/deleteTemplate',
+        params=params,
+        headers=headers,
+    )
+    return response
+
+
+async def db_get_template_draft(draft_id: str, pgsql) -> typing.Optional[tuple]:
+    cursor = pgsql[DB_NAME].cursor()
+    cursor.execute(
+        "SELECT * "
+        "FROM ens_schema.notification_template_draft "
+        "WHERE notification_template_draft_id = %s", (draft_id,),
+    )
+    record = cursor.fetchone()
+    return record
+
+
+async def db_get_template(template_id: str, pgsql) -> typing.Optional[tuple]:
+    cursor = pgsql[DB_NAME].cursor()
+    cursor.execute(
+        "SELECT * "
+        "FROM ens_schema.notification_template "
+        "WHERE notification_template_id = %s", (template_id,),
+    )
+    record = cursor.fetchone()
+    return record
+
+
+async def db_get_templates(rows_num: int, pgsql) -> typing.Optional[tuple]:
+    cursor = pgsql[DB_NAME].cursor()
+    cursor.execute(
+        "SELECT * "
+        "FROM ens_schema.notification_template "
+    )
+    records = cursor.fetchmany(rows_num)
+    return records

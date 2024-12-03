@@ -18,7 +18,7 @@ userver::yaml_config::Schema ens::recipients::RecipientManager::GetStaticConfigS
   )");
 }
 
-std::unique_ptr<schemas::RecipientDraft> ens::recipients::RecipientManager::Create(const std::string &user_id,
+std::unique_ptr<schemas::RecipientDraft> ens::recipients::RecipientManager::Create(const boost::uuids::uuid &user_id,
                                                                                    const schemas::RecipientWithoutId &data) {
   const userver::storages::postgres::Query create_recipient_query{
       "INSERT INTO ens_schema.recipient_draft "
@@ -30,14 +30,14 @@ std::unique_ptr<schemas::RecipientDraft> ens::recipients::RecipientManager::Crea
       _pg_cluster->Begin(userver::storages::postgres::ClusterHostType::kMaster, {});
   userver::storages::postgres::ResultSet insert_res = insert_transaction.Execute(create_recipient_query,
                                                                                  recipient_draft_id,
-                                                                                 boost::lexical_cast<boost::uuids::uuid>(user_id),
+                                                                                 user_id,
                                                                                  data.name,
                                                                                  data.email,
                                                                                  data.phone_number,
                                                                                  data.telegram_username);
   insert_transaction.Commit();
   schemas::RecipientDraft created_draft{boost::uuids::to_string(recipient_draft_id),
-                                        user_id,
+                                        boost::uuids::to_string(user_id),
                                         data.name,
                                         data.email,
                                         data.phone_number,
@@ -45,7 +45,7 @@ std::unique_ptr<schemas::RecipientDraft> ens::recipients::RecipientManager::Crea
   return std::make_unique<schemas::RecipientDraft>(created_draft);
 }
 
-std::unique_ptr<schemas::RecipientWithId> ens::recipients::RecipientManager::GetById(const std::string &user_id,
+std::unique_ptr<schemas::RecipientWithId> ens::recipients::RecipientManager::GetById(const boost::uuids::uuid &user_id,
                                                                                      const std::string &recipient_id) const {
   const userver::storages::postgres::Query recipient_info_query{
       "SELECT recipient_id, master_id, name, email, phone_number, telegram_username "
@@ -55,14 +55,14 @@ std::unique_ptr<schemas::RecipientWithId> ens::recipients::RecipientManager::Get
   userver::storages::postgres::ResultSet
       select_res = _pg_cluster->Execute(userver::storages::postgres::ClusterHostType::kSlave,
                                         recipient_info_query,
-                                        boost::lexical_cast<boost::uuids::uuid>(user_id),
+                                        user_id,
                                         boost::lexical_cast<boost::uuids::uuid>(recipient_id));
   if (select_res.IsEmpty()) {
     throw RecipientNotFoundException{recipient_id};
   }
   userver::storages::postgres::Row recipient_row = select_res[0];
   schemas::RecipientWithId recipient_data{recipient_id,
-                                          user_id,
+                                          boost::uuids::to_string(user_id),
                                           recipient_row["name"].As<std::string>(),
                                           recipient_row["email"].As<std::string>(),
                                           recipient_row["phone_number"].As<std::string>(),
@@ -71,7 +71,7 @@ std::unique_ptr<schemas::RecipientWithId> ens::recipients::RecipientManager::Get
   return std::make_unique<schemas::RecipientWithId>(recipient_data);
 }
 
-std::unique_ptr<schemas::RecipientWithIdList> ens::recipients::RecipientManager::GetAll(const std::string &user_id) const {
+std::unique_ptr<schemas::RecipientWithIdList> ens::recipients::RecipientManager::GetAll(const boost::uuids::uuid &user_id) const {
   const userver::storages::postgres::Query recipients_info_query{
       "SELECT recipient_id, master_id, name, email, phone_number, telegram_username "
       "FROM ens_schema.recipient "
@@ -80,12 +80,12 @@ std::unique_ptr<schemas::RecipientWithIdList> ens::recipients::RecipientManager:
   userver::storages::postgres::ResultSet
       select_res = _pg_cluster->Execute(userver::storages::postgres::ClusterHostType::kSlave,
                                         recipients_info_query,
-                                        boost::lexical_cast<boost::uuids::uuid>(user_id));
+                                        user_id);
   schemas::RecipientWithIdList recipients_data;
   for (auto row : select_res) {
     recipients_data.emplace_back(
         boost::uuids::to_string(row["recipient_id"].As<boost::uuids::uuid>()),
-        user_id,
+        boost::uuids::to_string(user_id),
         row["name"].As<std::string>(),
         row["email"].As<std::string>(),
         row["phone_number"].As<std::string>(),
@@ -95,7 +95,7 @@ std::unique_ptr<schemas::RecipientWithIdList> ens::recipients::RecipientManager:
   return std::make_unique<schemas::RecipientWithIdList>(recipients_data);
 }
 
-std::unique_ptr<schemas::RecipientWithId> ens::recipients::RecipientManager::ConfirmCreation(const std::string &user_id,
+std::unique_ptr<schemas::RecipientWithId> ens::recipients::RecipientManager::ConfirmCreation(const boost::uuids::uuid &user_id,
                                                                                              const std::string &draft_id) {
   boost::uuids::uuid recipient_id = userver::utils::generators::GenerateBoostUuidV7();
   const userver::storages::postgres::Query recipient_creation_query{
@@ -123,12 +123,12 @@ std::unique_ptr<schemas::RecipientWithId> ens::recipients::RecipientManager::Con
   }
   userver::storages::postgres::ResultSet
       deletion_res = confirmation_transaction.Execute(draft_deletion_query,
-                                                      boost::lexical_cast<boost::uuids::uuid>(user_id),
+                                                      user_id,
                                                       boost::lexical_cast<boost::uuids::uuid>(draft_id));
   confirmation_transaction.Commit();
   userver::storages::postgres::Row recipient_row = insertion_res[0];
   schemas::RecipientWithId recipient_data{boost::uuids::to_string(recipient_id),
-                                          user_id,
+                                          boost::uuids::to_string(user_id),
                                           recipient_row["name"].As<std::string>(),
                                           recipient_row["email"].As<std::string>(),
                                           recipient_row["phone_number"].As<std::string>(),
@@ -137,7 +137,7 @@ std::unique_ptr<schemas::RecipientWithId> ens::recipients::RecipientManager::Con
   return std::make_unique<schemas::RecipientWithId>(recipient_data);
 }
 
-std::unique_ptr<schemas::RecipientWithId> ens::recipients::RecipientManager::ModifyRecipient(const std::string &user_id,
+std::unique_ptr<schemas::RecipientWithId> ens::recipients::RecipientManager::ModifyRecipient(const boost::uuids::uuid &user_id,
                                                                                              const std::string &recipient_id,
                                                                                              const schemas::RecipientWithoutId &data) {
   const userver::storages::postgres::Query update_query{
@@ -150,7 +150,7 @@ std::unique_ptr<schemas::RecipientWithId> ens::recipients::RecipientManager::Mod
       _pg_cluster->Begin(userver::storages::postgres::ClusterHostType::kMaster, {});
   userver::storages::postgres::ResultSet
       update_res = update_transaction.Execute(update_query,
-                                              boost::lexical_cast<boost::uuids::uuid>(user_id),
+                                              user_id,
                                               boost::lexical_cast<boost::uuids::uuid>(recipient_id),
                                               data.name,
                                               data.email,
@@ -162,7 +162,7 @@ std::unique_ptr<schemas::RecipientWithId> ens::recipients::RecipientManager::Mod
   update_transaction.Commit();
   userver::storages::postgres::Row recipient_row = update_res[0];
   schemas::RecipientWithId recipient_data{recipient_id,
-                                          user_id,
+                                          boost::uuids::to_string(user_id),
                                           recipient_row["name"].As<std::string>(),
                                           recipient_row["email"].As<std::string>(),
                                           recipient_row["phone_number"].As<std::string>(),
@@ -171,7 +171,7 @@ std::unique_ptr<schemas::RecipientWithId> ens::recipients::RecipientManager::Mod
   return std::make_unique<schemas::RecipientWithId>(recipient_data);
 }
 
-void ens::recipients::RecipientManager::DeleteRecipient(const std::string &user_id, const std::string &recipient_id) {
+void ens::recipients::RecipientManager::DeleteRecipient(const boost::uuids::uuid &user_id, const std::string &recipient_id) {
   const userver::storages::postgres::Query delete_query{
       "DELETE "
       "FROM ens_schema.recipient "
@@ -181,7 +181,7 @@ void ens::recipients::RecipientManager::DeleteRecipient(const std::string &user_
       _pg_cluster->Begin(userver::storages::postgres::ClusterHostType::kMaster, {});
   userver::storages::postgres::ResultSet
       delete_res = delete_transaction.Execute(delete_query,
-                                              boost::lexical_cast<boost::uuids::uuid>(user_id),
+                                              user_id,
                                               boost::lexical_cast<boost::uuids::uuid>(recipient_id));
   if (not delete_res.RowsAffected()) {
     throw RecipientNotFoundException{recipient_id};
@@ -189,6 +189,6 @@ void ens::recipients::RecipientManager::DeleteRecipient(const std::string &user_
   delete_transaction.Commit();
 }
 
-void ens::recipients::AppendRecipientsManager(userver::components::ComponentList &component_list) {
+void ens::recipients::AppendRecipientManager(userver::components::ComponentList &component_list) {
   component_list.Append<RecipientManager>();
 }

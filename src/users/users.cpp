@@ -9,7 +9,6 @@
 #include <userver/storages/postgres/transaction.hpp>
 #include <userver/yaml_config/merge_schemas.hpp>
 #include <boost/uuid/uuid_io.hpp>
-#include <boost/lexical_cast.hpp>
 #include <userver/utils/boost_uuid7.hpp>
 
 #include "users/auth.hpp"
@@ -80,7 +79,7 @@ std::unique_ptr<ens::users::JwtPair> ens::users::UserManager::Login(const std::s
 }
 
 // Modify existing user data
-void ens::users::UserManager::ModifyUser(const std::string &user_id, const schemas::User &new_data) {
+void ens::users::UserManager::ModifyUser(const boost::uuids::uuid &user_id, const schemas::User &new_data) {
   const userver::storages::postgres::Query update_user_query{
       "UPDATE ens_schema.user "
       "SET name = $1, password_hash = $2, password_salt = $3 "
@@ -93,22 +92,21 @@ void ens::users::UserManager::ModifyUser(const std::string &user_id, const schem
                                                                                  new_data.name,
                                                                                  pwd_pair->hashed_password,
                                                                                  pwd_pair->salt,
-                                                                                 boost::lexical_cast<boost::uuids::uuid>(
-                                                                                     user_id));
+                                                                                 user_id);
   if (not update_res.RowsAffected()) {
-    throw UserNotFoundException{user_id};
+    throw UserNotFoundException{boost::uuids::to_string(user_id)};
   }
   update_transaction.Commit();
 }
 
 // Get new jwt tokens
-std::unique_ptr<ens::users::JwtPair> ens::users::UserManager::RefreshToken(const std::string &user_id) const {
-  std::unique_ptr<ens::users::JwtPair> jwt_pair = this->_jwt_manager.GenerateJwtPair(user_id);
+std::unique_ptr<ens::users::JwtPair> ens::users::UserManager::RefreshToken(const boost::uuids::uuid &user_id) const {
+  std::unique_ptr<ens::users::JwtPair> jwt_pair = this->_jwt_manager.GenerateJwtPair(boost::uuids::to_string(user_id));
   return jwt_pair;
 }
 
 // Delete an account
-void ens::users::UserManager::DeleteUser(const std::string &user_id) {
+void ens::users::UserManager::DeleteUser(const boost::uuids::uuid &user_id) {
   const userver::storages::postgres::Query delete_user_query{
       "DELETE "
       "FROM ens_schema.user "
@@ -117,10 +115,9 @@ void ens::users::UserManager::DeleteUser(const std::string &user_id) {
   userver::storages::postgres::Transaction delete_transaction =
       _pg_cluster->Begin(userver::storages::postgres::ClusterHostType::kMaster, {});
   userver::storages::postgres::ResultSet delete_res = delete_transaction.Execute(delete_user_query,
-                                                                                 boost::lexical_cast<boost::uuids::uuid>(
-                                                                                     user_id));
+                                                                                 user_id);
   if (not delete_res.RowsAffected()) {
-    throw UserNotFoundException{user_id};
+    throw UserNotFoundException{boost::uuids::to_string(user_id)};
   }
   delete_transaction.Commit();
 }

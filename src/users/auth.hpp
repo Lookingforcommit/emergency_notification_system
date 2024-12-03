@@ -44,7 +44,7 @@ class JwtManager : public userver::components::ComponentBase {
       _secdist_config(
           component_context.FindComponent<userver::components::Secdist>().Get().Get<utils::ParsedSecdistConfig>()
       ) {}
-  std::string VerifyJwt(const std::string &token);
+  boost::uuids::uuid VerifyJwt(const std::string &token);
   std::unique_ptr<ens::users::JwtPair> GenerateJwtPair(const std::string &user_id);
   static userver::yaml_config::Schema GetStaticConfigSchema();
  private:

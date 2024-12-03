@@ -2,6 +2,9 @@
 
 #include <userver/server/handlers/exceptions.hpp>
 #include <userver/server/http/http_error.hpp>
+#include <boost/lexical_cast.hpp>
+#include <boost/uuid/uuid.hpp>
+#include <boost/uuid/uuid_io.hpp>
 
 #include "schemas/schemas.hpp"
 #include "users/auth.hpp"
@@ -15,8 +18,7 @@ userver::formats::json::Value ens::recipients::RecipientCreateHandler::HandleReq
   const std::string &access_token = request.GetHeader("Authorization");
   try {
     schemas::RecipientWithoutId user_data = request_json.As<schemas::RecipientWithoutId>();
-    std::string user_id = _jwt_verif_manager.VerifyJwt(access_token);
-    LOG_DEBUG() << "Create user_id=" << user_id;
+    boost::uuids::uuid user_id = _jwt_verif_manager.VerifyJwt(access_token);
     std::unique_ptr<schemas::RecipientDraft> created_data = this->_recipient_manager.Create(user_id, user_data);
     return schemas::Serialize(*created_data, userver::formats::serialize::To<userver::formats::json::Value>());
   }
@@ -46,9 +48,8 @@ userver::formats::json::Value ens::recipients::RecipientGetByIdHandler::HandleRe
                                                                                                userver::server::request::RequestContext &) const {
   const std::string &access_token = request.GetHeader("Authorization");
   const std::string recipient_id = request.GetArg("recipient_id");
-  LOG_DEBUG() << "GetById recipient_id=" << recipient_id;
   try {
-    std::string user_id = _jwt_verif_manager.VerifyJwt(access_token);
+    boost::uuids::uuid user_id = _jwt_verif_manager.VerifyJwt(access_token);
     std::unique_ptr<schemas::RecipientWithId> recipient = this->_recipient_manager.GetById(user_id, recipient_id);
     return schemas::Serialize(*recipient, userver::formats::serialize::To<userver::formats::json::Value>());
   }
@@ -77,11 +78,12 @@ userver::formats::json::Value ens::recipients::RecipientGetAllHandler::HandleReq
                                                                                               userver::server::request::RequestContext &) const {
   const std::string &access_token = request.GetHeader("Authorization");
   try {
-    std::string user_id = _jwt_verif_manager.VerifyJwt(access_token);
+    boost::uuids::uuid user_id = _jwt_verif_manager.VerifyJwt(access_token);
     std::unique_ptr<schemas::RecipientWithIdList> recipients = this->_recipient_manager.GetAll(user_id);
     userver::formats::json::ValueBuilder recipients_json(userver::formats::common::Type::kArray);
-    for (const auto& item : *recipients) {
-      recipients_json.PushBack(schemas::Serialize(item, userver::formats::serialize::To<userver::formats::json::Value>()));
+    for (const auto &item : *recipients) {
+      recipients_json.PushBack(schemas::Serialize(item,
+                                                  userver::formats::serialize::To<userver::formats::json::Value>()));
     }
     return recipients_json.ExtractValue();
   }
@@ -104,7 +106,7 @@ userver::formats::json::Value ens::recipients::RecipientConfirmCreationHandler::
   const std::string &access_token = request.GetHeader("Authorization");
   const std::string draft_id = request.GetArg("draft_id");
   try {
-    std::string user_id = _jwt_verif_manager.VerifyJwt(access_token);
+    boost::uuids::uuid user_id = _jwt_verif_manager.VerifyJwt(access_token);
     std::unique_ptr<schemas::RecipientWithId> recipient = this->_recipient_manager.ConfirmCreation(user_id, draft_id);
     return schemas::Serialize(*recipient, userver::formats::serialize::To<userver::formats::json::Value>());
   }
@@ -135,7 +137,7 @@ userver::formats::json::Value ens::recipients::RecipientModifyHandler::HandleReq
   const std::string recipient_id = request.GetArg("recipient_id");
   try {
     schemas::RecipientWithoutId user_data = request_json.As<schemas::RecipientWithoutId>();
-    std::string user_id = _jwt_verif_manager.VerifyJwt(access_token);
+    boost::uuids::uuid user_id = _jwt_verif_manager.VerifyJwt(access_token);
     std::unique_ptr<schemas::RecipientWithId> modified_data = this->_recipient_manager.ModifyRecipient(user_id,
                                                                                                        recipient_id,
                                                                                                        user_data);
@@ -175,7 +177,7 @@ userver::formats::json::Value ens::recipients::RecipientDeleteHandler::HandleReq
   const std::string &access_token = request.GetHeader("Authorization");
   const std::string recipient_id = request.GetArg("recipient_id");
   try {
-    std::string user_id = _jwt_verif_manager.VerifyJwt(access_token);
+    boost::uuids::uuid user_id = _jwt_verif_manager.VerifyJwt(access_token);
     this->_recipient_manager.DeleteRecipient(user_id, recipient_id);
     return userver::formats::json::Value{};
   }

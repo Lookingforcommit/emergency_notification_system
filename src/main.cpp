@@ -9,7 +9,12 @@
 #include <userver/utils/daemon_run.hpp>
 
 #include "users/handlers.hpp"
+#include "users/auth.hpp"
+#include "users/users.hpp"
 #include "recipients/handlers.hpp"
+#include "recipients/recipients.hpp"
+#include "templates/handlers.hpp"
+#include "templates/templates.hpp"
 #include "utils.hpp"
 
 int main(int argc, char *argv[]) {
@@ -29,12 +34,19 @@ int main(int argc, char *argv[]) {
   ens::users::AppendUserModifyHandler(component_list);
   ens::users::AppendUserRefreshTokenHandler(component_list);
   ens::users::AppendUserDeleteHandler(component_list);
-  ens::recipients::AppendRecipientsManager(component_list);
+  ens::recipients::AppendRecipientManager(component_list);
   ens::recipients::AppendRecipientCreateHandler(component_list);
   ens::recipients::AppendRecipientGetByIdHandler(component_list);
   ens::recipients::AppendRecipientGetAllHandler(component_list);
   ens::recipients::AppendRecipientConfirmCreationHandler(component_list);
   ens::recipients::AppendRecipientModifyHandler(component_list);
   ens::recipients::AppendRecipientDeleteHandler(component_list);
+  ens::templates::AppendTemplateManager(component_list);
+  ens::templates::AppendTemplateCreateHandler(component_list);
+  ens::templates::AppendTemplateGetByIdHandler(component_list);
+  ens::templates::AppendTemplateGetAllHandler(component_list);
+  ens::templates::AppendTemplateConfirmCreationHandler(component_list);
+  ens::templates::AppendTemplateModifyHandler(component_list);
+  ens::templates::AppendTemplateDeleteHandler(component_list);
   return userver::utils::DaemonMain(argc, argv, component_list);
 }

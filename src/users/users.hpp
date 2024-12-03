@@ -28,9 +28,9 @@ class UserManager : public userver::components::ComponentBase {
   static userver::yaml_config::Schema GetStaticConfigSchema();
   std::unique_ptr<ens::users::JwtPair> Create(const std::string &name, const std::string &password);
   [[nodiscard]] std::unique_ptr<ens::users::JwtPair> Login(const std::string &name, const std::string &password) const;
-  void ModifyUser(const std::string &user_id, const schemas::User &new_data);
-  [[nodiscard]] std::unique_ptr<ens::users::JwtPair> RefreshToken(const std::string &user_id) const;
-  void DeleteUser(const std::string &user_id);
+  void ModifyUser(const boost::uuids::uuid &user_id, const schemas::User &new_data);
+  [[nodiscard]] std::unique_ptr<ens::users::JwtPair> RefreshToken(const boost::uuids::uuid &user_id) const;
+  void DeleteUser(const boost::uuids::uuid &user_id);
 
  private:
   JwtManager &_jwt_manager;

@@ -17,7 +17,7 @@ namespace ens::recipients {
 // Component for recipients management logic
 class RecipientManager : public userver::components::ComponentBase {
  public:
-  static constexpr std::string_view kName = "recipients-manager";
+  static constexpr std::string_view kName = "recipient-manager";
   RecipientManager(const userver::components::ComponentConfig &config,
                    const userver::components::ComponentContext &component_context) :
       ComponentBase(config, component_context),
@@ -26,18 +26,18 @@ class RecipientManager : public userver::components::ComponentBase {
               .FindComponent<userver::components::Postgres>(utils::DB_COMPONENT_NAME)
               .GetCluster()) {}
   static userver::yaml_config::Schema GetStaticConfigSchema();
-  std::unique_ptr<schemas::RecipientDraft> Create(const std::string &user_id, const schemas::RecipientWithoutId &data);
-  std::unique_ptr<schemas::RecipientWithId> GetById(const std::string &user_id, const std::string &recipient_id) const;
-  std::unique_ptr<schemas::RecipientWithIdList> GetAll(const std::string &user_id) const;
-  std::unique_ptr<schemas::RecipientWithId> ConfirmCreation(const std::string &user_id, const std::string &draft_id);
-  std::unique_ptr<schemas::RecipientWithId> ModifyRecipient(const std::string &user_id, const std::string &recipient_id,
+  std::unique_ptr<schemas::RecipientDraft> Create(const boost::uuids::uuid &user_id, const schemas::RecipientWithoutId &data);
+  std::unique_ptr<schemas::RecipientWithId> GetById(const boost::uuids::uuid &user_id, const std::string &recipient_id) const;
+  std::unique_ptr<schemas::RecipientWithIdList> GetAll(const boost::uuids::uuid &user_id) const;
+  std::unique_ptr<schemas::RecipientWithId> ConfirmCreation(const boost::uuids::uuid &user_id, const std::string &draft_id);
+  std::unique_ptr<schemas::RecipientWithId> ModifyRecipient(const boost::uuids::uuid &user_id, const std::string &recipient_id,
                                                             const schemas::RecipientWithoutId &data);
-  void DeleteRecipient(const std::string &user_id, const std::string &recipient_id);
+  void DeleteRecipient(const boost::uuids::uuid &user_id, const std::string &recipient_id);
  private:
   userver::storages::postgres::ClusterPtr _pg_cluster;
 };
 
-void AppendRecipientsManager(userver::components::ComponentList &component_list);
+void AppendRecipientManager(userver::components::ComponentList &component_list);
 
 class RecipientNotFoundException : public std::exception {
  private:

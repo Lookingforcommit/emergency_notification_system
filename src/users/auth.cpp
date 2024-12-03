@@ -8,6 +8,11 @@
 #include <userver/utils/encoding/hex.hpp>
 #include <userver/yaml_config/merge_schemas.hpp>
 #include <jwt-cpp/jwt.h>
+#include <boost/lexical_cast.hpp>
+#include <boost/uuid/uuid.hpp>
+#include <boost/uuid/uuid_io.hpp>
+
+//TODO: search for user_id in the db
 
 std::string ens::users::GenerateSalt() {
   std::random_device rd;
@@ -63,18 +68,21 @@ userver::yaml_config::Schema ens::users::JwtManager::GetStaticConfigSchema() {
 }
 
 // Verify jwt and return user id
-std::string ens::users::JwtManager::VerifyJwt(const std::string &token) {
+boost::uuids::uuid ens::users::JwtManager::VerifyJwt(const std::string &token) {
   auto verifier = jwt::verify()
       .allow_algorithm(jwt::algorithm::hs256{this->_secdist_config._jwt_secret});
   try {
     auto decoded = jwt::decode(token);
     verifier.verify(decoded);
-    return decoded.get_payload_claim("user_id").as_string();
+    return boost::lexical_cast<boost::uuids::uuid>(decoded.get_payload_claim("user_id").as_string());
   }
   catch (const std::invalid_argument &e) {
     throw JwtVerificationException{};
   }
   catch (const jwt::error::signature_verification_exception &e) {
+    throw JwtVerificationException{};
+  }
+  catch (const boost::bad_lexical_cast &e) {
     throw JwtVerificationException{};
   }
 }
