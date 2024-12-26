@@ -6,9 +6,9 @@
 #include <userver/components/component.hpp>
 #include <userver/components/component_list.hpp>
 
-#include "users/users.hpp"
+#include "user/user.hpp"
 
-namespace ens::users {
+namespace ens::user {
 class UserJsonHandlerBase : public userver::server::handlers::HttpHandlerJsonBase {
  public:
   UserJsonHandlerBase(const userver::components::ComponentConfig &config,

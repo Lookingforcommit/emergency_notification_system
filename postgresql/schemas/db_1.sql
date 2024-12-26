@@ -30,7 +30,8 @@ CREATE TABLE IF NOT EXISTS ens_schema.notification_template_draft
     master_id                      uuid NOT NULL,
     name                           TEXT NOT NULL,
     message_text                   TEXT,
-    notification_template_draft_id uuid PRIMARY KEY
+    notification_template_draft_id uuid PRIMARY KEY,
+    FOREIGN KEY (master_id) REFERENCES ens_schema.user (user_id) ON DELETE CASCADE
 );
 
 DROP TABLE IF EXISTS ens_schema.recipient CASCADE;
@@ -55,7 +56,8 @@ CREATE TABLE IF NOT EXISTS ens_schema.recipient_draft
     email              TEXT,
     phone_number       TEXT,
     telegram_username  TEXT,
-    recipient_draft_id uuid PRIMARY KEY
+    recipient_draft_id uuid PRIMARY KEY,
+    FOREIGN KEY (master_id) REFERENCES ens_schema.user (user_id) ON DELETE CASCADE
 );
 
 DROP TABLE IF EXISTS ens_schema.recipient_group CASCADE;
@@ -66,9 +68,9 @@ CREATE TABLE IF NOT EXISTS ens_schema.recipient_group
     active             BOOLEAN NOT NULL,
     recipient_group_id uuid PRIMARY KEY,
     master_id          uuid    NOT NULL,
-    template_id        uuid    NOT NULL,
+    template_id        uuid,
     FOREIGN KEY (master_id) REFERENCES ens_schema.user (user_id) ON DELETE CASCADE,
-    FOREIGN KEY (template_id) REFERENCES ens_schema.notification_template (notification_template_id)
+    FOREIGN KEY (template_id) REFERENCES ens_schema.notification_template (notification_template_id) ON DELETE CASCADE
 );
 
 DROP TABLE IF EXISTS ens_schema.recipient_group_draft CASCADE;
@@ -76,19 +78,21 @@ DROP TABLE IF EXISTS ens_schema.recipient_group_draft CASCADE;
 CREATE TABLE IF NOT EXISTS ens_schema.recipient_group_draft
 (
     master_id                uuid    NOT NULL,
-    template_id              uuid    NOT NULL,
+    template_id              uuid,
     name                     TEXT    NOT NULL,
     active                   BOOLEAN NOT NULL,
-    recipient_group_draft_id uuid PRIMARY KEY
+    recipient_group_draft_id uuid PRIMARY KEY,
+    FOREIGN KEY (master_id) REFERENCES ens_schema.user (user_id) ON DELETE CASCADE,
+    FOREIGN KEY (template_id) REFERENCES ens_schema.notification_template (notification_template_id) ON DELETE CASCADE
 );
 
 DROP TABLE IF EXISTS ens_schema.recipient_recipient_group CASCADE;
 
 CREATE TABLE IF NOT EXISTS ens_schema.recipient_recipient_group
 (
-    recipient_recipient_group TEXT PRIMARY KEY,
     recipient_id              uuid NOT NULL,
     recipient_group_id        uuid NOT NULL,
+    PRIMARY KEY (recipient_id, recipient_group_id),
     FOREIGN KEY (recipient_id) REFERENCES ens_schema.recipient (recipient_id) ON DELETE CASCADE,
     FOREIGN KEY (recipient_group_id) REFERENCES ens_schema.recipient_group (recipient_group_id) ON DELETE CASCADE
 );
@@ -108,7 +112,7 @@ CREATE TABLE IF NOT EXISTS ens_schema.notification
     master_id            uuid                    NOT NULL,
     recipient_id         uuid                    NOT NULL,
     group_id             uuid                    NOT NULL,
-    FOREIGN KEY (master_id) REFERENCES ens_schema.user (user_id),
-    FOREIGN KEY (recipient_id) REFERENCES ens_schema.recipient (recipient_id),
-    FOREIGN KEY (group_id) REFERENCES ens_schema.recipient_group (recipient_group_id)
+    FOREIGN KEY (master_id) REFERENCES ens_schema.user (user_id) ON DELETE CASCADE,
+    FOREIGN KEY (recipient_id) REFERENCES ens_schema.recipient (recipient_id) ON DELETE CASCADE,
+    FOREIGN KEY (group_id) REFERENCES ens_schema.recipient_group (recipient_group_id) ON DELETE CASCADE
 );

@@ -8,9 +8,9 @@
 #include <userver/storages/postgres/cluster.hpp>
 #include <userver/storages/postgres/component.hpp>
 
-#include "users/auth.hpp"
+#include "user/auth.hpp"
 #include "schemas/schemas.hpp"
-#include "utils.hpp"
+#include "utils/utils.hpp"
 
 namespace ens::recipients {
 
@@ -23,7 +23,7 @@ class RecipientManager : public userver::components::ComponentBase {
       ComponentBase(config, component_context),
       _pg_cluster(
           component_context
-              .FindComponent<userver::components::Postgres>(utils::DB_COMPONENT_NAME)
+              .FindComponent<userver::components::Postgres>(ens::utils::DB_COMPONENT_NAME)
               .GetCluster()) {}
   static userver::yaml_config::Schema GetStaticConfigSchema();
   std::unique_ptr<schemas::RecipientDraft> Create(const boost::uuids::uuid &user_id, const schemas::RecipientWithoutId &data);

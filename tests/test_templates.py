@@ -1,27 +1,5 @@
-from voluptuous import Schema, Required, Optional
-
 import utils
-
-BaseTemplateSchema = Schema({
-    Required("name"): str,
-    Optional("message_text"): str,
-})
-
-ReturnedTemplateSchema = BaseTemplateSchema.extend({
-    Required("master_id"): str
-})
-
-TemplateWithoutIdSchema = BaseTemplateSchema
-
-TemplateDraftSchema = ReturnedTemplateSchema.extend({
-    Required("draft_id"): str
-})
-
-TemplateWithIdSchema = ReturnedTemplateSchema.extend({
-    Required("notification_template_id"): str
-})
-
-TemplateWithIdListSchema = Schema([TemplateWithIdSchema])
+from schemas import TemplateDraftSchema, TemplateWithIdSchema, TemplateWithIdListSchema
 
 
 async def test_create_template_200(service_client, pgsql):

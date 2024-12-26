@@ -64,9 +64,9 @@ std::unique_ptr<schemas::RecipientWithId> ens::recipients::RecipientManager::Get
   schemas::RecipientWithId recipient_data{recipient_id,
                                           boost::uuids::to_string(user_id),
                                           recipient_row["name"].As<std::string>(),
-                                          recipient_row["email"].As<std::string>(),
-                                          recipient_row["phone_number"].As<std::string>(),
-                                          recipient_row["telegram_username"].As<std::string>()
+                                          recipient_row["email"].As<std::optional<std::string>>(),
+                                          recipient_row["phone_number"].As<std::optional<std::string>>(),
+                                          recipient_row["telegram_username"].As<std::optional<std::string>>()
   };
   return std::make_unique<schemas::RecipientWithId>(recipient_data);
 }
@@ -87,9 +87,9 @@ std::unique_ptr<schemas::RecipientWithIdList> ens::recipients::RecipientManager:
         boost::uuids::to_string(row["recipient_id"].As<boost::uuids::uuid>()),
         boost::uuids::to_string(user_id),
         row["name"].As<std::string>(),
-        row["email"].As<std::string>(),
-        row["phone_number"].As<std::string>(),
-        row["telegram_username"].As<std::string>()
+        row["email"].As<std::optional<std::string>>(),
+        row["phone_number"].As<std::optional<std::string>>(),
+        row["telegram_username"].As<std::optional<std::string>>()
     );
   }
   return std::make_unique<schemas::RecipientWithIdList>(recipients_data);
@@ -104,7 +104,7 @@ std::unique_ptr<schemas::RecipientWithId> ens::recipients::RecipientManager::Con
       "SELECT $3, $1, name, email, phone_number, telegram_username "
       "FROM ens_schema.recipient_draft "
       "WHERE master_id = $1 AND recipient_draft_id = $2) "
-      "RETURNING recipient_id, master_id, name, email, phone_number, telegram_username"
+      "RETURNING name, email, phone_number, telegram_username"
   };
   const userver::storages::postgres::Query draft_deletion_query{
       "DELETE "
@@ -130,9 +130,9 @@ std::unique_ptr<schemas::RecipientWithId> ens::recipients::RecipientManager::Con
   schemas::RecipientWithId recipient_data{boost::uuids::to_string(recipient_id),
                                           boost::uuids::to_string(user_id),
                                           recipient_row["name"].As<std::string>(),
-                                          recipient_row["email"].As<std::string>(),
-                                          recipient_row["phone_number"].As<std::string>(),
-                                          recipient_row["telegram_username"].As<std::string>()
+                                          recipient_row["email"].As<std::optional<std::string>>(),
+                                          recipient_row["phone_number"].As<std::optional<std::string>>(),
+                                          recipient_row["telegram_username"].As<std::optional<std::string>>()
   };
   return std::make_unique<schemas::RecipientWithId>(recipient_data);
 }
@@ -144,7 +144,7 @@ std::unique_ptr<schemas::RecipientWithId> ens::recipients::RecipientManager::Mod
       "UPDATE ens_schema.recipient "
       "SET name = $3, email = $4, phone_number = $5, telegram_username = $6 "
       "WHERE master_id = $1 AND recipient_id = $2 "
-      "RETURNING recipient_id, master_id, name, email, phone_number, telegram_username"
+      "RETURNING name, email, phone_number, telegram_username"
   };
   userver::storages::postgres::Transaction update_transaction =
       _pg_cluster->Begin(userver::storages::postgres::ClusterHostType::kMaster, {});
@@ -164,9 +164,9 @@ std::unique_ptr<schemas::RecipientWithId> ens::recipients::RecipientManager::Mod
   schemas::RecipientWithId recipient_data{recipient_id,
                                           boost::uuids::to_string(user_id),
                                           recipient_row["name"].As<std::string>(),
-                                          recipient_row["email"].As<std::string>(),
-                                          recipient_row["phone_number"].As<std::string>(),
-                                          recipient_row["telegram_username"].As<std::string>()
+                                          recipient_row["email"].As<std::optional<std::string>>(),
+                                          recipient_row["phone_number"].As<std::optional<std::string>>(),
+                                          recipient_row["telegram_username"].As<std::optional<std::string>>()
   };
   return std::make_unique<schemas::RecipientWithId>(recipient_data);
 }

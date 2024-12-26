@@ -7,7 +7,7 @@
 #include <userver/components/component_list.hpp>
 
 #include "templates/templates.hpp"
-#include "users/auth.hpp"
+#include "user/auth.hpp"
 
 namespace ens::templates {
 class TemplateJsonHandlerBase : public userver::server::handlers::HttpHandlerJsonBase {
@@ -16,10 +16,10 @@ class TemplateJsonHandlerBase : public userver::server::handlers::HttpHandlerJso
                           const userver::components::ComponentContext &context)
       : HttpHandlerJsonBase(config, context),
         _template_manager(context.FindComponent<TemplateManager>()),
-        _jwt_verif_manager(context.FindComponent<ens::users::JwtManager>()) {}
+        _jwt_verif_manager(context.FindComponent<ens::user::JwtManager>()) {}
  protected:
   TemplateManager &_template_manager;
-  ens::users::JwtManager &_jwt_verif_manager;
+  ens::user::JwtManager &_jwt_verif_manager;
 };
 
 class TemplateCreateHandler : public TemplateJsonHandlerBase {

@@ -5,7 +5,7 @@
 #include <userver/storages/postgres/cluster.hpp>
 #include <userver/storages/postgres/component.hpp>
 
-#include "utils.hpp"
+#include "utils/utils.hpp"
 #include "schemas/schemas.hpp"
 
 namespace ens::templates {
@@ -18,7 +18,7 @@ class TemplateManager : public userver::components::ComponentBase {
       ComponentBase(config, component_context),
       _pg_cluster(
           component_context
-              .FindComponent<userver::components::Postgres>(utils::DB_COMPONENT_NAME)
+              .FindComponent<userver::components::Postgres>(ens::utils::DB_COMPONENT_NAME)
               .GetCluster()) {}
   static userver::yaml_config::Schema GetStaticConfigSchema();
   std::unique_ptr<schemas::NotificationTemplateDraft> Create(const boost::uuids::uuid &user_id,

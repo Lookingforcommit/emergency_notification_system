@@ -8,14 +8,16 @@
 #include <userver/testsuite/testsuite_support.hpp>
 #include <userver/utils/daemon_run.hpp>
 
-#include "users/handlers.hpp"
-#include "users/auth.hpp"
-#include "users/users.hpp"
+#include "user/handlers.hpp"
+#include "user/auth.hpp"
+#include "user/user.hpp"
 #include "recipients/handlers.hpp"
 #include "recipients/recipients.hpp"
 #include "templates/handlers.hpp"
 #include "templates/templates.hpp"
-#include "utils.hpp"
+#include "groups/groups.hpp"
+#include "groups/handlers.hpp"
+#include "utils/utils.hpp"
 
 int main(int argc, char *argv[]) {
   auto component_list = userver::components::MinimalServerComponentList()
@@ -24,16 +26,16 @@ int main(int argc, char *argv[]) {
       .Append<userver::clients::dns::Component>()
       .Append<userver::components::HttpClient>()
       .Append<userver::server::handlers::TestsControl>()
-      .Append<userver::components::Postgres>(utils::DB_COMPONENT_NAME)
+      .Append<userver::components::Postgres>(ens::utils::DB_COMPONENT_NAME)
       .Append<userver::components::Secdist>()
       .Append<userver::components::DefaultSecdistProvider>();
-  ens::users::AppendUserManager(component_list);
-  ens::users::AppendJwtManager(component_list);
-  ens::users::AppendUserCreateHandler(component_list);
-  ens::users::AppendUserLoginHandler(component_list);
-  ens::users::AppendUserModifyHandler(component_list);
-  ens::users::AppendUserRefreshTokenHandler(component_list);
-  ens::users::AppendUserDeleteHandler(component_list);
+  ens::user::AppendUserManager(component_list);
+  ens::user::AppendJwtManager(component_list);
+  ens::user::AppendUserCreateHandler(component_list);
+  ens::user::AppendUserLoginHandler(component_list);
+  ens::user::AppendUserModifyHandler(component_list);
+  ens::user::AppendUserRefreshTokenHandler(component_list);
+  ens::user::AppendUserDeleteHandler(component_list);
   ens::recipients::AppendRecipientManager(component_list);
   ens::recipients::AppendRecipientCreateHandler(component_list);
   ens::recipients::AppendRecipientGetByIdHandler(component_list);
@@ -48,5 +50,16 @@ int main(int argc, char *argv[]) {
   ens::templates::AppendTemplateConfirmCreationHandler(component_list);
   ens::templates::AppendTemplateModifyHandler(component_list);
   ens::templates::AppendTemplateDeleteHandler(component_list);
+  ens::groups::AppendGroupManager(component_list);
+  ens::groups::AppendGroupCreateHandler(component_list);
+  ens::groups::AppendGroupGetByIdHandler(component_list);
+  ens::groups::AppendGroupGetRecipientsHandler(component_list);
+  ens::groups::AppendGroupGetActiveHandler(component_list);
+  ens::groups::AppendGroupGetAllHandler(component_list);
+  ens::groups::AppendGroupConfirmCreationHandler(component_list);
+  ens::groups::AppendGroupModifyGroupHandler(component_list);
+  ens::groups::AppendGroupAddRecipientHandler(component_list);
+  ens::groups::AppendGroupDeleteRecipientHandler(component_list);
+  ens::groups::AppendGroupDeleteGroupHandler(component_list);
   return userver::utils::DaemonMain(argc, argv, component_list);
 }

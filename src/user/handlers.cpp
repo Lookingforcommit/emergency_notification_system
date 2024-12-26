@@ -10,19 +10,19 @@
 #include <boost/uuid/uuid.hpp>
 #include <boost/uuid/uuid_io.hpp>
 
-#include "users.hpp"
+#include "user.hpp"
 #include "auth.hpp"
 #include "schemas/schemas.hpp"
 
 // TODO: Add a json schema for jwt pairs
 // TODO: catch generic json_parse errors and throw 422
 
-userver::formats::json::Value ens::users::UserCreateHandler::HandleRequestJsonThrow(const userver::server::http::HttpRequest &,
+userver::formats::json::Value ens::user::UserCreateHandler::HandleRequestJsonThrow(const userver::server::http::HttpRequest &,
                                                                                     const userver::formats::json::Value &request_json,
                                                                                     userver::server::request::RequestContext &) const {
   try {
     schemas::User user_data = request_json.As<schemas::User>();
-    std::unique_ptr<ens::users::JwtPair> jwt_pair = this->_user_manager.Create(user_data.name, user_data.password);
+    std::unique_ptr<ens::user::JwtPair> jwt_pair = this->_user_manager.Create(user_data.name, user_data.password);
     userver::formats::json::ValueBuilder builder;
     builder["access_token"] = jwt_pair->access_token;
     builder["refresh_token"] = jwt_pair->refresh_token;
@@ -45,16 +45,16 @@ userver::formats::json::Value ens::users::UserCreateHandler::HandleRequestJsonTh
   }
 }
 
-void ens::users::AppendUserCreateHandler(userver::components::ComponentList &component_list) {
+void ens::user::AppendUserCreateHandler(userver::components::ComponentList &component_list) {
   component_list.Append<UserCreateHandler>();
 }
 
-userver::formats::json::Value ens::users::UserLoginHandler::HandleRequestJsonThrow(const userver::server::http::HttpRequest &,
+userver::formats::json::Value ens::user::UserLoginHandler::HandleRequestJsonThrow(const userver::server::http::HttpRequest &,
                                                                                    const userver::formats::json::Value &request_json,
                                                                                    userver::server::request::RequestContext &) const {
   try {
     schemas::User user_data = request_json.As<schemas::User>();
-    std::unique_ptr<ens::users::JwtPair> jwt_pair = this->_user_manager.Login(user_data.name, user_data.password);
+    std::unique_ptr<ens::user::JwtPair> jwt_pair = this->_user_manager.Login(user_data.name, user_data.password);
     userver::formats::json::ValueBuilder builder;
     builder["access_token"] = jwt_pair->access_token;
     builder["refresh_token"] = jwt_pair->refresh_token;
@@ -84,10 +84,10 @@ userver::formats::json::Value ens::users::UserLoginHandler::HandleRequestJsonThr
   }
 }
 
-void ens::users::AppendUserLoginHandler(userver::components::ComponentList &component_list) {
+void ens::user::AppendUserLoginHandler(userver::components::ComponentList &component_list) {
   component_list.Append<UserLoginHandler>();
 }
-userver::formats::json::Value ens::users::UserModifyHandler::HandleRequestJsonThrow(const userver::server::http::HttpRequest &request,
+userver::formats::json::Value ens::user::UserModifyHandler::HandleRequestJsonThrow(const userver::server::http::HttpRequest &request,
                                                                                     const userver::formats::json::Value &request_json,
                                                                                     userver::server::request::RequestContext &) const {
   const std::string &access_token = request.GetHeader("Authorization");
@@ -121,17 +121,17 @@ userver::formats::json::Value ens::users::UserModifyHandler::HandleRequestJsonTh
   }
 }
 
-void ens::users::AppendUserModifyHandler(userver::components::ComponentList &component_list) {
+void ens::user::AppendUserModifyHandler(userver::components::ComponentList &component_list) {
   component_list.Append<UserModifyHandler>();
 }
 
-userver::formats::json::Value ens::users::UserRefreshTokenHandler::HandleRequestJsonThrow(const userver::server::http::HttpRequest &request,
+userver::formats::json::Value ens::user::UserRefreshTokenHandler::HandleRequestJsonThrow(const userver::server::http::HttpRequest &request,
                                                                                           const userver::formats::json::Value &,
                                                                                           userver::server::request::RequestContext &) const {
   const std::string &refresh_token = request.GetHeader("Authorization");
   try {
     boost::uuids::uuid user_id = _jwt_verif_manager.VerifyJwt(refresh_token);
-    std::unique_ptr<ens::users::JwtPair> jwt_pair = this->_user_manager.RefreshToken(user_id);
+    std::unique_ptr<ens::user::JwtPair> jwt_pair = this->_user_manager.RefreshToken(user_id);
     userver::formats::json::ValueBuilder builder;
     builder["access_token"] = jwt_pair->access_token;
     builder["refresh_token"] = jwt_pair->refresh_token;
@@ -147,11 +147,11 @@ userver::formats::json::Value ens::users::UserRefreshTokenHandler::HandleRequest
 }
 
 // TODO: catch token expired
-void ens::users::AppendUserRefreshTokenHandler(userver::components::ComponentList &component_list) {
+void ens::user::AppendUserRefreshTokenHandler(userver::components::ComponentList &component_list) {
   component_list.Append<UserRefreshTokenHandler>();
 }
 
-userver::formats::json::Value ens::users::UserDeleteHandler::HandleRequestJsonThrow(const userver::server::http::HttpRequest &request,
+userver::formats::json::Value ens::user::UserDeleteHandler::HandleRequestJsonThrow(const userver::server::http::HttpRequest &request,
                                                                                     const userver::formats::json::Value &,
                                                                                     userver::server::request::RequestContext &) const {
   const std::string &access_token = request.GetHeader("Authorization");
@@ -176,6 +176,6 @@ userver::formats::json::Value ens::users::UserDeleteHandler::HandleRequestJsonTh
   }
 }
 
-void ens::users::AppendUserDeleteHandler(userver::components::ComponentList &component_list) {
+void ens::user::AppendUserDeleteHandler(userver::components::ComponentList &component_list) {
   component_list.Append<UserDeleteHandler>();
 }

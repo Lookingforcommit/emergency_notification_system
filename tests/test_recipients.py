@@ -1,29 +1,5 @@
-from voluptuous import Schema, Required, Optional
-
 import utils
-
-BaseRecipientSchema = Schema({
-    Required("name"): str,
-    Optional("email"): str,
-    Optional("phone_number"): str,
-    Optional("telegram_username"): str,
-})
-
-ReturnedRecipientSchema = BaseRecipientSchema.extend({
-    Required("master_id"): str
-})
-
-RecipientWithoutIdSchema = BaseRecipientSchema
-
-RecipientDraftSchema = ReturnedRecipientSchema.extend({
-    Required("draft_id"): str
-})
-
-RecipientWithIdSchema = ReturnedRecipientSchema.extend({
-    Required("recipient_id"): str
-})
-
-RecipientWithIdListSchema = Schema([RecipientWithIdSchema])
+from schemas import RecipientDraftSchema, RecipientWithIdSchema, RecipientWithIdListSchema
 
 
 async def test_create_recipient_200(service_client, pgsql):

@@ -8,7 +8,7 @@ paths:
 components:
   responses:
     Unauthorized:
-      description: Only authorized users can access the endpoint. Provide a valid JWT access token or try refreshing it
+      description: Only authorized user can access the endpoint. Provide a valid JWT access token or try refreshing it
     MalformedRequestBody:
       description: Request body is malformed
     TooManyRequests:

@@ -7,7 +7,7 @@
 #include <boost/uuid/uuid_io.hpp>
 
 #include "schemas/schemas.hpp"
-#include "users/auth.hpp"
+#include "user/auth.hpp"
 
 // TODO: throw error if parameter is missing
 // TODO: convert ids to boost here to catch bad_lexical_cast
@@ -22,7 +22,7 @@ userver::formats::json::Value ens::recipients::RecipientCreateHandler::HandleReq
     std::unique_ptr<schemas::RecipientDraft> created_data = this->_recipient_manager.Create(user_id, user_data);
     return schemas::Serialize(*created_data, userver::formats::serialize::To<userver::formats::json::Value>());
   }
-  catch (const ens::users::JwtVerificationException &e) {
+  catch (const ens::user::JwtVerificationException &e) {
     throw userver::server::handlers::CustomHandlerException{
         userver::server::handlers::HandlerErrorCode::kUnauthorized,
         userver::server::handlers::InternalMessage{e.what()},
@@ -53,7 +53,7 @@ userver::formats::json::Value ens::recipients::RecipientGetByIdHandler::HandleRe
     std::unique_ptr<schemas::RecipientWithId> recipient = this->_recipient_manager.GetById(user_id, recipient_id);
     return schemas::Serialize(*recipient, userver::formats::serialize::To<userver::formats::json::Value>());
   }
-  catch (const ens::users::JwtVerificationException &e) {
+  catch (const ens::user::JwtVerificationException &e) {
     throw userver::server::handlers::CustomHandlerException{
         userver::server::handlers::HandlerErrorCode::kUnauthorized,
         userver::server::handlers::InternalMessage{e.what()},
@@ -87,7 +87,7 @@ userver::formats::json::Value ens::recipients::RecipientGetAllHandler::HandleReq
     }
     return recipients_json.ExtractValue();
   }
-  catch (const ens::users::JwtVerificationException &e) {
+  catch (const ens::user::JwtVerificationException &e) {
     throw userver::server::handlers::CustomHandlerException{
         userver::server::handlers::HandlerErrorCode::kUnauthorized,
         userver::server::handlers::InternalMessage{e.what()},
@@ -110,7 +110,7 @@ userver::formats::json::Value ens::recipients::RecipientConfirmCreationHandler::
     std::unique_ptr<schemas::RecipientWithId> recipient = this->_recipient_manager.ConfirmCreation(user_id, draft_id);
     return schemas::Serialize(*recipient, userver::formats::serialize::To<userver::formats::json::Value>());
   }
-  catch (const ens::users::JwtVerificationException &e) {
+  catch (const ens::user::JwtVerificationException &e) {
     throw userver::server::handlers::CustomHandlerException{
         userver::server::handlers::HandlerErrorCode::kUnauthorized,
         userver::server::handlers::InternalMessage{e.what()},
@@ -143,7 +143,7 @@ userver::formats::json::Value ens::recipients::RecipientModifyHandler::HandleReq
                                                                                                        user_data);
     return schemas::Serialize(*modified_data, userver::formats::serialize::To<userver::formats::json::Value>());
   }
-  catch (const ens::users::JwtVerificationException &e) {
+  catch (const ens::user::JwtVerificationException &e) {
     throw userver::server::handlers::CustomHandlerException{
         userver::server::handlers::HandlerErrorCode::kUnauthorized,
         userver::server::handlers::InternalMessage{e.what()},
@@ -181,7 +181,7 @@ userver::formats::json::Value ens::recipients::RecipientDeleteHandler::HandleReq
     this->_recipient_manager.DeleteRecipient(user_id, recipient_id);
     return userver::formats::json::Value{};
   }
-  catch (const ens::users::JwtVerificationException &e) {
+  catch (const ens::user::JwtVerificationException &e) {
     throw userver::server::handlers::CustomHandlerException{
         userver::server::handlers::HandlerErrorCode::kUnauthorized,
         userver::server::handlers::InternalMessage{e.what()},

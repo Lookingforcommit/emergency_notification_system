@@ -46,6 +46,7 @@ components_manager:
         user-manager: {}
         recipient-manager: {}
         template-manager: {}
+        group-manager: {}
 
         tests-control:
             load-enabled: $is-testing
@@ -127,6 +128,47 @@ components_manager:
             task_processor: main-task-processor
         handler-templates-deleteTemplate:
             path: /templates/deleteTemplate
+            method: DELETE
+            task_processor: main-task-processor
+            
+        handler-groups-create:
+            path: /groups/create
+            method: POST
+            task_processor: main-task-processor
+        handler-groups-getById:
+            path: /groups
+            method: GET
+            task_processor: main-task-processor
+        handler-groups-getRecipients:
+            path: /groups/recipients
+            method: GET
+            task_processor: main-task-processor
+        handler-groups-getActive:
+            path: /groups/active
+            method: GET
+            task_processor: main-task-processor
+        handler-groups-getAll:
+            path: /groups/all
+            method: GET
+            task_processor: main-task-processor
+        handler-groups-confirmCreation:
+            path: /groups/confirmCreation
+            method: PUT
+            task_processor: main-task-processor
+        handler-groups-modifyGroup:
+            path: /groups/modifyGroup
+            method: PUT
+            task_processor: main-task-processor
+        handler-groups-addRecipient:
+            path: /groups/addRecipient
+            method: PUT
+            task_processor: main-task-processor
+        handler-groups-deleteRecipient:
+            path: /groups/deleteRecipient
+            method: DELETE
+            task_processor: main-task-processor
+        handler-groups-deleteGroup:
+            path: /groups/deleteGroup
             method: DELETE
             task_processor: main-task-processor
 

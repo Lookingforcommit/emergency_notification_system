@@ -32,12 +32,12 @@ add_library(${PROJECT_NAME}_objs OBJECT
         src/schemas/schemas.hpp
         src/schemas/schemas_fwd.hpp
         src/schemas/schemas_parsers.ipp
-        src/users/users.hpp
-        src/users/users.cpp
-        src/users/auth.cpp
-        src/users/auth.hpp
-        src/users/handlers.cpp
-        src/users/handlers.hpp
+        src/user/user.hpp
+        src/user/user.cpp
+        src/user/auth.cpp
+        src/user/auth.hpp
+        src/user/handlers.cpp
+        src/user/handlers.hpp
         src/recipients/recipients.cpp
         src/recipients/recipients.hpp
         src/recipients/handlers.cpp
@@ -46,6 +46,12 @@ add_library(${PROJECT_NAME}_objs OBJECT
         src/templates/templates.hpp
         src/templates/handlers.cpp
         src/templates/handlers.hpp
+        src/groups/groups.cpp
+        src/groups/groups.hpp
+        src/groups/handlers.cpp
+        src/groups/handlers.hpp
+        src/utils/utils.cpp
+        src/utils/utils.hpp
 )
 target_link_libraries(${PROJECT_NAME}_objs PUBLIC userver::postgresql)
 

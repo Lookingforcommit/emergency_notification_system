@@ -6,7 +6,7 @@ DB_NAME = "db_1"
 
 
 def compact_dict(dct: dict) -> dict:
-    return {k: v for k, v in dct.items() if v}
+    return {k: v for k, v in dct.items() if v != ""}
 
 
 async def create_user(name: str, password: str, service_client):
@@ -177,7 +177,7 @@ async def db_get_recipient(recipient_id: str, pgsql) -> typing.Optional[tuple]:
     return record
 
 
-async def db_get_recipients(rows_num: int, pgsql) -> typing.Optional[tuple]:
+async def db_get_recipients(rows_num: int, pgsql) -> typing.List[tuple]:
     cursor = pgsql[DB_NAME].cursor()
     cursor.execute(
         "SELECT * "
@@ -281,7 +281,7 @@ async def db_get_template(template_id: str, pgsql) -> typing.Optional[tuple]:
     return record
 
 
-async def db_get_templates(rows_num: int, pgsql) -> typing.Optional[tuple]:
+async def db_get_templates(rows_num: int, pgsql) -> typing.List[tuple]:
     cursor = pgsql[DB_NAME].cursor()
     cursor.execute(
         "SELECT * "
@@ -289,3 +289,170 @@ async def db_get_templates(rows_num: int, pgsql) -> typing.Optional[tuple]:
     )
     records = cursor.fetchmany(rows_num)
     return records
+
+
+async def create_group(service_client, name: str, active: bool, template_id: str = "", access_token: str = ""):
+    payload = compact_dict({
+        "name": name,
+        "notification_template_id": template_id,
+        "active": active
+    })
+    headers = compact_dict({"Authorization": access_token})
+    response = await service_client.post(
+        '/groups/create',
+        data=json.dumps(payload),
+        headers=headers
+    )
+    return response
+
+
+async def get_group(service_client, group_id: str, access_token: str = ""):
+    params = {"group_id": group_id}
+    headers = compact_dict({"Authorization": access_token})
+    response = await service_client.get(
+        '/groups',
+        params=params,
+        headers=headers
+    )
+    return response
+
+
+async def get_group_recipients(service_client, group_id: str, access_token: str = ""):
+    params = {"group_id": group_id}
+    headers = compact_dict({"Authorization": access_token})
+    response = await service_client.get(
+        '/groups/recipients',
+        params=params,
+        headers=headers
+    )
+    return response
+
+
+async def get_active_groups(service_client, access_token: str = ""):
+    headers = compact_dict({"Authorization": access_token})
+    response = await service_client.get(
+        '/groups/active',
+        headers=headers
+    )
+    return response
+
+
+async def get_groups(service_client, access_token: str = ""):
+    headers = compact_dict({"Authorization": access_token})
+    response = await service_client.get(
+        '/groups/all',
+        headers=headers
+    )
+    return response
+
+
+async def groups_confirm_creation(service_client, draft_id: str, access_token: str = ""):
+    params = {"draft_id": draft_id}
+    headers = compact_dict({"Authorization": access_token})
+    response = await service_client.put(
+        '/groups/confirmCreation',
+        params=params,
+        headers=headers,
+    )
+    return response
+
+
+async def modify_group(service_client, group_id: str, name: str, active: bool, template_id: str = "",
+                       access_token: str = ""):
+    payload = compact_dict({
+        "name": name,
+        "notification_template_id": template_id,
+        "active": active
+    })
+    params = {"group_id": group_id}
+    headers = compact_dict({"Authorization": access_token})
+    response = await service_client.put(
+        '/groups/modifyGroup',
+        params=params,
+        headers=headers,
+        data=json.dumps(payload)
+    )
+    return response
+
+
+async def add_recipient_to_group(service_client, group_id: str, recipient_id: str, access_token: str = ""):
+    params = {
+        "group_id": group_id,
+        "recipient_id": recipient_id
+    }
+    headers = compact_dict({"Authorization": access_token})
+    response = await service_client.put(
+        '/groups/addRecipient',
+        params=params,
+        headers=headers,
+    )
+    return response
+
+
+async def delete_recipient_from_group(service_client, group_id: str, recipient_id: str, access_token: str = ""):
+    params = {
+        "group_id": group_id,
+        "recipient_id": recipient_id
+    }
+    headers = compact_dict({"Authorization": access_token})
+    response = await service_client.delete(
+        '/groups/deleteRecipient',
+        params=params,
+        headers=headers,
+    )
+    return response
+
+
+async def delete_group(service_client, group_id: str, access_token: str = ""):
+    params = {"group_id": group_id}
+    headers = compact_dict({"Authorization": access_token})
+    response = await service_client.delete(
+        '/groups/deleteGroup',
+        params=params,
+        headers=headers,
+    )
+    return response
+
+
+async def db_get_group_draft(draft_id: str, pgsql) -> typing.Optional[tuple]:
+    cursor = pgsql[DB_NAME].cursor()
+    cursor.execute(
+        "SELECT * "
+        "FROM ens_schema.recipient_group_draft "
+        "WHERE recipient_group_draft_id = %s", (draft_id,),
+    )
+    record = cursor.fetchone()
+    return record
+
+
+async def db_get_group_recipients(group_id: str, rows_num: int, pgsql) -> typing.List[tuple]:
+    cursor = pgsql[DB_NAME].cursor()
+    cursor.execute(
+        "SELECT * "
+        "FROM ens_schema.recipient_recipient_group "
+        "WHERE recipient_group_id = %s", (group_id,),
+    )
+    records = cursor.fetchmany(rows_num)
+    return records
+
+
+async def db_get_group(group_id: str, pgsql) -> typing.Optional[tuple]:
+    cursor = pgsql[DB_NAME].cursor()
+    cursor.execute(
+        "SELECT * "
+        "FROM ens_schema.recipient_group "
+        "WHERE recipient_group_id = %s", (group_id,),
+    )
+    record = cursor.fetchone()
+    return record
+
+
+async def db_get_groups(rows_num: int, pgsql) -> typing.List[tuple]:
+    cursor = pgsql[DB_NAME].cursor()
+    cursor.execute(
+        "SELECT * "
+        "FROM ens_schema.recipient_group "
+    )
+    records = cursor.fetchmany(rows_num)
+    return records
+

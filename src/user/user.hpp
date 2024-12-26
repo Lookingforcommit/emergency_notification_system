@@ -7,29 +7,29 @@
 #include <userver/storages/postgres/cluster.hpp>
 #include <userver/storages/postgres/component.hpp>
 
-#include "users/auth.hpp"
+#include "user/auth.hpp"
 #include "schemas/schemas.hpp"
-#include "utils.hpp"
+#include "utils/utils.hpp"
 
-namespace ens::users {
+namespace ens::user {
 
-// Component for users management logic
+// Component for user management logic
 class UserManager : public userver::components::ComponentBase {
  public:
   static constexpr std::string_view kName = "user-manager";
   UserManager(const userver::components::ComponentConfig &config,
               const userver::components::ComponentContext &component_context) :
       ComponentBase(config, component_context),
-      _jwt_manager(component_context.FindComponent<ens::users::JwtManager>()),
+      _jwt_manager(component_context.FindComponent<ens::user::JwtManager>()),
       _pg_cluster(
           component_context
-              .FindComponent<userver::components::Postgres>(utils::DB_COMPONENT_NAME)
+              .FindComponent<userver::components::Postgres>(ens::utils::DB_COMPONENT_NAME)
               .GetCluster()) {}
   static userver::yaml_config::Schema GetStaticConfigSchema();
-  std::unique_ptr<ens::users::JwtPair> Create(const std::string &name, const std::string &password);
-  [[nodiscard]] std::unique_ptr<ens::users::JwtPair> Login(const std::string &name, const std::string &password) const;
+  std::unique_ptr<ens::user::JwtPair> Create(const std::string &name, const std::string &password);
+  [[nodiscard]] std::unique_ptr<ens::user::JwtPair> Login(const std::string &name, const std::string &password) const;
   void ModifyUser(const boost::uuids::uuid &user_id, const schemas::User &new_data);
-  [[nodiscard]] std::unique_ptr<ens::users::JwtPair> RefreshToken(const boost::uuids::uuid &user_id) const;
+  [[nodiscard]] std::unique_ptr<ens::user::JwtPair> RefreshToken(const boost::uuids::uuid &user_id) const;
   void DeleteUser(const boost::uuids::uuid &user_id);
 
  private:
@@ -69,4 +69,4 @@ class IncorrectPwdException : public std::exception {
   noexcept override { return this->_msg.c_str(); };
 };
 
-}  // namespace ens::users
+}  // namespace ens::user

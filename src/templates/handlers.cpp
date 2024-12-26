@@ -2,12 +2,11 @@
 
 #include <userver/server/handlers/exceptions.hpp>
 #include <userver/server/http/http_error.hpp>
-#include <boost/lexical_cast.hpp>
 #include <boost/uuid/uuid.hpp>
 #include <boost/uuid/uuid_io.hpp>
 
 #include "schemas/schemas.hpp"
-#include "users/auth.hpp"
+#include "user/auth.hpp"
 
 // TODO: convert ids to boost here to catch bad_lexical_cast
 
@@ -22,7 +21,7 @@ userver::formats::json::Value ens::templates::TemplateCreateHandler::HandleReque
         created_data = this->_template_manager.Create(user_id, user_data);
     return schemas::Serialize(*created_data, userver::formats::serialize::To<userver::formats::json::Value>());
   }
-  catch (const ens::users::JwtVerificationException &e) {
+  catch (const ens::user::JwtVerificationException &e) {
     throw userver::server::handlers::CustomHandlerException{
         userver::server::handlers::HandlerErrorCode::kUnauthorized,
         userver::server::handlers::InternalMessage{e.what()},
@@ -54,7 +53,7 @@ userver::formats::json::Value ens::templates::TemplateGetByIdHandler::HandleRequ
         notification_template = this->_template_manager.GetById(user_id, template_id);
     return schemas::Serialize(*notification_template, userver::formats::serialize::To<userver::formats::json::Value>());
   }
-  catch (const ens::users::JwtVerificationException &e) {
+  catch (const ens::user::JwtVerificationException &e) {
     throw userver::server::handlers::CustomHandlerException{
         userver::server::handlers::HandlerErrorCode::kUnauthorized,
         userver::server::handlers::InternalMessage{e.what()},
@@ -88,7 +87,7 @@ userver::formats::json::Value ens::templates::TemplateGetAllHandler::HandleReque
     }
     return templates_json.ExtractValue();
   }
-  catch (const ens::users::JwtVerificationException &e) {
+  catch (const ens::user::JwtVerificationException &e) {
     throw userver::server::handlers::CustomHandlerException{
         userver::server::handlers::HandlerErrorCode::kUnauthorized,
         userver::server::handlers::InternalMessage{e.what()},
@@ -112,7 +111,7 @@ userver::formats::json::Value ens::templates::TemplateConfirmCreationHandler::Ha
         notification_template = this->_template_manager.ConfirmCreation(user_id, draft_id);
     return schemas::Serialize(*notification_template, userver::formats::serialize::To<userver::formats::json::Value>());
   }
-  catch (const ens::users::JwtVerificationException &e) {
+  catch (const ens::user::JwtVerificationException &e) {
     throw userver::server::handlers::CustomHandlerException{
         userver::server::handlers::HandlerErrorCode::kUnauthorized,
         userver::server::handlers::InternalMessage{e.what()},
@@ -145,7 +144,7 @@ userver::formats::json::Value ens::templates::TemplateModifyHandler::HandleReque
                                                                                                                 user_data);
     return schemas::Serialize(*modified_data, userver::formats::serialize::To<userver::formats::json::Value>());
   }
-  catch (const ens::users::JwtVerificationException &e) {
+  catch (const ens::user::JwtVerificationException &e) {
     throw userver::server::handlers::CustomHandlerException{
         userver::server::handlers::HandlerErrorCode::kUnauthorized,
         userver::server::handlers::InternalMessage{e.what()},
@@ -183,7 +182,7 @@ userver::formats::json::Value ens::templates::TemplateDeleteHandler::HandleReque
     this->_template_manager.DeleteTemplate(user_id, template_id);
     return userver::formats::json::Value{};
   }
-  catch (const ens::users::JwtVerificationException &e) {
+  catch (const ens::user::JwtVerificationException &e) {
     throw userver::server::handlers::CustomHandlerException{
         userver::server::handlers::HandlerErrorCode::kUnauthorized,
         userver::server::handlers::InternalMessage{e.what()},

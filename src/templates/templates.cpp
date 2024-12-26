@@ -21,7 +21,7 @@ userver::yaml_config::Schema ens::templates::TemplateManager::GetStaticConfigSch
 }
 
 std::unique_ptr<schemas::NotificationTemplateDraft> ens::templates::TemplateManager::Create(const boost::uuids::uuid &user_id,
-                                                                                            const schemas::NotificationTemplateWithoutId &data) {
+                                                                                         const schemas::NotificationTemplateWithoutId &data) {
   const userver::storages::postgres::Query create_template_query{
       "INSERT INTO ens_schema.notification_template_draft "
       "(notification_template_draft_id, master_id, name, message_text) "
@@ -44,7 +44,7 @@ std::unique_ptr<schemas::NotificationTemplateDraft> ens::templates::TemplateMana
 }
 
 std::unique_ptr<schemas::NotificationTemplateWithId> ens::templates::TemplateManager::GetById(const boost::uuids::uuid &user_id,
-                                                                                              const std::string &template_id) const {
+                                                                                           const std::string &template_id) const {
   const userver::storages::postgres::Query template_info_query{
       "SELECT notification_template_id, master_id, name, message_text "
       "FROM ens_schema.notification_template "
@@ -62,7 +62,7 @@ std::unique_ptr<schemas::NotificationTemplateWithId> ens::templates::TemplateMan
   schemas::NotificationTemplateWithId template_data{template_id,
                                                     boost::uuids::to_string(user_id),
                                                     template_row["name"].As<std::string>(),
-                                                    template_row["message_text"].As<std::string>()
+                                                    template_row["message_text"].As<std::optional<std::string>>()
   };
   return std::make_unique<schemas::NotificationTemplateWithId>(template_data);
 }
@@ -83,14 +83,14 @@ std::unique_ptr<schemas::NotificationTemplateWithIdList> ens::templates::Templat
         boost::uuids::to_string(row["notification_template_id"].As<boost::uuids::uuid>()),
         boost::uuids::to_string(user_id),
         row["name"].As<std::string>(),
-        row["message_text"].As<std::string>()
+        row["message_text"].As<std::optional<std::string>>()
     );
   }
   return std::make_unique<schemas::NotificationTemplateWithIdList>(templates_data);
 }
 
 std::unique_ptr<schemas::NotificationTemplateWithId> ens::templates::TemplateManager::ConfirmCreation(const boost::uuids::uuid &user_id,
-                                                                                                      const std::string &draft_id) {
+                                                                                                   const std::string &draft_id) {
   boost::uuids::uuid template_id = userver::utils::generators::GenerateBoostUuidV7();
   const userver::storages::postgres::Query template_creation_query{
       "INSERT INTO ens_schema.notification_template "
@@ -98,7 +98,7 @@ std::unique_ptr<schemas::NotificationTemplateWithId> ens::templates::TemplateMan
       "SELECT $3, $1, name, message_text "
       "FROM ens_schema.notification_template_draft "
       "WHERE master_id = $1 AND notification_template_draft_id = $2) "
-      "RETURNING notification_template_id, master_id, name, message_text"
+      "RETURNING name, message_text"
   };
   const userver::storages::postgres::Query draft_deletion_query{
       "DELETE "
@@ -124,19 +124,19 @@ std::unique_ptr<schemas::NotificationTemplateWithId> ens::templates::TemplateMan
   schemas::NotificationTemplateWithId template_data{boost::uuids::to_string(template_id),
                                                     boost::uuids::to_string(user_id),
                                                     template_row["name"].As<std::string>(),
-                                                    template_row["message_text"].As<std::string>()
+                                                    template_row["message_text"].As<std::optional<std::string>>()
   };
   return std::make_unique<schemas::NotificationTemplateWithId>(template_data);
 }
 
 std::unique_ptr<schemas::NotificationTemplateWithId> ens::templates::TemplateManager::ModifyTemplate(const boost::uuids::uuid &user_id,
-                                                                                                     const std::string &template_id,
-                                                                                                     const schemas::NotificationTemplateWithoutId &data) {
+                                                                                                  const std::string &template_id,
+                                                                                                  const schemas::NotificationTemplateWithoutId &data) {
   const userver::storages::postgres::Query update_query{
       "UPDATE ens_schema.notification_template "
       "SET name = $3, message_text = $4 "
       "WHERE master_id = $1 AND notification_template_id = $2 "
-      "RETURNING notification_template_id, master_id, name, message_text"
+      "RETURNING name, message_text"
   };
   userver::storages::postgres::Transaction update_transaction =
       _pg_cluster->Begin(userver::storages::postgres::ClusterHostType::kMaster, {});
@@ -154,7 +154,7 @@ std::unique_ptr<schemas::NotificationTemplateWithId> ens::templates::TemplateMan
   schemas::NotificationTemplateWithId template_data{template_id,
                                                     boost::uuids::to_string(user_id),
                                                     template_row["name"].As<std::string>(),
-                                                    template_row["message_text"].As<std::string>()
+                                                    template_row["message_text"].As<std::optional<std::string>>()
   };
   return std::make_unique<schemas::NotificationTemplateWithId>(template_data);
 }

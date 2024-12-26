@@ -1,14 +1,7 @@
 import json
 
-from voluptuous import Schema, Required
-
 import utils
-
-JwtSchema = Schema({
-    Required("access_token"): str,
-    Required("refresh_token"): str,
-}
-)
+from schemas import JwtSchema
 
 
 async def test_create_user_200(service_client, pgsql):

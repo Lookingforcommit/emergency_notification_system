@@ -14,11 +14,11 @@
 
 //TODO: search for user_id in the db
 
-std::string ens::users::GenerateSalt() {
+std::string ens::user::GenerateSalt() {
   std::random_device rd;
   std::mt19937 gen(rd());
   std::uniform_int_distribution<uint8_t> dis(0, 255);
-  std::vector<uint8_t> salt(ens::users::SALT_SIZE);
+  std::vector<uint8_t> salt(ens::user::SALT_SIZE);
   for (auto &byte : salt) {
     byte = dis(gen);
   }
@@ -26,7 +26,7 @@ std::string ens::users::GenerateSalt() {
 }
 
 // Hash password with passed salt
-std::unique_ptr<ens::users::PwdPair> ens::users::HashPwd(const std::string &password, const std::string &salt) {
+std::unique_ptr<ens::user::PwdPair> ens::user::HashPwd(const std::string &password, const std::string &salt) {
   std::string salted_password = password + salt;
   auto hash = userver::crypto::hash::Sha512(salted_password);
   PwdPair pwd_pair = PwdPair(hash, salt);
@@ -34,7 +34,7 @@ std::unique_ptr<ens::users::PwdPair> ens::users::HashPwd(const std::string &pass
 }
 
 // Hash password with random salt
-std::unique_ptr<ens::users::PwdPair> ens::users::HashPwd(const std::string &password) {
+std::unique_ptr<ens::user::PwdPair> ens::user::HashPwd(const std::string &password) {
   std::string salt = GenerateSalt();
   std::string salted_password = password + salt;
   auto hash = userver::crypto::hash::Sha512(salted_password);
@@ -42,7 +42,7 @@ std::unique_ptr<ens::users::PwdPair> ens::users::HashPwd(const std::string &pass
   return std::make_unique<PwdPair>(pwd_pair);
 }
 
-std::unique_ptr<ens::users::JwtPair> ens::users::JwtManager::GenerateJwtPair(const std::string &user_id) {
+std::unique_ptr<ens::user::JwtPair> ens::user::JwtManager::GenerateJwtPair(const std::string &user_id) {
   auto access_token = jwt::create()
       .set_type("JWS")
       .set_payload_claim("user_id", jwt::claim(user_id))
@@ -55,10 +55,10 @@ std::unique_ptr<ens::users::JwtPair> ens::users::JwtManager::GenerateJwtPair(con
       .set_issued_now()
       .set_expires_in(std::chrono::seconds{JWT_REFRESH_TOKEN_EXPIRATION})
       .sign(jwt::algorithm::hs256{this->_secdist_config._jwt_secret});
-  return std::make_unique<ens::users::JwtPair>(access_token, refresh_token);
+  return std::make_unique<ens::user::JwtPair>(access_token, refresh_token);
 }
 
-userver::yaml_config::Schema ens::users::JwtManager::GetStaticConfigSchema() {
+userver::yaml_config::Schema ens::user::JwtManager::GetStaticConfigSchema() {
   return userver::yaml_config::MergeSchemas<userver::components::ComponentBase>(R"(
     type: object
     description: Component for jwt verification logic
@@ -68,7 +68,7 @@ userver::yaml_config::Schema ens::users::JwtManager::GetStaticConfigSchema() {
 }
 
 // Verify jwt and return user id
-boost::uuids::uuid ens::users::JwtManager::VerifyJwt(const std::string &token) {
+boost::uuids::uuid ens::user::JwtManager::VerifyJwt(const std::string &token) {
   auto verifier = jwt::verify()
       .allow_algorithm(jwt::algorithm::hs256{this->_secdist_config._jwt_secret});
   try {
@@ -87,6 +87,6 @@ boost::uuids::uuid ens::users::JwtManager::VerifyJwt(const std::string &token) {
   }
 }
 
-void ens::users::AppendJwtManager(userver::components::ComponentList &component_list) {
+void ens::user::AppendJwtManager(userver::components::ComponentList &component_list) {
   component_list.Append<JwtManager>();
 }

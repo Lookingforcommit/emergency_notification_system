@@ -72,6 +72,13 @@ struct BaseRecipientGroup {
   std::string name{};
   std::optional<std::string> notification_template_id{};
   bool active{};
+
+  BaseRecipientGroup() = default;
+
+  BaseRecipientGroup(const std::string &name, const std::optional<std::string> &notification_template_id, bool active)
+    : name(name),
+      notification_template_id(notification_template_id),
+      active(active) {};
 };
 
 bool operator==(const schemas::BaseRecipientGroup &lhs,
@@ -511,6 +518,10 @@ struct ReturnedRecipientGroup_P1 {
   std::string master_id{};
 
   USERVER_NAMESPACE::formats::json::Value extra;
+
+  ReturnedRecipientGroup_P1() = default;
+
+  ReturnedRecipientGroup_P1(const std::string &master_id) : master_id(master_id) {}
 };
 
 struct ReturnedRecipientGroup : public schemas::BaseRecipientGroup,
@@ -520,7 +531,12 @@ struct ReturnedRecipientGroup : public schemas::BaseRecipientGroup,
   ReturnedRecipientGroup(schemas::BaseRecipientGroup &&a0,
                          schemas::ReturnedRecipientGroup_P1 &&a1)
       : schemas::BaseRecipientGroup(std::move(a0)),
-        schemas::ReturnedRecipientGroup_P1(std::move(a1)) {}
+        schemas::ReturnedRecipientGroup_P1(std::move(a1)) {};
+
+  ReturnedRecipientGroup(const std::string &master_id, const std::string &name,
+                         const std::optional<std::string> &notification_template_id, bool active)
+                         : BaseRecipientGroup(name, notification_template_id, active),
+                           ReturnedRecipientGroup_P1(master_id) {};
 };
 
 bool operator==(const schemas::ReturnedRecipientGroup_P1 &lhs,
@@ -561,6 +577,10 @@ struct RecipientGroupDraft_P1 {
   std::string draft_id{};
 
   USERVER_NAMESPACE::formats::json::Value extra;
+
+  RecipientGroupDraft_P1() = default;
+
+  RecipientGroupDraft_P1(const std::string &draft_id) : draft_id(draft_id) {};
 };
 
 struct RecipientGroupDraft : public schemas::ReturnedRecipientGroup,
@@ -570,7 +590,12 @@ struct RecipientGroupDraft : public schemas::ReturnedRecipientGroup,
   RecipientGroupDraft(schemas::ReturnedRecipientGroup &&a0,
                       schemas::RecipientGroupDraft_P1 &&a1)
       : schemas::ReturnedRecipientGroup(std::move(a0)),
-        schemas::RecipientGroupDraft_P1(std::move(a1)) {}
+        schemas::RecipientGroupDraft_P1(std::move(a1)) {};
+
+  RecipientGroupDraft(const std::string &draft_id, const std::string &master_id, const std::string &name,
+                      const std::optional<std::string> &notification_template_id, bool active)
+                      : ReturnedRecipientGroup(master_id, name, notification_template_id, active),
+                        RecipientGroupDraft_P1(draft_id) {};
 };
 
 bool operator==(const schemas::RecipientGroupDraft_P1 &lhs,
@@ -611,6 +636,10 @@ struct RecipientGroupWithId_P1 {
   std::string recipient_group_id{};
 
   USERVER_NAMESPACE::formats::json::Value extra;
+
+  RecipientGroupWithId_P1() = default;
+
+  RecipientGroupWithId_P1(const std::string &recipient_group_id) : recipient_group_id(recipient_group_id) {};
 };
 
 struct RecipientGroupWithId : public schemas::ReturnedRecipientGroup,
@@ -620,7 +649,12 @@ struct RecipientGroupWithId : public schemas::ReturnedRecipientGroup,
   RecipientGroupWithId(schemas::ReturnedRecipientGroup &&a0,
                        schemas::RecipientGroupWithId_P1 &&a1)
       : schemas::ReturnedRecipientGroup(std::move(a0)),
-        schemas::RecipientGroupWithId_P1(std::move(a1)) {}
+        schemas::RecipientGroupWithId_P1(std::move(a1)) {};
+
+  RecipientGroupWithId(const std::string &recipient_group_id, const std::string &master_id, const std::string &name,
+                       const std::optional<std::string> &notification_template_id, bool active)
+                       : ReturnedRecipientGroup(master_id, name, notification_template_id, active),
+                         RecipientGroupWithId_P1(recipient_group_id) {};
 };
 
 bool operator==(const schemas::RecipientGroupWithId_P1 &lhs,

@@ -1,4 +1,4 @@
-#include "users.hpp"
+#include "user.hpp"
 
 #include <string>
 #include <memory>
@@ -11,22 +11,22 @@
 #include <boost/uuid/uuid_io.hpp>
 #include <userver/utils/boost_uuid7.hpp>
 
-#include "users/auth.hpp"
+#include "user/auth.hpp"
 #include "schemas/schemas.hpp"
 
 //TODO : user credentials should be non-loggable
 
-userver::yaml_config::Schema ens::users::UserManager::GetStaticConfigSchema() {
+userver::yaml_config::Schema ens::user::UserManager::GetStaticConfigSchema() {
   return userver::yaml_config::MergeSchemas<userver::components::ComponentBase>(R"(
     type: object
-    description: Component for users management logic
+    description: Component for user management logic
     additionalProperties: false
     properties: {}
   )");
 }
 
 // Create a user in the DB and return a pair of jwt tokens
-std::unique_ptr<ens::users::JwtPair> ens::users::UserManager::Create(const std::string &name,
+std::unique_ptr<ens::user::JwtPair> ens::user::UserManager::Create(const std::string &name,
                                                                      const std::string &password) {
   const userver::storages::postgres::Query create_user_query{
       "INSERT INTO ens_schema.user (user_id, name, password_hash, password_salt) "
@@ -46,13 +46,13 @@ std::unique_ptr<ens::users::JwtPair> ens::users::UserManager::Create(const std::
     throw UserAlreadyExistsException{name};
   }
   insert_transaction.Commit();
-  std::unique_ptr<ens::users::JwtPair> jwt_pair = this->_jwt_manager.GenerateJwtPair(boost::uuids::to_string(user_id));
+  std::unique_ptr<ens::user::JwtPair> jwt_pair = this->_jwt_manager.GenerateJwtPair(boost::uuids::to_string(user_id));
   return jwt_pair;
 }
 
 // Login into an existing account and retrieve jwt tokens
 // May log in by old credentials due to unfinished ModifyUser
-std::unique_ptr<ens::users::JwtPair> ens::users::UserManager::Login(const std::string &name,
+std::unique_ptr<ens::user::JwtPair> ens::user::UserManager::Login(const std::string &name,
                                                                     const std::string &password) const {
   const userver::storages::postgres::Query stored_user_info_query{
       "SELECT user_id, password_hash, password_salt "
@@ -74,12 +74,12 @@ std::unique_ptr<ens::users::JwtPair> ens::users::UserManager::Login(const std::s
   if (stored_pair.hashed_password != login_pair->hashed_password) {
     throw IncorrectPwdException{user_id};
   }
-  std::unique_ptr<ens::users::JwtPair> jwt_pair = this->_jwt_manager.GenerateJwtPair(user_id);
+  std::unique_ptr<ens::user::JwtPair> jwt_pair = this->_jwt_manager.GenerateJwtPair(user_id);
   return jwt_pair;
 }
 
 // Modify existing user data
-void ens::users::UserManager::ModifyUser(const boost::uuids::uuid &user_id, const schemas::User &new_data) {
+void ens::user::UserManager::ModifyUser(const boost::uuids::uuid &user_id, const schemas::User &new_data) {
   const userver::storages::postgres::Query update_user_query{
       "UPDATE ens_schema.user "
       "SET name = $1, password_hash = $2, password_salt = $3 "
@@ -100,13 +100,13 @@ void ens::users::UserManager::ModifyUser(const boost::uuids::uuid &user_id, cons
 }
 
 // Get new jwt tokens
-std::unique_ptr<ens::users::JwtPair> ens::users::UserManager::RefreshToken(const boost::uuids::uuid &user_id) const {
-  std::unique_ptr<ens::users::JwtPair> jwt_pair = this->_jwt_manager.GenerateJwtPair(boost::uuids::to_string(user_id));
+std::unique_ptr<ens::user::JwtPair> ens::user::UserManager::RefreshToken(const boost::uuids::uuid &user_id) const {
+  std::unique_ptr<ens::user::JwtPair> jwt_pair = this->_jwt_manager.GenerateJwtPair(boost::uuids::to_string(user_id));
   return jwt_pair;
 }
 
 // Delete an account
-void ens::users::UserManager::DeleteUser(const boost::uuids::uuid &user_id) {
+void ens::user::UserManager::DeleteUser(const boost::uuids::uuid &user_id) {
   const userver::storages::postgres::Query delete_user_query{
       "DELETE "
       "FROM ens_schema.user "
@@ -122,6 +122,6 @@ void ens::users::UserManager::DeleteUser(const boost::uuids::uuid &user_id) {
   delete_transaction.Commit();
 }
 
-void ens::users::AppendUserManager(userver::components::ComponentList &component_list) {
+void ens::user::AppendUserManager(userver::components::ComponentList &component_list) {
   component_list.Append<UserManager>();
 }
