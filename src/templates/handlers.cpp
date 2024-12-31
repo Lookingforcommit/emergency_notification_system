@@ -8,8 +8,6 @@
 #include "schemas/schemas.hpp"
 #include "user/auth.hpp"
 
-// TODO: convert ids to boost here to catch bad_lexical_cast
-
 userver::formats::json::Value ens::templates::TemplateCreateHandler::HandleRequestJsonThrow(const userver::server::http::HttpRequest &request,
                                                                                             const userver::formats::json::Value &request_json,
                                                                                             userver::server::request::RequestContext &) const {
@@ -46,7 +44,7 @@ userver::formats::json::Value ens::templates::TemplateGetByIdHandler::HandleRequ
                                                                                              const userver::formats::json::Value &,
                                                                                              userver::server::request::RequestContext &) const {
   const std::string &access_token = request.GetHeader("Authorization");
-  const std::string template_id = request.GetArg("template_id");
+  const boost::uuids::uuid template_id = boost::lexical_cast<boost::uuids::uuid>(request.GetArg("template_id"));
   try {
     boost::uuids::uuid user_id = _jwt_verif_manager.VerifyJwt(access_token);
     std::unique_ptr<schemas::NotificationTemplateWithId>
@@ -56,6 +54,13 @@ userver::formats::json::Value ens::templates::TemplateGetByIdHandler::HandleRequ
   catch (const ens::user::JwtVerificationException &e) {
     throw userver::server::handlers::CustomHandlerException{
         userver::server::handlers::HandlerErrorCode::kUnauthorized,
+        userver::server::handlers::InternalMessage{e.what()},
+        userver::server::handlers::ExternalBody{e.what()}
+    };
+  }
+  catch (const boost::bad_lexical_cast &e) {
+    throw userver::server::handlers::CustomHandlerException{
+        userver::server::handlers::HandlerErrorCode::kResourceNotFound,
         userver::server::handlers::InternalMessage{e.what()},
         userver::server::handlers::ExternalBody{e.what()}
     };
@@ -104,7 +109,7 @@ userver::formats::json::Value ens::templates::TemplateConfirmCreationHandler::Ha
                                                                                                      const userver::formats::json::Value &,
                                                                                                      userver::server::request::RequestContext &) const {
   const std::string &access_token = request.GetHeader("Authorization");
-  const std::string draft_id = request.GetArg("draft_id");
+  const boost::uuids::uuid draft_id = boost::lexical_cast<boost::uuids::uuid>(request.GetArg("draft_id"));
   try {
     boost::uuids::uuid user_id = _jwt_verif_manager.VerifyJwt(access_token);
     std::unique_ptr<schemas::NotificationTemplateWithId>
@@ -114,6 +119,13 @@ userver::formats::json::Value ens::templates::TemplateConfirmCreationHandler::Ha
   catch (const ens::user::JwtVerificationException &e) {
     throw userver::server::handlers::CustomHandlerException{
         userver::server::handlers::HandlerErrorCode::kUnauthorized,
+        userver::server::handlers::InternalMessage{e.what()},
+        userver::server::handlers::ExternalBody{e.what()}
+    };
+  }
+  catch (const boost::bad_lexical_cast &e) {
+    throw userver::server::handlers::CustomHandlerException{
+        userver::server::handlers::HandlerErrorCode::kResourceNotFound,
         userver::server::handlers::InternalMessage{e.what()},
         userver::server::handlers::ExternalBody{e.what()}
     };
@@ -135,7 +147,7 @@ userver::formats::json::Value ens::templates::TemplateModifyHandler::HandleReque
                                                                                             const userver::formats::json::Value &request_json,
                                                                                             userver::server::request::RequestContext &) const {
   const std::string &access_token = request.GetHeader("Authorization");
-  const std::string template_id = request.GetArg("template_id");
+  const boost::uuids::uuid template_id = boost::lexical_cast<boost::uuids::uuid>(request.GetArg("template_id"));
   try {
     schemas::NotificationTemplateWithoutId user_data = request_json.As<schemas::NotificationTemplateWithoutId>();
     boost::uuids::uuid user_id = _jwt_verif_manager.VerifyJwt(access_token);
@@ -147,6 +159,13 @@ userver::formats::json::Value ens::templates::TemplateModifyHandler::HandleReque
   catch (const ens::user::JwtVerificationException &e) {
     throw userver::server::handlers::CustomHandlerException{
         userver::server::handlers::HandlerErrorCode::kUnauthorized,
+        userver::server::handlers::InternalMessage{e.what()},
+        userver::server::handlers::ExternalBody{e.what()}
+    };
+  }
+  catch (const boost::bad_lexical_cast &e) {
+    throw userver::server::handlers::CustomHandlerException{
+        userver::server::handlers::HandlerErrorCode::kResourceNotFound,
         userver::server::handlers::InternalMessage{e.what()},
         userver::server::handlers::ExternalBody{e.what()}
     };
@@ -176,7 +195,7 @@ userver::formats::json::Value ens::templates::TemplateDeleteHandler::HandleReque
                                                                                             const userver::formats::json::Value &,
                                                                                             userver::server::request::RequestContext &) const {
   const std::string &access_token = request.GetHeader("Authorization");
-  const std::string template_id = request.GetArg("template_id");
+  const boost::uuids::uuid template_id = boost::lexical_cast<boost::uuids::uuid>(request.GetArg("template_id"));
   try {
     boost::uuids::uuid user_id = _jwt_verif_manager.VerifyJwt(access_token);
     this->_template_manager.DeleteTemplate(user_id, template_id);
@@ -185,6 +204,13 @@ userver::formats::json::Value ens::templates::TemplateDeleteHandler::HandleReque
   catch (const ens::user::JwtVerificationException &e) {
     throw userver::server::handlers::CustomHandlerException{
         userver::server::handlers::HandlerErrorCode::kUnauthorized,
+        userver::server::handlers::InternalMessage{e.what()},
+        userver::server::handlers::ExternalBody{e.what()}
+    };
+  }
+  catch (const boost::bad_lexical_cast &e) {
+    throw userver::server::handlers::CustomHandlerException{
+        userver::server::handlers::HandlerErrorCode::kResourceNotFound,
         userver::server::handlers::InternalMessage{e.what()},
         userver::server::handlers::ExternalBody{e.what()}
     };

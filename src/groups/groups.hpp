@@ -24,21 +24,21 @@ class GroupManager : public userver::components::ComponentBase {
   std::unique_ptr<schemas::RecipientGroupDraft> Create(const boost::uuids::uuid &user_id,
                                                        const schemas::RecipientGroupWithoutId &data);
   std::unique_ptr<schemas::RecipientGroupWithId> GetById(const boost::uuids::uuid &user_id,
-                                                         const std::string &group_id) const;
+                                                         const boost::uuids::uuid &group_id) const;
   std::unique_ptr<schemas::RecipientWithIdList> GetRecipients(const boost::uuids::uuid &user_id,
-                                                              const std::string &group_id) const;
+                                                              const boost::uuids::uuid &group_id) const;
   std::unique_ptr<schemas::RecipientGroupWithIdList> GetActive(const boost::uuids::uuid &user_id) const;
   std::unique_ptr<schemas::RecipientGroupWithIdList> GetAll(const boost::uuids::uuid &user_id) const;
   std::unique_ptr<schemas::RecipientGroupWithId> ConfirmCreation(const boost::uuids::uuid &user_id,
-                                                                 const std::string &draft_id);
+                                                                 const boost::uuids::uuid &draft_id);
   std::unique_ptr<schemas::RecipientGroupWithId> ModifyGroup(const boost::uuids::uuid &user_id,
-                                                             const std::string &group_id,
+                                                             const boost::uuids::uuid &group_id,
                                                              const schemas::RecipientGroupWithoutId &data);
   void AddRecipient(const boost::uuids::uuid &user_id,
-                    const std::string &group_id,
-                    const std::string &recipient_id);
-  void DeleteGroup(const boost::uuids::uuid &user_id, const std::string &group_id);
-  void DeleteRecipient(const boost::uuids::uuid &user_id, const std::string &group_id, const std::string &recipient_id);
+                    const boost::uuids::uuid &group_id,
+                    const boost::uuids::uuid &recipient_id);
+  void DeleteGroup(const boost::uuids::uuid &user_id, const boost::uuids::uuid &group_id);
+  void DeleteRecipient(const boost::uuids::uuid &user_id, const boost::uuids::uuid &group_id, const boost::uuids::uuid &recipient_id);
  private:
   userver::storages::postgres::ClusterPtr _pg_cluster;
 };

@@ -5,7 +5,6 @@
 #include <userver/yaml_config/merge_schemas.hpp>
 #include <userver/utils/boost_uuid7.hpp>
 #include <boost/uuid/uuid_io.hpp>
-#include <boost/lexical_cast.hpp>
 
 #include "schemas/schemas.hpp"
 
@@ -44,7 +43,7 @@ std::unique_ptr<schemas::RecipientGroupDraft> ens::groups::GroupManager::Create(
 }
 
 std::unique_ptr<schemas::RecipientGroupWithId> ens::groups::GroupManager::GetById(const boost::uuids::uuid &user_id,
-                                                                                  const std::string &group_id) const {
+                                                                                  const boost::uuids::uuid &group_id) const {
   const userver::storages::postgres::Query group_info_query{
       "SELECT recipient_group_id, master_id, template_id, name, active "
       "FROM ens_schema.recipient_group "
@@ -54,12 +53,12 @@ std::unique_ptr<schemas::RecipientGroupWithId> ens::groups::GroupManager::GetByI
       select_res = _pg_cluster->Execute(userver::storages::postgres::ClusterHostType::kSlave,
                                         group_info_query,
                                         user_id,
-                                        boost::lexical_cast<boost::uuids::uuid>(group_id));
+                                        group_id);
   if (select_res.IsEmpty()) {
-    throw RecipientGroupNotFoundException{group_id};
+    throw RecipientGroupNotFoundException{boost::uuids::to_string(group_id)};
   }
   userver::storages::postgres::Row group_row = select_res[0];
-  schemas::RecipientGroupWithId group_data{group_id,
+  schemas::RecipientGroupWithId group_data{boost::uuids::to_string(group_id),
                                            boost::uuids::to_string(user_id),
                                            group_row["name"].As<std::string>(),
                                            group_row["template_id"].As<std::optional<std::string>>(),
@@ -69,7 +68,7 @@ std::unique_ptr<schemas::RecipientGroupWithId> ens::groups::GroupManager::GetByI
 }
 
 std::unique_ptr<schemas::RecipientWithIdList> ens::groups::GroupManager::GetRecipients(const boost::uuids::uuid &user_id,
-                                                                                       const std::string &group_id) const {
+                                                                                       const boost::uuids::uuid &group_id) const {
   const userver::storages::postgres::Query group_exists_query{
       "SELECT EXISTS ( "
       "SELECT 1 "
@@ -89,15 +88,15 @@ std::unique_ptr<schemas::RecipientWithIdList> ens::groups::GroupManager::GetReci
       group_exists_res = _pg_cluster->Execute(userver::storages::postgres::ClusterHostType::kSlave,
                                               group_exists_query,
                                               user_id,
-                                              boost::lexical_cast<boost::uuids::uuid>(group_id));
+                                              group_id);
   if (not group_exists_res.AsSingleRow<bool>()) {
-    throw RecipientGroupNotFoundException{group_id};
+    throw RecipientGroupNotFoundException{boost::uuids::to_string(group_id)};
   }
   userver::storages::postgres::ResultSet
       select_res = _pg_cluster->Execute(userver::storages::postgres::ClusterHostType::kSlave,
                                         recipients_query,
                                         user_id,
-                                        boost::lexical_cast<boost::uuids::uuid>(group_id));
+                                        group_id);
   schemas::RecipientWithIdList recipients_data;
   for (auto row : select_res) {
     recipients_data.emplace_back(boost::uuids::to_string(row["recipient_id"].As<boost::uuids::uuid>()),
@@ -156,7 +155,7 @@ std::unique_ptr<schemas::RecipientGroupWithIdList> ens::groups::GroupManager::Ge
 }
 
 std::unique_ptr<schemas::RecipientGroupWithId> ens::groups::GroupManager::ConfirmCreation(const boost::uuids::uuid &user_id,
-                                                                                          const std::string &draft_id) {
+                                                                                          const boost::uuids::uuid &draft_id) {
   boost::uuids::uuid group_id = userver::utils::generators::GenerateBoostUuidV7();
   const userver::storages::postgres::Query group_creation_query{
       "INSERT INTO ens_schema.recipient_group "
@@ -176,16 +175,16 @@ std::unique_ptr<schemas::RecipientGroupWithId> ens::groups::GroupManager::Confir
   userver::storages::postgres::ResultSet
       insertion_res = confirmation_transaction.Execute(group_creation_query,
                                                        user_id,
-                                                       boost::lexical_cast<boost::uuids::uuid>(draft_id),
+                                                       draft_id,
                                                        group_id);
   if (not insertion_res.RowsAffected()) {
     confirmation_transaction.Rollback();
-    throw DraftNotFoundException{draft_id};
+    throw DraftNotFoundException{boost::uuids::to_string(draft_id)};
   }
   userver::storages::postgres::ResultSet
       deletion_res = confirmation_transaction.Execute(draft_deletion_query,
-                                                      boost::lexical_cast<boost::uuids::uuid>(user_id),
-                                                      boost::lexical_cast<boost::uuids::uuid>(draft_id));
+                                                      user_id,
+                                                      draft_id);
   confirmation_transaction.Commit();
   userver::storages::postgres::Row group_row = insertion_res[0];
   schemas::RecipientGroupWithId group_data{boost::uuids::to_string(group_id),
@@ -198,7 +197,7 @@ std::unique_ptr<schemas::RecipientGroupWithId> ens::groups::GroupManager::Confir
 }
 
 std::unique_ptr<schemas::RecipientGroupWithId> ens::groups::GroupManager::ModifyGroup(const boost::uuids::uuid &user_id,
-                                                                                      const std::string &group_id,
+                                                                                      const boost::uuids::uuid &group_id,
                                                                                       const schemas::RecipientGroupWithoutId &data) {
   const userver::storages::postgres::Query update_query{
       "UPDATE ens_schema.recipient_group "
@@ -211,17 +210,17 @@ std::unique_ptr<schemas::RecipientGroupWithId> ens::groups::GroupManager::Modify
   userver::storages::postgres::ResultSet
       update_res = update_transaction.Execute(update_query,
                                               user_id,
-                                              boost::lexical_cast<boost::uuids::uuid>(group_id),
+                                              group_id,
                                               data.name,
                                               ens::utils::optional_str_to_uuid(data.notification_template_id),
                                               data.active);
   if (not update_res.RowsAffected()) {
     update_transaction.Rollback();
-    throw RecipientGroupNotFoundException{group_id};
+    throw RecipientGroupNotFoundException{boost::uuids::to_string(group_id)};
   }
   update_transaction.Commit();
   userver::storages::postgres::Row group_row = update_res[0];
-  schemas::RecipientGroupWithId group_data{group_id,
+  schemas::RecipientGroupWithId group_data{boost::uuids::to_string(group_id),
                                            boost::uuids::to_string(user_id),
                                            group_row["name"].As<std::string>(),
                                            ens::utils::optional_uuid_to_str(group_row["template_id"].As<std::optional<boost::uuids::uuid>>()),
@@ -231,8 +230,8 @@ std::unique_ptr<schemas::RecipientGroupWithId> ens::groups::GroupManager::Modify
 }
 
 void ens::groups::GroupManager::AddRecipient(const boost::uuids::uuid &user_id,
-                                             const std::string &group_id,
-                                             const std::string &recipient_id) {
+                                             const boost::uuids::uuid &group_id,
+                                             const boost::uuids::uuid &recipient_id) {
   const userver::storages::postgres::Query group_exists_query{
       "SELECT EXISTS ( "
       "SELECT 1 "
@@ -254,32 +253,29 @@ void ens::groups::GroupManager::AddRecipient(const boost::uuids::uuid &user_id,
       _pg_cluster->Begin(userver::storages::postgres::ClusterHostType::kMaster, {});
   userver::storages::postgres::ResultSet group_exists_res = transaction.Execute(group_exists_query,
                                                                                 user_id,
-                                                                                boost::lexical_cast<boost::uuids::uuid>(
-                                                                                    group_id));
+                                                                                group_id);
   userver::storages::postgres::ResultSet recipient_exists_res = transaction.Execute(recipient_exists_query,
                                                                                     user_id,
-                                                                                    boost::lexical_cast<boost::uuids::uuid>(
-                                                                                        recipient_id));
+                                                                                    recipient_id);
   if (not group_exists_res.AsSingleRow<bool>()) {
     transaction.Rollback();
-    throw RecipientGroupNotFoundException{group_id};
+    throw RecipientGroupNotFoundException{boost::uuids::to_string(group_id)};
   }
   if (not recipient_exists_res.AsSingleRow<bool>()) {
     transaction.Rollback();
-    throw RecipientNotFoundException{recipient_id};
+    throw RecipientNotFoundException{boost::uuids::to_string(recipient_id)};
   }
   userver::storages::postgres::ResultSet insert_res = transaction.Execute(add_recipient_query,
-                                                                          boost::lexical_cast<boost::uuids::uuid>(
-                                                                              group_id),
-                                                                          boost::lexical_cast<boost::uuids::uuid>(
-                                                                              recipient_id));
+                                                                          group_id,
+                                                                          recipient_id);
   if (not insert_res.RowsAffected()) {
-    throw RecipientAlreadyAddedException{recipient_id, group_id};
+    throw RecipientAlreadyAddedException{boost::uuids::to_string(recipient_id),
+                                         boost::uuids::to_string(group_id)};
   }
   transaction.Commit();
 }
 
-void ens::groups::GroupManager::DeleteGroup(const boost::uuids::uuid &user_id, const std::string &group_id) {
+void ens::groups::GroupManager::DeleteGroup(const boost::uuids::uuid &user_id, const boost::uuids::uuid &group_id) {
   const userver::storages::postgres::Query delete_query{
       "DELETE "
       "FROM ens_schema.recipient_group "
@@ -290,17 +286,17 @@ void ens::groups::GroupManager::DeleteGroup(const boost::uuids::uuid &user_id, c
   userver::storages::postgres::ResultSet
       delete_res = delete_transaction.Execute(delete_query,
                                               user_id,
-                                              boost::lexical_cast<boost::uuids::uuid>(group_id));
+                                              group_id);
   if (not delete_res.RowsAffected()) {
     delete_transaction.Rollback();
-    throw RecipientGroupNotFoundException{group_id};
+    throw RecipientGroupNotFoundException{boost::uuids::to_string(group_id)};
   }
   delete_transaction.Commit();
 }
 
 void ens::groups::GroupManager::DeleteRecipient(const boost::uuids::uuid &user_id,
-                                                const std::string &group_id,
-                                                const std::string &recipient_id) {
+                                                const boost::uuids::uuid &group_id,
+                                                const boost::uuids::uuid &recipient_id) {
   const userver::storages::postgres::Query group_exists_query{
       "SELECT EXISTS ( "
       "SELECT 1 "
@@ -322,27 +318,26 @@ void ens::groups::GroupManager::DeleteRecipient(const boost::uuids::uuid &user_i
       _pg_cluster->Begin(userver::storages::postgres::ClusterHostType::kMaster, {});
   userver::storages::postgres::ResultSet group_exists_res = transaction.Execute(group_exists_query,
                                                                                 user_id,
-                                                                                boost::lexical_cast<boost::uuids::uuid>(
-                                                                                    group_id));
+                                                                                group_id);
   userver::storages::postgres::ResultSet recipient_exists_res = transaction.Execute(recipient_exists_query,
                                                                                     user_id,
-                                                                                    boost::lexical_cast<boost::uuids::uuid>(
-                                                                                        recipient_id));
+                                                                                    recipient_id);
   if (not group_exists_res.AsSingleRow<bool>()) {
     transaction.Rollback();
-    throw RecipientGroupNotFoundException{group_id};
+    throw RecipientGroupNotFoundException{boost::uuids::to_string(group_id)};
   }
   if (not recipient_exists_res.AsSingleRow<bool>()) {
     transaction.Rollback();
-    throw RecipientNotFoundException{recipient_id};
+    throw RecipientNotFoundException{boost::uuids::to_string(recipient_id)};
   }
   userver::storages::postgres::ResultSet
       delete_res = transaction.Execute(delete_query,
-                                       boost::lexical_cast<boost::uuids::uuid>(group_id),
-                                       boost::lexical_cast<boost::uuids::uuid>(recipient_id));
+                                       group_id,
+                                       recipient_id);
   if (not delete_res.RowsAffected()) {
     transaction.Rollback();
-    throw RecipientNotAddedException{recipient_id, group_id};
+    throw RecipientNotAddedException{boost::uuids::to_string(recipient_id),
+                                     boost::uuids::to_string(group_id)};
   }
   transaction.Commit();
 }

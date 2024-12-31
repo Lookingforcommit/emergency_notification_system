@@ -24,14 +24,14 @@ class TemplateManager : public userver::components::ComponentBase {
   std::unique_ptr<schemas::NotificationTemplateDraft> Create(const boost::uuids::uuid &user_id,
                                                              const schemas::NotificationTemplateWithoutId &data);
   std::unique_ptr<schemas::NotificationTemplateWithId> GetById(const boost::uuids::uuid &user_id,
-                                                               const std::string &template_id) const;
+                                                               const boost::uuids::uuid &template_id) const;
   std::unique_ptr<schemas::NotificationTemplateWithIdList> GetAll(const boost::uuids::uuid &user_id) const;
   std::unique_ptr<schemas::NotificationTemplateWithId> ConfirmCreation(const boost::uuids::uuid &user_id,
-                                                                       const std::string &draft_id);
+                                                                       const boost::uuids::uuid &draft_id);
   std::unique_ptr<schemas::NotificationTemplateWithId> ModifyTemplate(const boost::uuids::uuid &user_id,
-                                                                      const std::string &template_id,
+                                                                      const boost::uuids::uuid &template_id,
                                                                       const schemas::NotificationTemplateWithoutId &data);
-  void DeleteTemplate(const boost::uuids::uuid &user_id, const std::string &template_id);
+  void DeleteTemplate(const boost::uuids::uuid &user_id, const boost::uuids::uuid &template_id);
  private:
   userver::storages::postgres::ClusterPtr _pg_cluster;
 };

@@ -44,7 +44,7 @@ userver::formats::json::Value ens::groups::GroupGetByIdHandler::HandleRequestJso
                                                                                        const userver::formats::json::Value &,
                                                                                        userver::server::request::RequestContext &) const {
   const std::string &access_token = request.GetHeader("Authorization");
-  const std::string group_id = request.GetArg("group_id");
+  const boost::uuids::uuid group_id = boost::lexical_cast<boost::uuids::uuid>(request.GetArg("group_id"));
   try {
     boost::uuids::uuid user_id = _jwt_verif_manager.VerifyJwt(access_token);
     std::unique_ptr<schemas::RecipientGroupWithId>
@@ -54,6 +54,13 @@ userver::formats::json::Value ens::groups::GroupGetByIdHandler::HandleRequestJso
   catch (const ens::user::JwtVerificationException &e) {
     throw userver::server::handlers::CustomHandlerException{
         userver::server::handlers::HandlerErrorCode::kUnauthorized,
+        userver::server::handlers::InternalMessage{e.what()},
+        userver::server::handlers::ExternalBody{e.what()}
+    };
+  }
+  catch (const boost::bad_lexical_cast &e) {
+    throw userver::server::handlers::CustomHandlerException{
+        userver::server::handlers::HandlerErrorCode::kResourceNotFound,
         userver::server::handlers::InternalMessage{e.what()},
         userver::server::handlers::ExternalBody{e.what()}
     };
@@ -75,7 +82,7 @@ userver::formats::json::Value ens::groups::GroupGetRecipientsHandler::HandleRequ
                                                                                              const userver::formats::json::Value &,
                                                                                              userver::server::request::RequestContext &) const {
   const std::string &access_token = request.GetHeader("Authorization");
-  const std::string &group_id = request.GetArg("group_id");
+  const boost::uuids::uuid &group_id = boost::lexical_cast<boost::uuids::uuid>(request.GetArg("group_id"));
   try {
     boost::uuids::uuid user_id = _jwt_verif_manager.VerifyJwt(access_token);
     std::unique_ptr<schemas::RecipientWithIdList> recipients = this->_group_manager.GetRecipients(user_id, group_id);
@@ -89,6 +96,13 @@ userver::formats::json::Value ens::groups::GroupGetRecipientsHandler::HandleRequ
   catch (const ens::user::JwtVerificationException &e) {
     throw userver::server::handlers::CustomHandlerException{
         userver::server::handlers::HandlerErrorCode::kUnauthorized,
+        userver::server::handlers::InternalMessage{e.what()},
+        userver::server::handlers::ExternalBody{e.what()}
+    };
+  }
+  catch (const boost::bad_lexical_cast &e) {
+    throw userver::server::handlers::CustomHandlerException{
+        userver::server::handlers::HandlerErrorCode::kResourceNotFound,
         userver::server::handlers::InternalMessage{e.what()},
         userver::server::handlers::ExternalBody{e.what()}
     };
@@ -164,7 +178,7 @@ userver::formats::json::Value ens::groups::GroupConfirmCreationHandler::HandleRe
                                                                                                const userver::formats::json::Value &,
                                                                                                userver::server::request::RequestContext &) const {
   const std::string &access_token = request.GetHeader("Authorization");
-  const std::string draft_id = request.GetArg("draft_id");
+  const boost::uuids::uuid draft_id = boost::lexical_cast<boost::uuids::uuid>(request.GetArg("draft_id"));
   try {
     boost::uuids::uuid user_id = _jwt_verif_manager.VerifyJwt(access_token);
     std::unique_ptr<schemas::RecipientGroupWithId>
@@ -174,6 +188,13 @@ userver::formats::json::Value ens::groups::GroupConfirmCreationHandler::HandleRe
   catch (const ens::user::JwtVerificationException &e) {
     throw userver::server::handlers::CustomHandlerException{
         userver::server::handlers::HandlerErrorCode::kUnauthorized,
+        userver::server::handlers::InternalMessage{e.what()},
+        userver::server::handlers::ExternalBody{e.what()}
+    };
+  }
+  catch (const boost::bad_lexical_cast &e) {
+    throw userver::server::handlers::CustomHandlerException{
+        userver::server::handlers::HandlerErrorCode::kResourceNotFound,
         userver::server::handlers::InternalMessage{e.what()},
         userver::server::handlers::ExternalBody{e.what()}
     };
@@ -195,7 +216,7 @@ userver::formats::json::Value ens::groups::GroupModifyGroupHandler::HandleReques
                                                                                            const userver::formats::json::Value &request_json,
                                                                                            userver::server::request::RequestContext &) const {
   const std::string &access_token = request.GetHeader("Authorization");
-  const std::string group_id = request.GetArg("group_id");
+  const boost::uuids::uuid group_id = boost::lexical_cast<boost::uuids::uuid>(request.GetArg("group_id"));
   try {
     schemas::RecipientGroupWithoutId user_data = request_json.As<schemas::RecipientGroupWithoutId>();
     boost::uuids::uuid user_id = _jwt_verif_manager.VerifyJwt(access_token);
@@ -207,6 +228,13 @@ userver::formats::json::Value ens::groups::GroupModifyGroupHandler::HandleReques
   catch (const ens::user::JwtVerificationException &e) {
     throw userver::server::handlers::CustomHandlerException{
         userver::server::handlers::HandlerErrorCode::kUnauthorized,
+        userver::server::handlers::InternalMessage{e.what()},
+        userver::server::handlers::ExternalBody{e.what()}
+    };
+  }
+  catch (const boost::bad_lexical_cast &e) {
+    throw userver::server::handlers::CustomHandlerException{
+        userver::server::handlers::HandlerErrorCode::kResourceNotFound,
         userver::server::handlers::InternalMessage{e.what()},
         userver::server::handlers::ExternalBody{e.what()}
     };
@@ -236,8 +264,8 @@ userver::formats::json::Value ens::groups::GroupAddRecipientHandler::HandleReque
                                                                                             const userver::formats::json::Value &,
                                                                                             userver::server::request::RequestContext &) const {
   const std::string &access_token = request.GetHeader("Authorization");
-  const std::string group_id = request.GetArg("group_id");
-  const std::string recipient_id = request.GetArg("recipient_id");
+  const boost::uuids::uuid group_id = boost::lexical_cast<boost::uuids::uuid>(request.GetArg("group_id"));
+  const boost::uuids::uuid recipient_id = boost::lexical_cast<boost::uuids::uuid>(request.GetArg("recipient_id"));
   try {
     boost::uuids::uuid user_id = _jwt_verif_manager.VerifyJwt(access_token);
     this->_group_manager.AddRecipient(user_id, group_id, recipient_id);
@@ -245,6 +273,13 @@ userver::formats::json::Value ens::groups::GroupAddRecipientHandler::HandleReque
   catch (const ens::user::JwtVerificationException &e) {
     throw userver::server::handlers::CustomHandlerException{
         userver::server::handlers::HandlerErrorCode::kUnauthorized,
+        userver::server::handlers::InternalMessage{e.what()},
+        userver::server::handlers::ExternalBody{e.what()}
+    };
+  }
+  catch (const boost::bad_lexical_cast &e) {
+    throw userver::server::handlers::CustomHandlerException{
+        userver::server::handlers::HandlerErrorCode::kResourceNotFound,
         userver::server::handlers::InternalMessage{e.what()},
         userver::server::handlers::ExternalBody{e.what()}
     };
@@ -281,8 +316,8 @@ userver::formats::json::Value ens::groups::GroupDeleteRecipientHandler::HandleRe
                                                                                                const userver::formats::json::Value &,
                                                                                                userver::server::request::RequestContext &) const {
   const std::string &access_token = request.GetHeader("Authorization");
-  const std::string group_id = request.GetArg("group_id");
-  const std::string recipient_id = request.GetArg("recipient_id");
+  const boost::uuids::uuid group_id = boost::lexical_cast<boost::uuids::uuid>(request.GetArg("group_id"));
+  const boost::uuids::uuid recipient_id = boost::lexical_cast<boost::uuids::uuid>(request.GetArg("recipient_id"));
   try {
     boost::uuids::uuid user_id = _jwt_verif_manager.VerifyJwt(access_token);
     this->_group_manager.DeleteRecipient(user_id, group_id, recipient_id);
@@ -290,6 +325,13 @@ userver::formats::json::Value ens::groups::GroupDeleteRecipientHandler::HandleRe
   catch (const ens::user::JwtVerificationException &e) {
     throw userver::server::handlers::CustomHandlerException{
         userver::server::handlers::HandlerErrorCode::kUnauthorized,
+        userver::server::handlers::InternalMessage{e.what()},
+        userver::server::handlers::ExternalBody{e.what()}
+    };
+  }
+  catch (const boost::bad_lexical_cast &e) {
+    throw userver::server::handlers::CustomHandlerException{
+        userver::server::handlers::HandlerErrorCode::kResourceNotFound,
         userver::server::handlers::InternalMessage{e.what()},
         userver::server::handlers::ExternalBody{e.what()}
     };
@@ -319,7 +361,7 @@ userver::formats::json::Value ens::groups::GroupDeleteGroupHandler::HandleReques
                                                                                            const userver::formats::json::Value &,
                                                                                            userver::server::request::RequestContext &) const {
   const std::string &access_token = request.GetHeader("Authorization");
-  const std::string group_id = request.GetArg("group_id");
+  const boost::uuids::uuid group_id = boost::lexical_cast<boost::uuids::uuid>(request.GetArg("group_id"));
   try {
     boost::uuids::uuid user_id = _jwt_verif_manager.VerifyJwt(access_token);
     this->_group_manager.DeleteGroup(user_id, group_id);
@@ -327,6 +369,13 @@ userver::formats::json::Value ens::groups::GroupDeleteGroupHandler::HandleReques
   catch (const ens::user::JwtVerificationException &e) {
     throw userver::server::handlers::CustomHandlerException{
         userver::server::handlers::HandlerErrorCode::kUnauthorized,
+        userver::server::handlers::InternalMessage{e.what()},
+        userver::server::handlers::ExternalBody{e.what()}
+    };
+  }
+  catch (const boost::bad_lexical_cast &e) {
+    throw userver::server::handlers::CustomHandlerException{
+        userver::server::handlers::HandlerErrorCode::kResourceNotFound,
         userver::server::handlers::InternalMessage{e.what()},
         userver::server::handlers::ExternalBody{e.what()}
     };

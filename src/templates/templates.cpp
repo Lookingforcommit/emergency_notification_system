@@ -5,11 +5,8 @@
 #include <userver/yaml_config/merge_schemas.hpp>
 #include <userver/utils/boost_uuid7.hpp>
 #include <boost/uuid/uuid_io.hpp>
-#include <boost/lexical_cast.hpp>
 
 #include "schemas/schemas.hpp"
-
-//TODO: limit size of templates (VARCHAR instead of TEXT)
 
 userver::yaml_config::Schema ens::templates::TemplateManager::GetStaticConfigSchema() {
   return userver::yaml_config::MergeSchemas<userver::components::ComponentBase>(R"(
@@ -21,7 +18,7 @@ userver::yaml_config::Schema ens::templates::TemplateManager::GetStaticConfigSch
 }
 
 std::unique_ptr<schemas::NotificationTemplateDraft> ens::templates::TemplateManager::Create(const boost::uuids::uuid &user_id,
-                                                                                         const schemas::NotificationTemplateWithoutId &data) {
+                                                                                            const schemas::NotificationTemplateWithoutId &data) {
   const userver::storages::postgres::Query create_template_query{
       "INSERT INTO ens_schema.notification_template_draft "
       "(notification_template_draft_id, master_id, name, message_text) "
@@ -44,7 +41,7 @@ std::unique_ptr<schemas::NotificationTemplateDraft> ens::templates::TemplateMana
 }
 
 std::unique_ptr<schemas::NotificationTemplateWithId> ens::templates::TemplateManager::GetById(const boost::uuids::uuid &user_id,
-                                                                                           const std::string &template_id) const {
+                                                                                              const boost::uuids::uuid &template_id) const {
   const userver::storages::postgres::Query template_info_query{
       "SELECT notification_template_id, master_id, name, message_text "
       "FROM ens_schema.notification_template "
@@ -54,12 +51,12 @@ std::unique_ptr<schemas::NotificationTemplateWithId> ens::templates::TemplateMan
       select_res = _pg_cluster->Execute(userver::storages::postgres::ClusterHostType::kSlave,
                                         template_info_query,
                                         user_id,
-                                        boost::lexical_cast<boost::uuids::uuid>(template_id));
+                                        template_id);
   if (select_res.IsEmpty()) {
-    throw NotificationTemplateNotFoundException{template_id};
+    throw NotificationTemplateNotFoundException{boost::uuids::to_string(template_id)};
   }
   userver::storages::postgres::Row template_row = select_res[0];
-  schemas::NotificationTemplateWithId template_data{template_id,
+  schemas::NotificationTemplateWithId template_data{boost::uuids::to_string(template_id),
                                                     boost::uuids::to_string(user_id),
                                                     template_row["name"].As<std::string>(),
                                                     template_row["message_text"].As<std::optional<std::string>>()
@@ -90,7 +87,7 @@ std::unique_ptr<schemas::NotificationTemplateWithIdList> ens::templates::Templat
 }
 
 std::unique_ptr<schemas::NotificationTemplateWithId> ens::templates::TemplateManager::ConfirmCreation(const boost::uuids::uuid &user_id,
-                                                                                                   const std::string &draft_id) {
+                                                                                                      const boost::uuids::uuid &draft_id) {
   boost::uuids::uuid template_id = userver::utils::generators::GenerateBoostUuidV7();
   const userver::storages::postgres::Query template_creation_query{
       "INSERT INTO ens_schema.notification_template "
@@ -110,15 +107,15 @@ std::unique_ptr<schemas::NotificationTemplateWithId> ens::templates::TemplateMan
   userver::storages::postgres::ResultSet
       insertion_res = confirmation_transaction.Execute(template_creation_query,
                                                        user_id,
-                                                       boost::lexical_cast<boost::uuids::uuid>(draft_id),
+                                                       draft_id,
                                                        template_id);
   if (not insertion_res.RowsAffected()) {
-    throw DraftNotFoundException{draft_id};
+    throw DraftNotFoundException{boost::uuids::to_string(draft_id)};
   }
   userver::storages::postgres::ResultSet
       deletion_res = confirmation_transaction.Execute(draft_deletion_query,
-                                                      boost::lexical_cast<boost::uuids::uuid>(user_id),
-                                                      boost::lexical_cast<boost::uuids::uuid>(draft_id));
+                                                      user_id,
+                                                      draft_id);
   confirmation_transaction.Commit();
   userver::storages::postgres::Row template_row = insertion_res[0];
   schemas::NotificationTemplateWithId template_data{boost::uuids::to_string(template_id),
@@ -130,8 +127,8 @@ std::unique_ptr<schemas::NotificationTemplateWithId> ens::templates::TemplateMan
 }
 
 std::unique_ptr<schemas::NotificationTemplateWithId> ens::templates::TemplateManager::ModifyTemplate(const boost::uuids::uuid &user_id,
-                                                                                                  const std::string &template_id,
-                                                                                                  const schemas::NotificationTemplateWithoutId &data) {
+                                                                                                     const boost::uuids::uuid &template_id,
+                                                                                                     const schemas::NotificationTemplateWithoutId &data) {
   const userver::storages::postgres::Query update_query{
       "UPDATE ens_schema.notification_template "
       "SET name = $3, message_text = $4 "
@@ -143,15 +140,15 @@ std::unique_ptr<schemas::NotificationTemplateWithId> ens::templates::TemplateMan
   userver::storages::postgres::ResultSet
       update_res = update_transaction.Execute(update_query,
                                               user_id,
-                                              boost::lexical_cast<boost::uuids::uuid>(template_id),
+                                              template_id,
                                               data.name,
                                               data.message_text);
   if (not update_res.RowsAffected()) {
-    throw NotificationTemplateNotFoundException{template_id};
+    throw NotificationTemplateNotFoundException{boost::uuids::to_string(template_id)};
   }
   update_transaction.Commit();
   userver::storages::postgres::Row template_row = update_res[0];
-  schemas::NotificationTemplateWithId template_data{template_id,
+  schemas::NotificationTemplateWithId template_data{boost::uuids::to_string(template_id),
                                                     boost::uuids::to_string(user_id),
                                                     template_row["name"].As<std::string>(),
                                                     template_row["message_text"].As<std::optional<std::string>>()
@@ -159,7 +156,8 @@ std::unique_ptr<schemas::NotificationTemplateWithId> ens::templates::TemplateMan
   return std::make_unique<schemas::NotificationTemplateWithId>(template_data);
 }
 
-void ens::templates::TemplateManager::DeleteTemplate(const boost::uuids::uuid &user_id, const std::string &template_id) {
+void ens::templates::TemplateManager::DeleteTemplate(const boost::uuids::uuid &user_id,
+                                                     const boost::uuids::uuid &template_id) {
   const userver::storages::postgres::Query delete_query{
       "DELETE "
       "FROM ens_schema.notification_template "
@@ -170,9 +168,9 @@ void ens::templates::TemplateManager::DeleteTemplate(const boost::uuids::uuid &u
   userver::storages::postgres::ResultSet
       delete_res = delete_transaction.Execute(delete_query,
                                               user_id,
-                                              boost::lexical_cast<boost::uuids::uuid>(template_id));
+                                              template_id);
   if (not delete_res.RowsAffected()) {
-    throw NotificationTemplateNotFoundException{template_id};
+    throw NotificationTemplateNotFoundException{boost::uuids::to_string(template_id)};
   }
   delete_transaction.Commit();
 }

@@ -6,9 +6,7 @@
 #include <userver/server/handlers/exceptions.hpp>
 #include <userver/server/http/http_error.hpp>
 #include <userver/formats/json/schema.hpp>
-#include <boost/lexical_cast.hpp>
 #include <boost/uuid/uuid.hpp>
-#include <boost/uuid/uuid_io.hpp>
 
 #include "user.hpp"
 #include "auth.hpp"

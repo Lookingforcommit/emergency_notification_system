@@ -27,12 +27,12 @@ class RecipientManager : public userver::components::ComponentBase {
               .GetCluster()) {}
   static userver::yaml_config::Schema GetStaticConfigSchema();
   std::unique_ptr<schemas::RecipientDraft> Create(const boost::uuids::uuid &user_id, const schemas::RecipientWithoutId &data);
-  std::unique_ptr<schemas::RecipientWithId> GetById(const boost::uuids::uuid &user_id, const std::string &recipient_id) const;
+  std::unique_ptr<schemas::RecipientWithId> GetById(const boost::uuids::uuid &user_id, const boost::uuids::uuid &recipient_id) const;
   std::unique_ptr<schemas::RecipientWithIdList> GetAll(const boost::uuids::uuid &user_id) const;
-  std::unique_ptr<schemas::RecipientWithId> ConfirmCreation(const boost::uuids::uuid &user_id, const std::string &draft_id);
-  std::unique_ptr<schemas::RecipientWithId> ModifyRecipient(const boost::uuids::uuid &user_id, const std::string &recipient_id,
+  std::unique_ptr<schemas::RecipientWithId> ConfirmCreation(const boost::uuids::uuid &user_id, const boost::uuids::uuid &draft_id);
+  std::unique_ptr<schemas::RecipientWithId> ModifyRecipient(const boost::uuids::uuid &user_id, const boost::uuids::uuid &recipient_id,
                                                             const schemas::RecipientWithoutId &data);
-  void DeleteRecipient(const boost::uuids::uuid &user_id, const std::string &recipient_id);
+  void DeleteRecipient(const boost::uuids::uuid &user_id, const boost::uuids::uuid &recipient_id);
  private:
   userver::storages::postgres::ClusterPtr _pg_cluster;
 };
