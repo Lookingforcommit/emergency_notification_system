@@ -16,10 +16,10 @@ class TemplateJsonHandlerBase : public userver::server::handlers::HttpHandlerJso
                           const userver::components::ComponentContext &context)
       : HttpHandlerJsonBase(config, context),
         _template_manager(context.FindComponent<TemplateManager>()),
-        _jwt_verif_manager(context.FindComponent<ens::user::JwtManager>()) {}
+        _jwt_verif_manager(context.FindComponent<ens::auth::JWTManager>()) {}
  protected:
   TemplateManager &_template_manager;
-  ens::user::JwtManager &_jwt_verif_manager;
+  ens::auth::JWTManager &_jwt_verif_manager;
 };
 
 class TemplateCreateHandler : public TemplateJsonHandlerBase {

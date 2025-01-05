@@ -30,7 +30,7 @@ int main(int argc, char *argv[]) {
       .Append<userver::components::Secdist>()
       .Append<userver::components::DefaultSecdistProvider>();
   ens::user::AppendUserManager(component_list);
-  ens::user::AppendJwtManager(component_list);
+  ens::auth::AppendJWTManager(component_list);
   ens::user::AppendUserCreateHandler(component_list);
   ens::user::AppendUserLoginHandler(component_list);
   ens::user::AppendUserModifyHandler(component_list);

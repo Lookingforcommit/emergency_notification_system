@@ -47,12 +47,12 @@ class UserModifyHandler : public UserJsonHandlerBase {
   UserModifyHandler(const userver::components::ComponentConfig &config,
                     const userver::components::ComponentContext &context)
       : UserJsonHandlerBase(config, context),
-        _jwt_verif_manager(context.FindComponent<JwtManager>()) {}
+        _jwt_verif_manager(context.FindComponent<ens::auth::JWTManager>()) {}
   userver::formats::json::Value HandleRequestJsonThrow(
       const userver::server::http::HttpRequest &request, const userver::formats::json::Value &request_json,
       userver::server::request::RequestContext &) const override;
  private:
-  JwtManager &_jwt_verif_manager;
+  ens::auth::JWTManager &_jwt_verif_manager;
 };
 
 void AppendUserModifyHandler(userver::components::ComponentList &component_list);
@@ -63,12 +63,12 @@ class UserRefreshTokenHandler : public UserJsonHandlerBase {
   UserRefreshTokenHandler(const userver::components::ComponentConfig &config,
                           const userver::components::ComponentContext &context)
       : UserJsonHandlerBase(config, context),
-        _jwt_verif_manager(context.FindComponent<JwtManager>()) {}
+        _jwt_verif_manager(context.FindComponent<ens::auth::JWTManager>()) {}
   userver::formats::json::Value HandleRequestJsonThrow(const userver::server::http::HttpRequest &request,
                                                        const userver::formats::json::Value &,
                                                        userver::server::request::RequestContext &) const override;
  private:
-  JwtManager &_jwt_verif_manager;
+  ens::auth::JWTManager &_jwt_verif_manager;
 };
 
 void AppendUserRefreshTokenHandler(userver::components::ComponentList &component_list);
@@ -79,12 +79,12 @@ class UserDeleteHandler : public UserJsonHandlerBase {
   UserDeleteHandler(const userver::components::ComponentConfig &config,
                     const userver::components::ComponentContext &context)
       : UserJsonHandlerBase(config, context),
-        _jwt_verif_manager(context.FindComponent<JwtManager>()) {}
+        _jwt_verif_manager(context.FindComponent<ens::auth::JWTManager>()) {}
   userver::formats::json::Value HandleRequestJsonThrow(const userver::server::http::HttpRequest &request,
                                                        const userver::formats::json::Value &,
                                                        userver::server::request::RequestContext &) const override;
  private:
-  JwtManager &_jwt_verif_manager;
+  ens::auth::JWTManager &_jwt_verif_manager;
 };
 
 void AppendUserDeleteHandler(userver::components::ComponentList &component_list);

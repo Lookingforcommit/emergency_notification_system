@@ -8,8 +8,8 @@
 #include <userver/storages/postgres/result_set.hpp>
 #include <userver/storages/postgres/transaction.hpp>
 #include <userver/yaml_config/merge_schemas.hpp>
-#include <boost/uuid/uuid_io.hpp>
 #include <userver/utils/boost_uuid7.hpp>
+#include <boost/uuid/uuid_io.hpp>
 
 #include "user/auth.hpp"
 #include "schemas/schemas.hpp"
@@ -26,8 +26,8 @@ userver::yaml_config::Schema ens::user::UserManager::GetStaticConfigSchema() {
 }
 
 // Create a user in the DB and return a pair of jwt tokens
-std::unique_ptr<ens::user::JwtPair> ens::user::UserManager::Create(const std::string &name,
-                                                                     const std::string &password) {
+std::unique_ptr<schemas::JWTPair> ens::user::UserManager::Create(const std::string &name,
+                                                                 const std::string &password) {
   const userver::storages::postgres::Query create_user_query{
       "INSERT INTO ens_schema.user (user_id, name, password_hash, password_salt) "
       "VALUES ($1, $2, $3, $4) "
@@ -36,7 +36,7 @@ std::unique_ptr<ens::user::JwtPair> ens::user::UserManager::Create(const std::st
   userver::storages::postgres::Transaction insert_transaction =
       _pg_cluster->Begin(userver::storages::postgres::ClusterHostType::kMaster, {});
   boost::uuids::uuid user_id = userver::utils::generators::GenerateBoostUuidV7();
-  std::unique_ptr<PwdPair> pwd_pair = HashPwd(password);
+  std::unique_ptr<ens::auth::PwdPair> pwd_pair = ens::auth::HashPwd(password);
   userver::storages::postgres::ResultSet insert_res = insert_transaction.Execute(create_user_query,
                                                                                  user_id,
                                                                                  name,
@@ -46,14 +46,14 @@ std::unique_ptr<ens::user::JwtPair> ens::user::UserManager::Create(const std::st
     throw UserAlreadyExistsException{name};
   }
   insert_transaction.Commit();
-  std::unique_ptr<ens::user::JwtPair> jwt_pair = this->_jwt_manager.GenerateJwtPair(boost::uuids::to_string(user_id));
+  std::unique_ptr<schemas::JWTPair> jwt_pair = this->_jwt_manager.GenerateJWTPair(boost::uuids::to_string(user_id));
   return jwt_pair;
 }
 
 // Login into an existing account and retrieve jwt tokens
 // May log in by old credentials due to unfinished ModifyUser
-std::unique_ptr<ens::user::JwtPair> ens::user::UserManager::Login(const std::string &name,
-                                                                    const std::string &password) const {
+std::unique_ptr<schemas::JWTPair> ens::user::UserManager::Login(const std::string &name,
+                                                                const std::string &password) const {
   const userver::storages::postgres::Query stored_user_info_query{
       "SELECT user_id, password_hash, password_salt "
       "FROM ens_schema.user "
@@ -68,13 +68,13 @@ std::unique_ptr<ens::user::JwtPair> ens::user::UserManager::Login(const std::str
   }
   userver::storages::postgres::Row user_data = select_res[0];
   std::string user_id = boost::uuids::to_string(user_data["user_id"].As<boost::uuids::uuid>());
-  PwdPair stored_pair{user_data["password_hash"].As<std::string>(),
+  ens::auth::PwdPair stored_pair{user_data["password_hash"].As<std::string>(),
                       user_data["password_salt"].As<std::string>()};
-  std::unique_ptr<PwdPair> login_pair = HashPwd(password, stored_pair.salt);
+  std::unique_ptr<ens::auth::PwdPair> login_pair = ens::auth::HashPwd(password, stored_pair.salt);
   if (stored_pair.hashed_password != login_pair->hashed_password) {
     throw IncorrectPwdException{user_id};
   }
-  std::unique_ptr<ens::user::JwtPair> jwt_pair = this->_jwt_manager.GenerateJwtPair(user_id);
+  std::unique_ptr<schemas::JWTPair> jwt_pair = this->_jwt_manager.GenerateJWTPair(user_id);
   return jwt_pair;
 }
 
@@ -87,7 +87,7 @@ void ens::user::UserManager::ModifyUser(const boost::uuids::uuid &user_id, const
   };
   userver::storages::postgres::Transaction update_transaction =
       _pg_cluster->Begin(userver::storages::postgres::ClusterHostType::kMaster, {});
-  std::unique_ptr<PwdPair> pwd_pair = HashPwd(new_data.password);
+  std::unique_ptr<ens::auth::PwdPair> pwd_pair = ens::auth::HashPwd(new_data.password);
   userver::storages::postgres::ResultSet update_res = update_transaction.Execute(update_user_query,
                                                                                  new_data.name,
                                                                                  pwd_pair->hashed_password,
@@ -100,8 +100,8 @@ void ens::user::UserManager::ModifyUser(const boost::uuids::uuid &user_id, const
 }
 
 // Get new jwt tokens
-std::unique_ptr<ens::user::JwtPair> ens::user::UserManager::RefreshToken(const boost::uuids::uuid &user_id) const {
-  std::unique_ptr<ens::user::JwtPair> jwt_pair = this->_jwt_manager.GenerateJwtPair(boost::uuids::to_string(user_id));
+std::unique_ptr<schemas::JWTPair> ens::user::UserManager::RefreshToken(const boost::uuids::uuid &user_id) const {
+  std::unique_ptr<schemas::JWTPair> jwt_pair = this->_jwt_manager.GenerateJWTPair(boost::uuids::to_string(user_id));
   return jwt_pair;
 }
 

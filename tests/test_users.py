@@ -66,6 +66,7 @@ async def test_login_user_404(service_client):
     password = "1234"
     response = await utils.login_user(name, password, service_client)
     assert response.status == 404
+    assert "access_token" not in response.json()
 
 
 async def test_login_user_422(service_client):
@@ -98,7 +99,7 @@ async def test_modify_user_200(service_client, pgsql):
     assert new_db_data != old_db_data
 
 
-async def test_modify_user_401(service_client, pgsql):
+async def test_modify_user_401_missing_token(service_client, pgsql):
     name = "test_user_1"
     password = "1234"
     await utils.create_user(name, password, service_client)
@@ -108,6 +109,16 @@ async def test_modify_user_401(service_client, pgsql):
     new_db_data = await utils.db_get_user_by_name(name, pgsql)
     assert response.status == 401
     assert new_db_data == old_db_data
+
+
+async def test_modify_user_401_incorrect_user_id(service_client):
+    name = "test_user_1"
+    password = "1234"
+    access_token = (await utils.create_user(name, password, service_client)).json()["access_token"]
+    new_password = "new_password"
+    await utils.delete_user(service_client, access_token)
+    response = await utils.modify_user(name, new_password, service_client, access_token)
+    assert response.status == 401
 
 
 async def test_modify_user_422(service_client, pgsql):
@@ -145,7 +156,7 @@ async def test_refresh_token_200(service_client):
     JwtSchema(resp_json)
 
 
-async def test_refresh_token_404(service_client):
+async def test_refresh_token_404_incorrect_token(service_client):
     name = "test_user_1"
     password = "1234"
     await utils.create_user(name, password, service_client)
@@ -153,6 +164,19 @@ async def test_refresh_token_404(service_client):
     response = await service_client.put(
         '/user/refreshToken',
         headers={"Authorization": refresh_token},
+    )
+    assert response.status == 404
+    assert "access_token" not in response.json()
+
+
+async def test_refresh_token_404_incorrect_user_id(service_client):
+    name = "test_user_1"
+    password = "1234"
+    credentials = (await utils.create_user(name, password, service_client)).json()
+    await utils.delete_user(service_client, credentials["access_token"])
+    response = await service_client.put(
+        '/user/refreshToken',
+        headers={"Authorization": credentials["refresh_token"]},
     )
     assert response.status == 404
     assert "access_token" not in response.json()
@@ -169,7 +193,7 @@ async def test_delete_user_200(service_client, pgsql):
     assert len(db_users) == 0
 
 
-async def test_delete_user_401(service_client, pgsql):
+async def test_delete_user_401_missing_token(service_client, pgsql):
     name = "test_user_1"
     password = "1234"
     await utils.create_user(name, password, service_client)
@@ -177,3 +201,12 @@ async def test_delete_user_401(service_client, pgsql):
     db_users = await utils.db_get_users(1, pgsql)
     assert response.status == 401
     assert len(db_users) == 1
+
+
+async def test_delete_user_401_incorrect_user_id(service_client):
+    name = "test_user_1"
+    password = "1234"
+    access_token = (await utils.create_user(name, password, service_client)).json()["access_token"]
+    await utils.delete_user(service_client, access_token)
+    response = await utils.delete_user(service_client, access_token)
+    assert response.status == 401

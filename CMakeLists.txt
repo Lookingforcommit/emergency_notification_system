@@ -69,8 +69,6 @@ target_link_libraries(${PROJECT_NAME} PRIVATE ${PROJECT_NAME}_objs)
 
 
 # Functional Tests
-include(UserverTestsuite)
-
 userver_testsuite_add(
         PYTHONPATH "${CMAKE_CURRENT_SOURCE_DIR}/tests"
         SERVICE_TARGET ${PROJECT_NAME}

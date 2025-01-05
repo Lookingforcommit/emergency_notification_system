@@ -14,12 +14,12 @@ userver::formats::json::Value ens::templates::TemplateCreateHandler::HandleReque
   const std::string &access_token = request.GetHeader("Authorization");
   try {
     schemas::NotificationTemplateWithoutId user_data = request_json.As<schemas::NotificationTemplateWithoutId>();
-    boost::uuids::uuid user_id = _jwt_verif_manager.VerifyJwt(access_token);
+    boost::uuids::uuid user_id = _jwt_verif_manager.VerifyJWT(access_token);
     std::unique_ptr<schemas::NotificationTemplateDraft>
         created_data = this->_template_manager.Create(user_id, user_data);
     return schemas::Serialize(*created_data, userver::formats::serialize::To<userver::formats::json::Value>());
   }
-  catch (const ens::user::JwtVerificationException &e) {
+  catch (const ens::auth::GenericJWTException &e) {
     throw userver::server::handlers::CustomHandlerException{
         userver::server::handlers::HandlerErrorCode::kUnauthorized,
         userver::server::handlers::InternalMessage{e.what()},
@@ -44,14 +44,14 @@ userver::formats::json::Value ens::templates::TemplateGetByIdHandler::HandleRequ
                                                                                              const userver::formats::json::Value &,
                                                                                              userver::server::request::RequestContext &) const {
   const std::string &access_token = request.GetHeader("Authorization");
-  const boost::uuids::uuid template_id = boost::lexical_cast<boost::uuids::uuid>(request.GetArg("template_id"));
   try {
-    boost::uuids::uuid user_id = _jwt_verif_manager.VerifyJwt(access_token);
+    const boost::uuids::uuid template_id = boost::lexical_cast<boost::uuids::uuid>(request.GetArg("template_id"));
+    const boost::uuids::uuid user_id = _jwt_verif_manager.VerifyJWT(access_token);
     std::unique_ptr<schemas::NotificationTemplateWithId>
         notification_template = this->_template_manager.GetById(user_id, template_id);
     return schemas::Serialize(*notification_template, userver::formats::serialize::To<userver::formats::json::Value>());
   }
-  catch (const ens::user::JwtVerificationException &e) {
+  catch (const ens::auth::GenericJWTException &e) {
     throw userver::server::handlers::CustomHandlerException{
         userver::server::handlers::HandlerErrorCode::kUnauthorized,
         userver::server::handlers::InternalMessage{e.what()},
@@ -83,7 +83,7 @@ userver::formats::json::Value ens::templates::TemplateGetAllHandler::HandleReque
                                                                                             userver::server::request::RequestContext &) const {
   const std::string &access_token = request.GetHeader("Authorization");
   try {
-    boost::uuids::uuid user_id = _jwt_verif_manager.VerifyJwt(access_token);
+    boost::uuids::uuid user_id = _jwt_verif_manager.VerifyJWT(access_token);
     std::unique_ptr<schemas::NotificationTemplateWithIdList> templates = this->_template_manager.GetAll(user_id);
     userver::formats::json::ValueBuilder templates_json(userver::formats::common::Type::kArray);
     for (const auto &item : *templates) {
@@ -92,7 +92,7 @@ userver::formats::json::Value ens::templates::TemplateGetAllHandler::HandleReque
     }
     return templates_json.ExtractValue();
   }
-  catch (const ens::user::JwtVerificationException &e) {
+  catch (const ens::auth::GenericJWTException &e) {
     throw userver::server::handlers::CustomHandlerException{
         userver::server::handlers::HandlerErrorCode::kUnauthorized,
         userver::server::handlers::InternalMessage{e.what()},
@@ -109,21 +109,21 @@ userver::formats::json::Value ens::templates::TemplateConfirmCreationHandler::Ha
                                                                                                      const userver::formats::json::Value &,
                                                                                                      userver::server::request::RequestContext &) const {
   const std::string &access_token = request.GetHeader("Authorization");
-  const boost::uuids::uuid draft_id = boost::lexical_cast<boost::uuids::uuid>(request.GetArg("draft_id"));
   try {
-    boost::uuids::uuid user_id = _jwt_verif_manager.VerifyJwt(access_token);
+    const boost::uuids::uuid draft_id = boost::lexical_cast<boost::uuids::uuid>(request.GetArg("draft_id"));
+    const boost::uuids::uuid user_id = _jwt_verif_manager.VerifyJWT(access_token);
     std::unique_ptr<schemas::NotificationTemplateWithId>
         notification_template = this->_template_manager.ConfirmCreation(user_id, draft_id);
     return schemas::Serialize(*notification_template, userver::formats::serialize::To<userver::formats::json::Value>());
   }
-  catch (const ens::user::JwtVerificationException &e) {
+  catch (const ens::auth::GenericJWTException &e) {
     throw userver::server::handlers::CustomHandlerException{
         userver::server::handlers::HandlerErrorCode::kUnauthorized,
         userver::server::handlers::InternalMessage{e.what()},
         userver::server::handlers::ExternalBody{e.what()}
     };
   }
-  catch (const boost::bad_lexical_cast &e) {
+  catch (const boost::bad_lexical_cast &e) { // missing/non-uuid draft_id
     throw userver::server::handlers::CustomHandlerException{
         userver::server::handlers::HandlerErrorCode::kResourceNotFound,
         userver::server::handlers::InternalMessage{e.what()},
@@ -147,16 +147,16 @@ userver::formats::json::Value ens::templates::TemplateModifyHandler::HandleReque
                                                                                             const userver::formats::json::Value &request_json,
                                                                                             userver::server::request::RequestContext &) const {
   const std::string &access_token = request.GetHeader("Authorization");
-  const boost::uuids::uuid template_id = boost::lexical_cast<boost::uuids::uuid>(request.GetArg("template_id"));
   try {
+    const boost::uuids::uuid template_id = boost::lexical_cast<boost::uuids::uuid>(request.GetArg("template_id"));
     schemas::NotificationTemplateWithoutId user_data = request_json.As<schemas::NotificationTemplateWithoutId>();
-    boost::uuids::uuid user_id = _jwt_verif_manager.VerifyJwt(access_token);
+    const boost::uuids::uuid user_id = _jwt_verif_manager.VerifyJWT(access_token);
     std::unique_ptr<schemas::NotificationTemplateWithId> modified_data = this->_template_manager.ModifyTemplate(user_id,
                                                                                                                 template_id,
                                                                                                                 user_data);
     return schemas::Serialize(*modified_data, userver::formats::serialize::To<userver::formats::json::Value>());
   }
-  catch (const ens::user::JwtVerificationException &e) {
+  catch (const ens::auth::GenericJWTException &e) {
     throw userver::server::handlers::CustomHandlerException{
         userver::server::handlers::HandlerErrorCode::kUnauthorized,
         userver::server::handlers::InternalMessage{e.what()},
@@ -195,13 +195,13 @@ userver::formats::json::Value ens::templates::TemplateDeleteHandler::HandleReque
                                                                                             const userver::formats::json::Value &,
                                                                                             userver::server::request::RequestContext &) const {
   const std::string &access_token = request.GetHeader("Authorization");
-  const boost::uuids::uuid template_id = boost::lexical_cast<boost::uuids::uuid>(request.GetArg("template_id"));
   try {
-    boost::uuids::uuid user_id = _jwt_verif_manager.VerifyJwt(access_token);
+    const boost::uuids::uuid template_id = boost::lexical_cast<boost::uuids::uuid>(request.GetArg("template_id"));
+    const boost::uuids::uuid user_id = _jwt_verif_manager.VerifyJWT(access_token);
     this->_template_manager.DeleteTemplate(user_id, template_id);
     return userver::formats::json::Value{};
   }
-  catch (const ens::user::JwtVerificationException &e) {
+  catch (const ens::auth::GenericJWTException &e) {
     throw userver::server::handlers::CustomHandlerException{
         userver::server::handlers::HandlerErrorCode::kUnauthorized,
         userver::server::handlers::InternalMessage{e.what()},

@@ -16,10 +16,10 @@ class RecipientJsonHandlerBase : public userver::server::handlers::HttpHandlerJs
                            const userver::components::ComponentContext &context)
       : HttpHandlerJsonBase(config, context),
         _recipient_manager(context.FindComponent<RecipientManager>()),
-        _jwt_verif_manager(context.FindComponent<ens::user::JwtManager>()) {}
+        _jwt_verif_manager(context.FindComponent<ens::auth::JWTManager>()) {}
  protected:
   RecipientManager &_recipient_manager;
-  ens::user::JwtManager &_jwt_verif_manager;
+  ens::auth::JWTManager &_jwt_verif_manager;
 };
 
 class RecipientCreateHandler : public RecipientJsonHandlerBase {

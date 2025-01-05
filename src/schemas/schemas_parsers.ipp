@@ -599,4 +599,25 @@ schemas::User Parse(Value value,
   return res;
 }
 
+template<typename Value>
+schemas::JWTPair Parse(Value value,
+                       USERVER_NAMESPACE::formats::parse::To<schemas::JWTPair>) {
+  value.CheckNotMissing();
+  value.CheckObjectOrNull();
+
+  schemas::JWTPair res;
+
+  res.access_token =
+      value["access_token"]
+          .template As<USERVER_NAMESPACE::chaotic::Primitive<std::string>>();
+  res.refresh_token =
+      value["refresh_token"]
+          .template As<USERVER_NAMESPACE::chaotic::Primitive<std::string>>();
+
+  USERVER_NAMESPACE::chaotic::ValidateNoAdditionalProperties(
+      value, kschemas_User_PropertiesNames);
+
+  return res;
+}
+
 }  // namespace schemas

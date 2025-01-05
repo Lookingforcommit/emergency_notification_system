@@ -166,6 +166,25 @@ async def db_get_recipient_draft(draft_id: str, pgsql) -> typing.Optional[tuple]
     return record
 
 
+async def db_get_recipient_drafts(rows_num: int, pgsql) -> typing.List[tuple]:
+    cursor = pgsql[DB_NAME].cursor()
+    cursor.execute(
+        "SELECT * "
+        "FROM ens_schema.recipient_draft "
+    )
+    records = cursor.fetchmany(rows_num)
+    return records
+
+
+async def db_delete_recipient_draft(draft_id: str, pgsql):
+    cursor = pgsql[DB_NAME].cursor()
+    cursor.execute(
+        "DELETE "
+        "FROM ens_schema.recipient_draft "
+        "WHERE recipient_draft_id = %s", (draft_id,),
+    )
+
+
 async def db_get_recipient(recipient_id: str, pgsql) -> typing.Optional[tuple]:
     cursor = pgsql[DB_NAME].cursor()
     cursor.execute(
@@ -268,6 +287,25 @@ async def db_get_template_draft(draft_id: str, pgsql) -> typing.Optional[tuple]:
     )
     record = cursor.fetchone()
     return record
+
+
+async def db_get_template_drafts(rows_num: int, pgsql) -> typing.List[tuple]:
+    cursor = pgsql[DB_NAME].cursor()
+    cursor.execute(
+        "SELECT * "
+        "FROM ens_schema.notification_template_draft "
+    )
+    records = cursor.fetchmany(rows_num)
+    return records
+
+
+async def db_delete_template_draft(draft_id: str, pgsql):
+    cursor = pgsql[DB_NAME].cursor()
+    cursor.execute(
+        "DELETE "
+        "FROM ens_schema.notification_template_draft "
+        "WHERE notification_template_draft_id = %s", (draft_id,),
+    )
 
 
 async def db_get_template(template_id: str, pgsql) -> typing.Optional[tuple]:
@@ -425,6 +463,25 @@ async def db_get_group_draft(draft_id: str, pgsql) -> typing.Optional[tuple]:
     return record
 
 
+async def db_get_group_drafts(rows_num: int, pgsql) -> typing.List[tuple]:
+    cursor = pgsql[DB_NAME].cursor()
+    cursor.execute(
+        "SELECT * "
+        "FROM ens_schema.recipient_group_draft "
+    )
+    records = cursor.fetchmany(rows_num)
+    return records
+
+
+async def db_delete_group_draft(draft_id: str, pgsql):
+    cursor = pgsql[DB_NAME].cursor()
+    cursor.execute(
+        "DELETE "
+        "FROM ens_schema.recipient_group_draft "
+        "WHERE recipient_group_draft_id = %s", (draft_id,),
+    )
+
+
 async def db_get_group_recipients(group_id: str, rows_num: int, pgsql) -> typing.List[tuple]:
     cursor = pgsql[DB_NAME].cursor()
     cursor.execute(
@@ -455,4 +512,3 @@ async def db_get_groups(rows_num: int, pgsql) -> typing.List[tuple]:
     )
     records = cursor.fetchmany(rows_num)
     return records
-

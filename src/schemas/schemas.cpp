@@ -1129,4 +1129,33 @@ USERVER_NAMESPACE::formats::json::Value Serialize(
   return vb.ExtractValue();
 }
 
+bool operator==(const schemas::JWTPair &lhs, const schemas::JWTPair &rhs) {
+  return lhs.access_token == rhs.access_token && lhs.refresh_token == rhs.refresh_token;
+}
+
+USERVER_NAMESPACE::logging::LogHelper &operator<<(
+    USERVER_NAMESPACE::logging::LogHelper &lh, const schemas::JWTPair &value) {
+  return lh << ToString(USERVER_NAMESPACE::formats::json::ValueBuilder(value)
+                            .ExtractValue());
+}
+
+JWTPair Parse(USERVER_NAMESPACE::formats::json::Value json,
+              USERVER_NAMESPACE::formats::parse::To<schemas::JWTPair> to) {
+  return Parse<USERVER_NAMESPACE::formats::json::Value>(std::move(json), to);
+}
+
+USERVER_NAMESPACE::formats::json::Value Serialize(
+    [[maybe_unused]] const schemas::JWTPair &value,
+    USERVER_NAMESPACE::formats::serialize::To<
+        USERVER_NAMESPACE::formats::json::Value>) {
+  USERVER_NAMESPACE::formats::json::ValueBuilder vb =
+      USERVER_NAMESPACE::formats::common::Type::kObject;
+
+  vb["access_token"] = USERVER_NAMESPACE::chaotic::Primitive<std::string>{value.access_token};
+
+  vb["refresh_token"] =
+      USERVER_NAMESPACE::chaotic::Primitive<std::string>{value.refresh_token};
+
+  return vb.ExtractValue();
+}
 }  // namespace schemas

@@ -26,11 +26,15 @@ class RecipientManager : public userver::components::ComponentBase {
               .FindComponent<userver::components::Postgres>(ens::utils::DB_COMPONENT_NAME)
               .GetCluster()) {}
   static userver::yaml_config::Schema GetStaticConfigSchema();
-  std::unique_ptr<schemas::RecipientDraft> Create(const boost::uuids::uuid &user_id, const schemas::RecipientWithoutId &data);
-  std::unique_ptr<schemas::RecipientWithId> GetById(const boost::uuids::uuid &user_id, const boost::uuids::uuid &recipient_id) const;
+  std::unique_ptr<schemas::RecipientDraft> Create(const boost::uuids::uuid &user_id,
+                                                  const schemas::RecipientWithoutId &data);
+  std::unique_ptr<schemas::RecipientWithId> GetById(const boost::uuids::uuid &user_id,
+                                                    const boost::uuids::uuid &recipient_id) const;
   std::unique_ptr<schemas::RecipientWithIdList> GetAll(const boost::uuids::uuid &user_id) const;
-  std::unique_ptr<schemas::RecipientWithId> ConfirmCreation(const boost::uuids::uuid &user_id, const boost::uuids::uuid &draft_id);
-  std::unique_ptr<schemas::RecipientWithId> ModifyRecipient(const boost::uuids::uuid &user_id, const boost::uuids::uuid &recipient_id,
+  std::unique_ptr<schemas::RecipientWithId> ConfirmCreation(const boost::uuids::uuid &user_id,
+                                                            const boost::uuids::uuid &draft_id);
+  std::unique_ptr<schemas::RecipientWithId> ModifyRecipient(const boost::uuids::uuid &user_id,
+                                                            const boost::uuids::uuid &recipient_id,
                                                             const schemas::RecipientWithoutId &data);
   void DeleteRecipient(const boost::uuids::uuid &user_id, const boost::uuids::uuid &recipient_id);
  private:
@@ -41,7 +45,7 @@ void AppendRecipientManager(userver::components::ComponentList &component_list);
 
 class RecipientNotFoundException : public std::exception {
  private:
-  const std::string FORMAT{"Recipient does not exist recipient_id={}"};
+  static constexpr std::string_view FORMAT{"Recipient does not exist recipient_id={}"};
   const std::string _msg;
  public:
   RecipientNotFoundException(const std::string &recipient_id) : _msg(fmt::format(this->FORMAT, recipient_id)) {};
@@ -51,7 +55,7 @@ class RecipientNotFoundException : public std::exception {
 
 class DraftNotFoundException : public std::exception {
  private:
-  const std::string FORMAT{"Draft does not exist draft_id={}"};
+  static constexpr std::string_view FORMAT{"Draft does not exist draft_id={}"};
   const std::string _msg;
  public:
   DraftNotFoundException(const std::string &draft_id) : _msg(fmt::format(this->FORMAT, draft_id)) {};

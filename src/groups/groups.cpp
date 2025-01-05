@@ -5,6 +5,7 @@
 #include <userver/yaml_config/merge_schemas.hpp>
 #include <userver/utils/boost_uuid7.hpp>
 #include <boost/uuid/uuid_io.hpp>
+#include <boost/uuid/uuid.hpp>
 
 #include "schemas/schemas.hpp"
 
@@ -27,13 +28,21 @@ std::unique_ptr<schemas::RecipientGroupDraft> ens::groups::GroupManager::Create(
   boost::uuids::uuid group_draft_id = userver::utils::generators::GenerateBoostUuidV7();
   userver::storages::postgres::Transaction insert_transaction =
       _pg_cluster->Begin(userver::storages::postgres::ClusterHostType::kMaster, {});
-  userver::storages::postgres::ResultSet insert_res = insert_transaction.Execute(create_group_query,
-                                                                                 group_draft_id,
-                                                                                 user_id,
-                                                                                 ens::utils::optional_str_to_uuid(data.notification_template_id),
-                                                                                 data.name,
-                                                                                 data.active);
-  insert_transaction.Commit();
+  try {
+    userver::storages::postgres::ResultSet insert_res = insert_transaction.Execute(create_group_query,
+                                                                                   group_draft_id,
+                                                                                   user_id,
+                                                                                   ens::utils::optional_str_to_uuid(data.notification_template_id),
+                                                                                   data.name,
+                                                                                   data.active);
+    insert_transaction.Commit();
+  }
+  catch (const boost::bad_lexical_cast &e) { // means that template_id is not null but non-uuid
+    throw IncorrectNotificationTemplateIdException{data.notification_template_id.value()};
+  }
+  catch (const userver::storages::postgres::ForeignKeyViolation &e) { // means that template_id is not null but does not exist
+    throw IncorrectNotificationTemplateIdException{data.notification_template_id.value()};
+  }
   schemas::RecipientGroupDraft created_draft{boost::uuids::to_string(group_draft_id),
                                              boost::uuids::to_string(user_id),
                                              data.name,
@@ -207,26 +216,35 @@ std::unique_ptr<schemas::RecipientGroupWithId> ens::groups::GroupManager::Modify
   };
   userver::storages::postgres::Transaction update_transaction =
       _pg_cluster->Begin(userver::storages::postgres::ClusterHostType::kMaster, {});
-  userver::storages::postgres::ResultSet
-      update_res = update_transaction.Execute(update_query,
-                                              user_id,
-                                              group_id,
-                                              data.name,
-                                              ens::utils::optional_str_to_uuid(data.notification_template_id),
-                                              data.active);
-  if (not update_res.RowsAffected()) {
-    update_transaction.Rollback();
-    throw RecipientGroupNotFoundException{boost::uuids::to_string(group_id)};
+  try {
+    userver::storages::postgres::ResultSet
+        update_res = update_transaction.Execute(update_query,
+                                                user_id,
+                                                group_id,
+                                                data.name,
+                                                ens::utils::optional_str_to_uuid(data.notification_template_id),
+                                                data.active);
+    if (not update_res.RowsAffected()) {
+      update_transaction.Rollback();
+      throw RecipientGroupNotFoundException{boost::uuids::to_string(group_id)};
+    }
+    update_transaction.Commit();
+    userver::storages::postgres::Row group_row = update_res[0];
+    schemas::RecipientGroupWithId group_data{boost::uuids::to_string(group_id),
+                                             boost::uuids::to_string(user_id),
+                                             group_row["name"].As<std::string>(),
+                                             ens::utils::optional_uuid_to_str(group_row["template_id"].As<std::optional<
+                                                 boost::uuids::uuid>>()),
+                                             group_row["active"].As<bool>()
+    };
+    return std::make_unique<schemas::RecipientGroupWithId>(group_data);
   }
-  update_transaction.Commit();
-  userver::storages::postgres::Row group_row = update_res[0];
-  schemas::RecipientGroupWithId group_data{boost::uuids::to_string(group_id),
-                                           boost::uuids::to_string(user_id),
-                                           group_row["name"].As<std::string>(),
-                                           ens::utils::optional_uuid_to_str(group_row["template_id"].As<std::optional<boost::uuids::uuid>>()),
-                                           group_row["active"].As<bool>()
-  };
-  return std::make_unique<schemas::RecipientGroupWithId>(group_data);
+  catch (const boost::bad_lexical_cast &e) { // means that template_id is not null but non-uuid
+    throw IncorrectNotificationTemplateIdException{data.notification_template_id.value()};
+  }
+  catch (const userver::storages::postgres::ForeignKeyViolation &e) { // means that template_id is not null but does not exist
+    throw IncorrectNotificationTemplateIdException{data.notification_template_id.value()};
+  }
 }
 
 void ens::groups::GroupManager::AddRecipient(const boost::uuids::uuid &user_id,
@@ -265,14 +283,17 @@ void ens::groups::GroupManager::AddRecipient(const boost::uuids::uuid &user_id,
     transaction.Rollback();
     throw RecipientNotFoundException{boost::uuids::to_string(recipient_id)};
   }
-  userver::storages::postgres::ResultSet insert_res = transaction.Execute(add_recipient_query,
-                                                                          group_id,
-                                                                          recipient_id);
-  if (not insert_res.RowsAffected()) {
+  try {
+    userver::storages::postgres::ResultSet insert_res = transaction.Execute(add_recipient_query,
+                                                                            group_id,
+                                                                            recipient_id);
+    transaction.Commit();
+  }
+  catch (const userver::storages::postgres::UniqueViolation &e) {
+    transaction.Rollback();
     throw RecipientAlreadyAddedException{boost::uuids::to_string(recipient_id),
                                          boost::uuids::to_string(group_id)};
   }
-  transaction.Commit();
 }
 
 void ens::groups::GroupManager::DeleteGroup(const boost::uuids::uuid &user_id, const boost::uuids::uuid &group_id) {

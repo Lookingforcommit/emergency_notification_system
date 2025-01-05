@@ -16,8 +16,8 @@ struct BaseNotificationTemplate {
   BaseNotificationTemplate() = default;
 
   BaseNotificationTemplate(const std::string &name, const std::optional<std::string> &message_text)
-  : name(name),
-    message_text(message_text) {};
+      : name(name),
+        message_text(message_text) {};
 };
 
 bool operator==(const schemas::BaseNotificationTemplate &lhs,
@@ -76,9 +76,9 @@ struct BaseRecipientGroup {
   BaseRecipientGroup() = default;
 
   BaseRecipientGroup(const std::string &name, const std::optional<std::string> &notification_template_id, bool active)
-    : name(name),
-      notification_template_id(notification_template_id),
-      active(active) {};
+      : name(name),
+        notification_template_id(notification_template_id),
+        active(active) {};
 };
 
 bool operator==(const schemas::BaseRecipientGroup &lhs,
@@ -246,8 +246,8 @@ struct NotificationTemplateDraft
 
   NotificationTemplateDraft(const std::string &draft_id, const std::string &master_id, const std::string &name,
                             const std::optional<std::string> &message_text)
-                            : ReturnedNotificationTemplate(master_id, name, message_text),
-                              NotificationTemplateDraft_P1(draft_id) {};
+      : ReturnedNotificationTemplate(master_id, name, message_text),
+        NotificationTemplateDraft_P1(draft_id) {};
 };
 
 bool operator==(const schemas::NotificationTemplateDraft_P1 &lhs,
@@ -293,7 +293,7 @@ struct NotificationTemplateWithId_P1 {
   NotificationTemplateWithId_P1() = default;
 
   NotificationTemplateWithId_P1(const std::string &notification_template_id)
-  : notification_template_id(notification_template_id) {};
+      : notification_template_id(notification_template_id) {};
 };
 
 struct NotificationTemplateWithId
@@ -308,8 +308,8 @@ struct NotificationTemplateWithId
 
   NotificationTemplateWithId(const std::string &notification_template_id, const std::string &master_id,
                              const std::string &name, const std::optional<std::string> &message_text)
-                             : ReturnedNotificationTemplate(master_id, name, message_text),
-                               NotificationTemplateWithId_P1(notification_template_id) {};
+      : ReturnedNotificationTemplate(master_id, name, message_text),
+        NotificationTemplateWithId_P1(notification_template_id) {};
 };
 
 bool operator==(const schemas::NotificationTemplateWithId_P1 &lhs,
@@ -535,8 +535,8 @@ struct ReturnedRecipientGroup : public schemas::BaseRecipientGroup,
 
   ReturnedRecipientGroup(const std::string &master_id, const std::string &name,
                          const std::optional<std::string> &notification_template_id, bool active)
-                         : BaseRecipientGroup(name, notification_template_id, active),
-                           ReturnedRecipientGroup_P1(master_id) {};
+      : BaseRecipientGroup(name, notification_template_id, active),
+        ReturnedRecipientGroup_P1(master_id) {};
 };
 
 bool operator==(const schemas::ReturnedRecipientGroup_P1 &lhs,
@@ -594,8 +594,8 @@ struct RecipientGroupDraft : public schemas::ReturnedRecipientGroup,
 
   RecipientGroupDraft(const std::string &draft_id, const std::string &master_id, const std::string &name,
                       const std::optional<std::string> &notification_template_id, bool active)
-                      : ReturnedRecipientGroup(master_id, name, notification_template_id, active),
-                        RecipientGroupDraft_P1(draft_id) {};
+      : ReturnedRecipientGroup(master_id, name, notification_template_id, active),
+        RecipientGroupDraft_P1(draft_id) {};
 };
 
 bool operator==(const schemas::RecipientGroupDraft_P1 &lhs,
@@ -653,8 +653,8 @@ struct RecipientGroupWithId : public schemas::ReturnedRecipientGroup,
 
   RecipientGroupWithId(const std::string &recipient_group_id, const std::string &master_id, const std::string &name,
                        const std::optional<std::string> &notification_template_id, bool active)
-                       : ReturnedRecipientGroup(master_id, name, notification_template_id, active),
-                         RecipientGroupWithId_P1(recipient_group_id) {};
+      : ReturnedRecipientGroup(master_id, name, notification_template_id, active),
+        RecipientGroupWithId_P1(recipient_group_id) {};
 };
 
 bool operator==(const schemas::RecipientGroupWithId_P1 &lhs,
@@ -862,6 +862,31 @@ User Parse(USERVER_NAMESPACE::formats::json::Value json,
 
 USERVER_NAMESPACE::formats::json::Value Serialize(
     const schemas::User &value, USERVER_NAMESPACE::formats::serialize::To<
+    USERVER_NAMESPACE::formats::json::Value>);
+
+// Returned JWT tokens schema
+struct JWTPair {
+  std::string access_token{};
+  std::string refresh_token{};
+
+  JWTPair() = default;
+
+  JWTPair(const std::string &access_token,
+          const std::string &refresh_token)
+      : access_token(access_token),
+        refresh_token(refresh_token) {}
+};
+
+bool operator==(const schemas::JWTPair &lhs, const schemas::JWTPair &rhs);
+
+USERVER_NAMESPACE::logging::LogHelper &operator<<(
+    USERVER_NAMESPACE::logging::LogHelper &lh, const schemas::JWTPair &value);
+
+JWTPair Parse(USERVER_NAMESPACE::formats::json::Value json,
+              USERVER_NAMESPACE::formats::parse::To<schemas::JWTPair>);
+
+USERVER_NAMESPACE::formats::json::Value Serialize(
+    const schemas::JWTPair &value, USERVER_NAMESPACE::formats::serialize::To<
     USERVER_NAMESPACE::formats::json::Value>);
 
 }  // namespace schemas

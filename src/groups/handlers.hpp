@@ -16,10 +16,10 @@ class GroupJsonHandlerBase : public userver::server::handlers::HttpHandlerJsonBa
                        const userver::components::ComponentContext &context)
       : HttpHandlerJsonBase(config, context),
         _group_manager(context.FindComponent<GroupManager>()),
-        _jwt_verif_manager(context.FindComponent<ens::user::JwtManager>()) {}
+        _jwt_verif_manager(context.FindComponent<ens::auth::JWTManager>()) {}
  protected:
   GroupManager &_group_manager;
-  ens::user::JwtManager &_jwt_verif_manager;
+  ens::auth::JWTManager &_jwt_verif_manager;
 };
 
 class GroupCreateHandler : public GroupJsonHandlerBase {
