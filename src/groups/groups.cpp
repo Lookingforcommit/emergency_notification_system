@@ -85,7 +85,7 @@ std::unique_ptr<schemas::RecipientWithIdList> ens::groups::GroupManager::GetReci
       "WHERE master_id = $1 AND recipient_group_id = $2)"
   };
   const userver::storages::postgres::Query recipients_query{
-      "SELECT recipient.recipient_id, recipient.master_id, recipient.name, recipient.email, recipient.phone_number, recipient.telegram_username "
+      "SELECT recipient.recipient_id, recipient.master_id, recipient.name, recipient.email, recipient.phone_number, recipient.telegram_id "
       "FROM ens_schema.recipient_group "
       "LEFT JOIN ens_schema.recipient_recipient_group "
       "ON ens_schema.recipient_group.recipient_group_id = ens_schema.recipient_recipient_group.recipient_group_id "
@@ -113,7 +113,7 @@ std::unique_ptr<schemas::RecipientWithIdList> ens::groups::GroupManager::GetReci
                                  row["name"].As<std::string>(),
                                  row["email"].As<std::optional<std::string>>(),
                                  row["phone_number"].As<std::optional<std::string>>(),
-                                 row["telegram_username"].As<std::optional<std::string>>()
+                                 row["telegram_id"].As<std::optional<int64_t>>()
     );
   }
   return std::make_unique<schemas::RecipientWithIdList>(recipients_data);
@@ -199,7 +199,7 @@ std::unique_ptr<schemas::RecipientGroupWithId> ens::groups::GroupManager::Confir
   schemas::RecipientGroupWithId group_data{boost::uuids::to_string(group_id),
                                            boost::uuids::to_string(user_id),
                                            group_row["name"].As<std::string>(),
-                                           group_row["template_id"].As<std::optional<std::string>>(),
+                                           utils::optional_uuid_to_str(group_row["template_id"].As<std::optional<boost::uuids::uuid>>()),
                                            group_row["active"].As<bool>()
   };
   return std::make_unique<schemas::RecipientGroupWithId>(group_data);

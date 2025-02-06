@@ -42,11 +42,14 @@ components_manager:
         http-client:
             load-enabled: $is-testing
             fs-task-processor: fs-task-processor
+        telegram-bot-client: {}
+        telegram-notifications-bot: {}
         jwt-manager: {}
         user-manager: {}
         recipient-manager: {}
         template-manager: {}
         group-manager: {}
+        notification-manager: {}
 
         tests-control:
             load-enabled: $is-testing
@@ -169,6 +172,31 @@ components_manager:
             task_processor: main-task-processor
         handler-groups-deleteGroup:
             path: /groups/deleteGroup
+            method: DELETE
+            task_processor: main-task-processor
+
+        handler-notifications-createBatch:
+            path: /notifications/createBatch
+            method: POST
+            task_processor: main-task-processor
+        handler-notifications-getById:
+            path: /notifications
+            method: GET
+            task_processor: main-task-processor
+        handler-notifications-getAll:
+            path: /notifications/all
+            method: GET
+            task_processor: main-task-processor
+        handler-notifications-getPending:
+            path: /notifications/pending
+            method: GET
+            task_processor: main-task-processor
+        handler-notifications-sendBatch:
+            path: /notifications/sendBatch
+            method: PUT
+            task_processor: main-task-processor
+        handler-notifications-cancelNotification:
+            path: /notifications/cancelNotification
             method: DELETE
             task_processor: main-task-processor
 

@@ -48,7 +48,7 @@ bool operator==(const schemas::BaseRecipient &lhs,
                 const schemas::BaseRecipient &rhs) {
   return lhs.name == rhs.name && lhs.email == rhs.email &&
       lhs.phone_number == rhs.phone_number &&
-      lhs.telegram_username == rhs.telegram_username;
+      lhs.telegram_id == rhs.telegram_id;
 }
 
 USERVER_NAMESPACE::logging::LogHelper &operator<<(
@@ -83,10 +83,10 @@ USERVER_NAMESPACE::formats::json::Value Serialize(
         USERVER_NAMESPACE::chaotic::Primitive<std::string>{*value.phone_number};
   }
 
-  if (value.telegram_username) {
-    vb["telegram_username"] =
-        USERVER_NAMESPACE::chaotic::Primitive<std::string>{
-            *value.telegram_username};
+  if (value.telegram_id) {
+    vb["telegram_id"] =
+        USERVER_NAMESPACE::chaotic::Primitive<int64_t>{
+            *value.telegram_id};
   }
 
   return vb.ExtractValue();
@@ -134,7 +134,7 @@ USERVER_NAMESPACE::formats::json::Value Serialize(
 
 bool operator==(const schemas::Notification &lhs,
                 const schemas::Notification &rhs) {
-  return lhs.master_id == rhs.master_id &&
+  return lhs.batch_id == rhs.batch_id &&
       lhs.recipient_id == rhs.recipient_id && lhs.group_id == rhs.group_id &&
       lhs.type == rhs.type &&
       lhs.creation_timestamp == rhs.creation_timestamp &&
@@ -199,8 +199,8 @@ USERVER_NAMESPACE::formats::json::Value Serialize(
   USERVER_NAMESPACE::formats::json::ValueBuilder vb =
       USERVER_NAMESPACE::formats::common::Type::kObject;
 
-  vb["master_id"] =
-      USERVER_NAMESPACE::chaotic::Primitive<std::string>{value.master_id};
+  vb["batch_id"] =
+      USERVER_NAMESPACE::chaotic::Primitive<std::string>{value.batch_id};
 
   vb["recipient_id"] =
       USERVER_NAMESPACE::chaotic::Primitive<std::string>{value.recipient_id};
@@ -216,7 +216,7 @@ USERVER_NAMESPACE::formats::json::Value Serialize(
       value.creation_timestamp};
 
   vb["completion_timestamp"] =
-      USERVER_NAMESPACE::chaotic::Primitive<std::string>{
+      USERVER_NAMESPACE::chaotic::Primitive<std::optional<std::string>>{
           value.completion_timestamp};
 
   return vb.ExtractValue();
@@ -229,6 +229,38 @@ std::string ToString(schemas::Notification::Type value) {
     return std::string{*result};
   }
   throw std::runtime_error("Bad enum value");
+}
+
+bool operator==(const schemas::NotificationsBatch &lhs,
+                const schemas::NotificationsBatch &rhs) {
+  return lhs.batch_id == rhs.batch_id &&
+      lhs.master_id == rhs.master_id;
+}
+
+USERVER_NAMESPACE::logging::LogHelper &operator<<(
+    USERVER_NAMESPACE::logging::LogHelper &lh,
+    const schemas::NotificationsBatch &value) {
+  return lh << ToString(USERVER_NAMESPACE::formats::json::ValueBuilder(value)
+                            .ExtractValue());
+}
+
+NotificationsBatch Parse(
+    USERVER_NAMESPACE::formats::json::Value json,
+    USERVER_NAMESPACE::formats::parse::To<schemas::NotificationsBatch> to) {
+  return Parse<USERVER_NAMESPACE::formats::json::Value>(std::move(json), to);
+}
+
+USERVER_NAMESPACE::formats::json::Value Serialize(
+    [[maybe_unused]] const schemas::NotificationsBatch &value,
+    USERVER_NAMESPACE::formats::serialize::To<
+        USERVER_NAMESPACE::formats::json::Value>) {
+  USERVER_NAMESPACE::formats::json::ValueBuilder vb =
+      USERVER_NAMESPACE::formats::common::Type::kObject;
+
+  vb["master_id"] =
+      USERVER_NAMESPACE::chaotic::Primitive<std::string>{value.master_id};
+
+  return vb.ExtractValue();
 }
 
 bool operator==(const schemas::ReturnedNotificationTemplate_P1 &lhs,

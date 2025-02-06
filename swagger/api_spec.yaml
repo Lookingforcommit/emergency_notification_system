@@ -79,14 +79,16 @@ paths:
   /templates/deleteTemplate:
     $ref: "/paths/templates/templates-deleteTemplate.yaml"
 
+  /notifications/createBatch:
+    $ref: "paths/notifications/notifications-createBatch.yaml"
+  /notifications:
+    $ref: "paths/notifications/notifications.yaml"
   /notifications/all:
     $ref: "paths/notifications/notifications-all.yaml"
   /notifications/pending:
     $ref: "paths/notifications/notifications-pending.yaml"
-  /notifications/completed:
-    $ref: "paths/notifications/notifications-completed.yaml"
-  /notifications/send:
-    $ref: "paths/notifications/notifications-send.yaml"
+  /notifications/sendBatch:
+    $ref: "paths/notifications/notifications-sendBatch.yaml"
   /notifications/cancelNotification:
     $ref: "paths/notifications/notifications-cancelNotification.yaml"
 security:

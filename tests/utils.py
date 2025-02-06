@@ -78,12 +78,12 @@ async def db_get_users(rows_num: int, pgsql) -> typing.List[tuple]:
 
 
 async def create_recipient(service_client, name: str, email: str = "", phone_number: str = "",
-                           telegram_username: str = "", access_token: str = ""):
+                           telegram_id: str = "", access_token: str = ""):
     payload = compact_dict({
         "name": name,
         "email": email,
         "phone_number": phone_number,
-        "telegram_username": telegram_username
+        "telegram_id": telegram_id
     })
     headers = compact_dict({"Authorization": access_token})
     response = await service_client.post(
@@ -126,12 +126,12 @@ async def recipients_confirm_creation(service_client, draft_id: str, access_toke
 
 
 async def modify_recipient(service_client, recipient_id: str, name: str, email: str = "", phone_number: str = "",
-                           telegram_username: str = "", access_token: str = ""):
+                           telegram_id: str = "", access_token: str = ""):
     payload = compact_dict({
         "name": name,
         "email": email,
         "phone_number": phone_number,
-        "telegram_username": telegram_username
+        "telegram_id": telegram_id
     })
     params = {"recipient_id": recipient_id}
     headers = compact_dict({"Authorization": access_token})

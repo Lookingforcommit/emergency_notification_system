@@ -1,19 +1,17 @@
-put:
+post:
   tags:
     - notifications
-  summary: Send notifications to all active recipient groups
-  description: Send notifications to all active recipient groups
-  operationId: sendNotifications
+  summary: Create a notifications batch for later sending
+  description: Create a notifications batch for later sending
+  operationId: createNotificationsBatch
   responses:
     "200":
       description: Successful operation
       content:
         application/json:
           schema:
-            description: "Array of IDs identifying created notifications"
-            type: array
-            items:
-              type: string
+            description: "ID of created batch"
+            type: string
     "401":
       $ref: "/../../responses.yaml/#/components/responses/Unauthorized"
     "429":

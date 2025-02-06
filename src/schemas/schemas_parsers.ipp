@@ -47,7 +47,7 @@ static constexpr USERVER_NAMESPACE::utils::TrivialSet
       .Case("name")
       .Case("email")
       .Case("phone_number")
-      .Case("telegram_username");
+      .Case("telegram_id");
 };
 
 template<typename Value>
@@ -69,10 +69,10 @@ schemas::BaseRecipient Parse(
       value["phone_number"]
           .template As<std::optional<
               USERVER_NAMESPACE::chaotic::Primitive<std::string>>>();
-  res.telegram_username =
-      value["telegram_username"]
+  res.telegram_id =
+      value["telegram_id"]
           .template As<std::optional<
-              USERVER_NAMESPACE::chaotic::Primitive<std::string>>>();
+              USERVER_NAMESPACE::chaotic::Primitive<int64_t>>>();
 
   USERVER_NAMESPACE::chaotic::ValidateNoAdditionalProperties(
       value, kschemas_BaseRecipient_PropertiesNames);
@@ -114,19 +114,11 @@ schemas::BaseRecipientGroup Parse(
   return res;
 }
 
-static constexpr USERVER_NAMESPACE::utils::TrivialBiMap
-    kschemas_Notification_Type_Mapping = [](auto selector) {
-  return selector()
-      .template Type<schemas::Notification::Type, std::string_view>()
-      .Case(schemas::Notification::Type::kTelegram, "Telegram")
-      .Case(schemas::Notification::Type::kSms, "SMS")
-      .Case(schemas::Notification::Type::kMail, "Mail");
-};
-
 static constexpr USERVER_NAMESPACE::utils::TrivialSet
     kschemas_Notification_PropertiesNames = [](auto selector) {
   return selector()
       .template Type<std::string_view>()
+      .Case("notification_id")
       .Case("master_id")
       .Case("recipient_id")
       .Case("group_id")
@@ -159,8 +151,11 @@ schemas::Notification Parse(
 
   schemas::Notification res;
 
-  res.master_id =
-      value["master_id"]
+  res.notification_id =
+      value["notification_id"]
+          .template As<USERVER_NAMESPACE::chaotic::Primitive<std::string>>();
+  res.batch_id =
+      value["batch_id"]
           .template As<USERVER_NAMESPACE::chaotic::Primitive<std::string>>();
   res.recipient_id =
       value["recipient_id"]
@@ -176,13 +171,43 @@ schemas::Notification Parse(
           .template As<USERVER_NAMESPACE::chaotic::Primitive<std::string>>();
   res.completion_timestamp =
       value["completion_timestamp"]
-          .template As<USERVER_NAMESPACE::chaotic::Primitive<std::string>>();
+          .template As<std::optional<USERVER_NAMESPACE::chaotic::Primitive<std::string>>>();
 
   USERVER_NAMESPACE::chaotic::ValidateNoAdditionalProperties(
       value, kschemas_Notification_PropertiesNames);
 
   return res;
 }
+
+static constexpr USERVER_NAMESPACE::utils::TrivialSet
+    kschemas_NotificationsBatch_PropertiesNames = [](auto selector) {
+  return selector()
+      .template Type<std::string_view>()
+      .Case("batch_id")
+      .Case("master_id");
+};
+
+template<typename Value>
+schemas::NotificationsBatch Parse(
+    Value value, USERVER_NAMESPACE::formats::parse::To<schemas::NotificationsBatch>) {
+  value.CheckNotMissing();
+  value.CheckObjectOrNull();
+
+  schemas::NotificationsBatch res;
+
+  res.batch_id =
+      value["batch_id"]
+          .template As<USERVER_NAMESPACE::chaotic::Primitive<std::string>>();
+  res.master_id =
+      value["master_id"]
+          .template As<USERVER_NAMESPACE::chaotic::Primitive<std::string>>();
+
+  USERVER_NAMESPACE::chaotic::ValidateNoAdditionalProperties(
+      value, kschemas_NotificationsBatch_PropertiesNames);
+
+  return res;
+}
+
 
 static constexpr USERVER_NAMESPACE::utils::TrivialSet
     kschemas_ReturnedNotificationTemplate_P1_PropertiesNames =

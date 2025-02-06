@@ -52,6 +52,12 @@ add_library(${PROJECT_NAME}_objs OBJECT
         src/groups/handlers.hpp
         src/utils/utils.cpp
         src/utils/utils.hpp
+        src/notifications/telegram/telegram_bot.cpp
+        src/notifications/telegram/telegram_bot.hpp
+        src/notifications/notifications.cpp
+        src/notifications/notifications.hpp
+        src/notifications/handlers.cpp
+        src/notifications/handlers.hpp
 )
 target_link_libraries(${PROJECT_NAME}_objs PUBLIC userver::postgresql)
 
@@ -61,6 +67,9 @@ set(JWT_BUILD_EXAMPLES OFF)
 add_subdirectory(third_party/jwt-cpp)
 target_include_directories(${PROJECT_NAME}_objs PUBLIC jwt-cpp)
 target_link_libraries(${PROJECT_NAME}_objs PUBLIC jwt-cpp)
+add_subdirectory(third_party/haufont-telegram)
+target_include_directories(${PROJECT_NAME}_objs PUBLIC userver-telegram)
+target_link_libraries(${PROJECT_NAME}_objs PUBLIC userver-telegram)
 
 
 # The Service

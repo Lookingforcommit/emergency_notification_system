@@ -7,6 +7,7 @@
 #include <userver/server/handlers/tests_control.hpp>
 #include <userver/testsuite/testsuite_support.hpp>
 #include <userver/utils/daemon_run.hpp>
+#include <userver/telegram/bot/components/client.hpp>
 
 #include "user/handlers.hpp"
 #include "user/auth.hpp"
@@ -17,6 +18,9 @@
 #include "templates/templates.hpp"
 #include "groups/groups.hpp"
 #include "groups/handlers.hpp"
+#include "notifications/telegram/telegram_bot.hpp"
+#include "notifications/handlers.hpp"
+#include "notifications/notifications.hpp"
 #include "utils/utils.hpp"
 
 int main(int argc, char *argv[]) {
@@ -28,7 +32,8 @@ int main(int argc, char *argv[]) {
       .Append<userver::server::handlers::TestsControl>()
       .Append<userver::components::Postgres>(ens::utils::DB_COMPONENT_NAME)
       .Append<userver::components::Secdist>()
-      .Append<userver::components::DefaultSecdistProvider>();
+      .Append<userver::components::DefaultSecdistProvider>()
+      .Append<userver::telegram::bot::TelegramBotClient>();
   ens::user::AppendUserManager(component_list);
   ens::auth::AppendJWTManager(component_list);
   ens::user::AppendUserCreateHandler(component_list);
@@ -61,5 +66,13 @@ int main(int argc, char *argv[]) {
   ens::groups::AppendGroupAddRecipientHandler(component_list);
   ens::groups::AppendGroupDeleteRecipientHandler(component_list);
   ens::groups::AppendGroupDeleteGroupHandler(component_list);
+  ens::notifications::telegram::AppendTelegramNotificationsBot(component_list);
+  ens::notifications::AppendNotificationsManager(component_list);
+  ens::notifications::AppendNotificationCreateBatchHandler(component_list);
+  ens::notifications::AppendNotificationGetByIdHandler(component_list);
+  ens::notifications::AppendNotificationGetPendingHandler(component_list);
+  ens::notifications::AppendNotificationGetAllHandler(component_list);
+  ens::notifications::AppendNotificationSendBatchHandler(component_list);
+  ens::notifications::AppendNotificationCancelNotificationHandler(component_list);
   return userver::utils::DaemonMain(argc, argv, component_list);
 }

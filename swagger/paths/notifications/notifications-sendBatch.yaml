@@ -1,0 +1,33 @@
+put:
+  tags:
+    - notifications
+  summary: Send notifications of specified batch
+  description: Send notifications of specified batch
+  operationId: sendNotificationsBatch
+  parameters:
+    - in: path
+      name: batch_id
+      schema:
+        type: string
+      required: true
+      description: String ID of a notification to cancel
+  responses:
+    "200":
+      description: Successful operation
+      content:
+        application/json:
+          schema:
+            description: "Array of IDs identifying created notifications"
+            type: array
+            items:
+              type: string
+    "401":
+      $ref: "/../../responses.yaml/#/components/responses/Unauthorized"
+    "404":
+      "description": "Batch not found/Batch has already been sent"
+    "429":
+      $ref: "/../../responses.yaml/#/components/responses/TooManyRequests"
+    "500":
+      $ref: "/../../responses.yaml/#/components/responses/InternalServerError"
+    "503":
+      $ref: "/../../responses.yaml/#/components/responses/ServiceUnavailable"

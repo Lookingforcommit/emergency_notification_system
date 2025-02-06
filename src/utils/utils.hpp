@@ -9,13 +9,14 @@
 #include <boost/lexical_cast.hpp>
 
 namespace ens::utils {
+// TODO: transfer db_name to static config
 const std::string DB_COMPONENT_NAME = "postgres-ens";
 
-class ParsedSecdistConfig {
+class JWTSecdistConfig {
  public:
   using JwtSecret = userver::utils::NonLoggable<class JwtSecretTag, std::string>;
   const std::string _jwt_secret;
-  ParsedSecdistConfig(const userver::formats::json::Value &val)
+  JWTSecdistConfig(const userver::formats::json::Value &val)
       : _jwt_secret(val["jwt_secret"].As<JwtSecret>()) {}
 };
 

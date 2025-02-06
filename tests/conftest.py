@@ -10,6 +10,11 @@ USERVER_CONFIG_HOOKS = ['prepare_service_config']
 SERVICE_SOURCE_DIR = pathlib.Path(__file__).parent.parent
 
 
+@pytest.fixture(scope="session")
+def allowed_url_prefixes_extra():
+    return ["https://api.telegram.org"]
+
+
 @pytest.fixture(scope='session')
 def service_source_dir():
     """Path to root directory service."""

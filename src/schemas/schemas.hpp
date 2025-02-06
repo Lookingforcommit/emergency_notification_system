@@ -2,9 +2,14 @@
 
 #include <optional>
 #include <string>
-#include <userver/formats/json/value.hpp>
 
+#include <userver/formats/json/value.hpp>
 #include <userver/chaotic/type_bundle_hpp.hpp>
+#include <userver/utils/trivial_map.hpp>
+#include <userver/storages/postgres/io/type_mapping.hpp>
+#include <userver/storages/postgres/io/user_types.hpp>
+#include <userver/storages/postgres/io/pg_types.hpp>
+#include <userver/storages/postgres/io/enum_types.hpp>
 
 namespace schemas {
 
@@ -41,13 +46,13 @@ struct BaseRecipient {
   std::string name{};
   std::optional<std::string> email{};
   std::optional<std::string> phone_number{};
-  std::optional<std::string> telegram_username{};
+  std::optional<int64_t> telegram_id{};
   BaseRecipient(const std::string &name, const std::optional<std::string> &email,
-                const std::optional<std::string> &phone_number, const std::optional<std::string> &telegram_username)
+                const std::optional<std::string> &phone_number, const std::optional<int64_t> &telegram_id)
       : name(name),
         email(email),
         phone_number(phone_number),
-        telegram_username(telegram_username) {}
+        telegram_id(telegram_id) {}
   BaseRecipient() = default;
 };
 
@@ -113,12 +118,22 @@ struct Notification {
       Type::kMail,
   };
 
-  std::string master_id{};
+  std::string notification_id{};
+  std::string batch_id{};
   std::string recipient_id{};
   std::string group_id{};
   schemas::Notification::Type type{};
   std::string creation_timestamp{};
-  std::string completion_timestamp{};
+  std::optional<std::string> completion_timestamp{};
+};
+
+static constexpr USERVER_NAMESPACE::utils::TrivialBiMap
+    kschemas_Notification_Type_Mapping = [](auto selector) {
+  return selector()
+      .template Type<schemas::Notification::Type, std::string_view>()
+      .Case(schemas::Notification::Type::kTelegram, "Telegram")
+      .Case(schemas::Notification::Type::kSms, "SMS")
+      .Case(schemas::Notification::Type::kMail, "Mail");
 };
 
 bool operator==(const schemas::Notification &lhs,
@@ -161,6 +176,27 @@ USERVER_NAMESPACE::formats::json::Value Serialize(
 std::string ToString(schemas::Notification::Type value);
 
 using NotificationList = std::vector<schemas::Notification>;
+
+struct NotificationsBatch {
+  std::string batch_id{};
+  std::string master_id{};
+};
+
+bool operator==(const schemas::NotificationsBatch &lhs,
+                const schemas::NotificationsBatch &rhs);
+
+USERVER_NAMESPACE::logging::LogHelper &operator<<(
+    USERVER_NAMESPACE::logging::LogHelper &lh,
+    const schemas::NotificationsBatch &value);
+
+NotificationsBatch Parse(
+    USERVER_NAMESPACE::formats::json::Value json,
+    USERVER_NAMESPACE::formats::parse::To<schemas::NotificationsBatch>);
+
+USERVER_NAMESPACE::formats::json::Value Serialize(
+    const schemas::NotificationsBatch &value,
+    USERVER_NAMESPACE::formats::serialize::To<
+        USERVER_NAMESPACE::formats::json::Value>);
 
 // Base schema for all NotificationTemplate schemas returned by the server
 struct ReturnedNotificationTemplate_P1 {
@@ -418,8 +454,8 @@ struct ReturnedRecipient : public schemas::BaseRecipient,
         schemas::ReturnedRecipient_P1(std::move(a1)) {};
 
   ReturnedRecipient(const std::string &master_id, const std::string &name, const std::optional<std::string> &email,
-                    const std::optional<std::string> &phone_number, const std::optional<std::string> &telegram_username)
-      : BaseRecipient(name, email, phone_number, telegram_username),
+                    const std::optional<std::string> &phone_number, const std::optional<int64_t> &telegram_id)
+      : BaseRecipient(name, email, phone_number, telegram_id),
         ReturnedRecipient_P1(master_id) {};
 };
 
@@ -476,8 +512,8 @@ struct RecipientDraft : public schemas::ReturnedRecipient,
 
   RecipientDraft(const std::string &draft_id, const std::string &master_id, const std::string &name,
                  const std::optional<std::string> &email, const std::optional<std::string> &phone_number,
-                 const std::optional<std::string> &telegram_username)
-      : ReturnedRecipient(master_id, name, email, phone_number, telegram_username),
+                 const std::optional<int64_t> &telegram_id)
+      : ReturnedRecipient(master_id, name, email, phone_number, telegram_id),
         RecipientDraft_P1(draft_id) {};
 };
 
@@ -760,8 +796,8 @@ struct RecipientWithId : public schemas::ReturnedRecipient,
 
   RecipientWithId(const std::string &recipient_id, const std::string &master_id, const std::string &name,
                   const std::optional<std::string> &email, const std::optional<std::string> &phone_number,
-                  const std::optional<std::string> &telegram_username)
-      : ReturnedRecipient(master_id, name, email, phone_number, telegram_username),
+                  const std::optional<int64_t> &telegram_id)
+      : ReturnedRecipient(master_id, name, email, phone_number, telegram_id),
         RecipientWithId_P1(recipient_id) {};
 };
 
@@ -890,3 +926,12 @@ USERVER_NAMESPACE::formats::json::Value Serialize(
     USERVER_NAMESPACE::formats::json::Value>);
 
 }  // namespace schemas
+
+// Postgres to cpp type mappings
+namespace USERVER_NAMESPACE::storages::postgres::io {
+template<>
+struct CppToUserPg<schemas::Notification::Type> {
+  static constexpr userver::storages::postgres::DBTypeName postgres_name = "ens_schema.message_type";
+  static constexpr userver::utils::TrivialBiMap enumerators = schemas::kschemas_Notification_Type_Mapping;
+};
+}

@@ -44,9 +44,11 @@ components:
           type: string
           description: "Recipient phone number in international format"
           example: "+12345"
-        telegram_username:
-          type: string
-          example: "@test_telegram"
+        telegram_id:
+          type: integer
+          description: "User id of the recipient account. You can view it if you turn on the
+                        advanced_settings/experimental/show_peer_ids option"
+          example: "1251054162"
       required:
         - name
 
@@ -234,7 +236,9 @@ components:
       type: object
       additionalProperties: false
       properties:
-        master_id:
+        notification_id:
+          type: string
+        batch_id:
           type: string
         recipient_id:
           type: string
@@ -253,12 +257,12 @@ components:
           type: string
           example: "2024-09-24 13:21:54"
       required:
-        - master_id
+        - notification_id
+        - batch_id
         - recipient_id
         - group_id
         - type
         - creation_timestamp
-        - completion_timestamp
 
     NotificationList:
       type: array

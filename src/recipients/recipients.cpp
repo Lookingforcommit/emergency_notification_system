@@ -21,7 +21,7 @@ std::unique_ptr<schemas::RecipientDraft> ens::recipients::RecipientManager::Crea
                                                                                    const schemas::RecipientWithoutId &data) {
   const userver::storages::postgres::Query create_recipient_query{
       "INSERT INTO ens_schema.recipient_draft "
-      "(recipient_draft_id, master_id, name, email, phone_number, telegram_username) "
+      "(recipient_draft_id, master_id, name, email, phone_number, telegram_id) "
       "VALUES ($1, $2, $3, $4, $5, $6)"
   };
   boost::uuids::uuid recipient_draft_id = userver::utils::generators::GenerateBoostUuidV7();
@@ -33,21 +33,21 @@ std::unique_ptr<schemas::RecipientDraft> ens::recipients::RecipientManager::Crea
                                                                                  data.name,
                                                                                  data.email,
                                                                                  data.phone_number,
-                                                                                 data.telegram_username);
+                                                                                 data.telegram_id);
   insert_transaction.Commit();
   schemas::RecipientDraft created_draft{boost::uuids::to_string(recipient_draft_id),
                                         boost::uuids::to_string(user_id),
                                         data.name,
                                         data.email,
                                         data.phone_number,
-                                        data.telegram_username};
+                                        data.telegram_id};
   return std::make_unique<schemas::RecipientDraft>(created_draft);
 }
 
 std::unique_ptr<schemas::RecipientWithId> ens::recipients::RecipientManager::GetById(const boost::uuids::uuid &user_id,
                                                                                      const boost::uuids::uuid &recipient_id) const {
   const userver::storages::postgres::Query recipient_info_query{
-      "SELECT recipient_id, master_id, name, email, phone_number, telegram_username "
+      "SELECT recipient_id, master_id, name, email, phone_number, telegram_id "
       "FROM ens_schema.recipient "
       "WHERE master_id = $1 AND recipient_id = $2",
   };
@@ -65,14 +65,14 @@ std::unique_ptr<schemas::RecipientWithId> ens::recipients::RecipientManager::Get
                                           recipient_row["name"].As<std::string>(),
                                           recipient_row["email"].As<std::optional<std::string>>(),
                                           recipient_row["phone_number"].As<std::optional<std::string>>(),
-                                          recipient_row["telegram_username"].As<std::optional<std::string>>()
+                                          recipient_row["telegram_id"].As<std::optional<int64_t>>()
   };
   return std::make_unique<schemas::RecipientWithId>(recipient_data);
 }
 
 std::unique_ptr<schemas::RecipientWithIdList> ens::recipients::RecipientManager::GetAll(const boost::uuids::uuid &user_id) const {
   const userver::storages::postgres::Query recipients_info_query{
-      "SELECT recipient_id, master_id, name, email, phone_number, telegram_username "
+      "SELECT recipient_id, master_id, name, email, phone_number, telegram_id "
       "FROM ens_schema.recipient "
       "WHERE master_id = $1",
   };
@@ -88,7 +88,7 @@ std::unique_ptr<schemas::RecipientWithIdList> ens::recipients::RecipientManager:
         row["name"].As<std::string>(),
         row["email"].As<std::optional<std::string>>(),
         row["phone_number"].As<std::optional<std::string>>(),
-        row["telegram_username"].As<std::optional<std::string>>()
+        row["telegram_id"].As<std::optional<int64_t>>()
     );
   }
   return std::make_unique<schemas::RecipientWithIdList>(recipients_data);
@@ -99,11 +99,11 @@ std::unique_ptr<schemas::RecipientWithId> ens::recipients::RecipientManager::Con
   boost::uuids::uuid recipient_id = userver::utils::generators::GenerateBoostUuidV7();
   const userver::storages::postgres::Query recipient_creation_query{
       "INSERT INTO ens_schema.recipient "
-      "(recipient_id, master_id, name, email, phone_number, telegram_username) ( "
-      "SELECT $3, $1, name, email, phone_number, telegram_username "
+      "(recipient_id, master_id, name, email, phone_number, telegram_id) ( "
+      "SELECT $3, $1, name, email, phone_number, telegram_id "
       "FROM ens_schema.recipient_draft "
       "WHERE master_id = $1 AND recipient_draft_id = $2) "
-      "RETURNING name, email, phone_number, telegram_username"
+      "RETURNING name, email, phone_number, telegram_id"
   };
   const userver::storages::postgres::Query draft_deletion_query{
       "DELETE "
@@ -131,7 +131,7 @@ std::unique_ptr<schemas::RecipientWithId> ens::recipients::RecipientManager::Con
                                           recipient_row["name"].As<std::string>(),
                                           recipient_row["email"].As<std::optional<std::string>>(),
                                           recipient_row["phone_number"].As<std::optional<std::string>>(),
-                                          recipient_row["telegram_username"].As<std::optional<std::string>>()
+                                          recipient_row["telegram_id"].As<std::optional<int64_t>>()
   };
   return std::make_unique<schemas::RecipientWithId>(recipient_data);
 }
@@ -141,9 +141,9 @@ std::unique_ptr<schemas::RecipientWithId> ens::recipients::RecipientManager::Mod
                                                                                              const schemas::RecipientWithoutId &data) {
   const userver::storages::postgres::Query update_query{
       "UPDATE ens_schema.recipient "
-      "SET name = $3, email = $4, phone_number = $5, telegram_username = $6 "
+      "SET name = $3, email = $4, phone_number = $5, telegram_id = $6 "
       "WHERE master_id = $1 AND recipient_id = $2 "
-      "RETURNING name, email, phone_number, telegram_username"
+      "RETURNING name, email, phone_number, telegram_id"
   };
   userver::storages::postgres::Transaction update_transaction =
       _pg_cluster->Begin(userver::storages::postgres::ClusterHostType::kMaster, {});
@@ -154,7 +154,7 @@ std::unique_ptr<schemas::RecipientWithId> ens::recipients::RecipientManager::Mod
                                               data.name,
                                               data.email,
                                               data.phone_number,
-                                              data.telegram_username);
+                                              data.telegram_id);
   if (not update_res.RowsAffected()) {
     throw RecipientNotFoundException{boost::uuids::to_string(recipient_id)};
   }
@@ -165,7 +165,7 @@ std::unique_ptr<schemas::RecipientWithId> ens::recipients::RecipientManager::Mod
                                           recipient_row["name"].As<std::string>(),
                                           recipient_row["email"].As<std::optional<std::string>>(),
                                           recipient_row["phone_number"].As<std::optional<std::string>>(),
-                                          recipient_row["telegram_username"].As<std::optional<std::string>>()
+                                          recipient_row["telegram_id"].As<std::optional<int64_t>>()
   };
   return std::make_unique<schemas::RecipientWithId>(recipient_data);
 }

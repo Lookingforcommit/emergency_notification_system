@@ -38,7 +38,7 @@ class JWTManager : public userver::components::ComponentBase {
              const userver::components::ComponentContext &component_context) :
       ComponentBase(config, component_context),
       _secdist_config(
-          component_context.FindComponent<userver::components::Secdist>().Get().Get<ens::utils::ParsedSecdistConfig>()
+          component_context.FindComponent<userver::components::Secdist>().Get().Get<ens::utils::JWTSecdistConfig>()
       ),
       _pg_cluster(
           component_context
@@ -48,7 +48,7 @@ class JWTManager : public userver::components::ComponentBase {
   std::unique_ptr<schemas::JWTPair> GenerateJWTPair(const std::string &user_id);
   static userver::yaml_config::Schema GetStaticConfigSchema();
  private:
-  ens::utils::ParsedSecdistConfig _secdist_config;
+  ens::utils::JWTSecdistConfig _secdist_config;
   userver::storages::postgres::ClusterPtr _pg_cluster;
 };
 

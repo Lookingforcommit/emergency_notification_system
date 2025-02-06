@@ -30,7 +30,7 @@ BaseRecipientSchema = Schema({
     Required("name"): str,
     Optional("email"): str,
     Optional("phone_number"): str,
-    Optional("telegram_username"): str,
+    Optional("telegram_id"): int,
 })
 
 ReturnedRecipientSchema = BaseRecipientSchema.extend({
