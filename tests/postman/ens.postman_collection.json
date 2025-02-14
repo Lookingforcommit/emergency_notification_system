@@ -1,0 +1,664 @@
+{
+	"info": {
+		"_postman_id": "92958262-67a6-4ab4-bf5a-cd18f39ae7b9",
+		"name": "ens",
+		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json",
+		"_exporter_id": "20836393"
+	},
+	"item": [
+		{
+			"name": "user",
+			"item": [
+				{
+					"name": "user_create",
+					"request": {
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n    \"name\": \"test_user_1\",\r\n    \"password\": \"1234\"\r\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{url_base}}/user/create",
+							"host": [
+								"{{url_base}}"
+							],
+							"path": [
+								"user",
+								"create"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "user_login",
+					"request": {
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n    \"name\": \"test_user_1\",\r\n    \"password\": \"1234\"\r\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{url_base}}/user/login",
+							"host": [
+								"{{url_base}}"
+							],
+							"path": [
+								"user",
+								"login"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "user_delete",
+					"request": {
+						"auth": {
+							"type": "noauth"
+						},
+						"method": "DELETE",
+						"header": [
+							{
+								"key": "Authorization",
+								"value": "{{jwt_token}}",
+								"type": "text"
+							}
+						],
+						"url": {
+							"raw": "{{url_base}}/user",
+							"host": [
+								"{{url_base}}"
+							],
+							"path": [
+								"user"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "user_modifyUser",
+					"request": {
+						"method": "PUT",
+						"header": [
+							{
+								"key": "Authorization",
+								"value": "{{jwt_token}}",
+								"type": "text"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n    \"name\": \"test_user_2\",\r\n    \"password\": \"new_password\"\r\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{url_base}}/user/modifyUser",
+							"host": [
+								"{{url_base}}"
+							],
+							"path": [
+								"user",
+								"modifyUser"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "user_refreshToken",
+					"request": {
+						"method": "PUT",
+						"header": [
+							{
+								"key": "Authorization",
+								"value": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXUyJ9.eyJleHAiOjE3Mzg1MzQ4NjgsImlhdCI6MTczNTk0Mjg2OCwidXNlcl9pZCI6IjAxOTQyZTQyLTBmMDQtNzFhMy1hN2NhLTllNjAyMTY3MjA4YiJ9.-NKtWim2oy1ot4mkt2T7n-1E226eo6hhET5787R_-Fc",
+								"type": "text"
+							}
+						],
+						"url": {
+							"raw": "{{url_base}}/user/refreshToken",
+							"host": [
+								"{{url_base}}"
+							],
+							"path": [
+								"user",
+								"refreshToken"
+							]
+						}
+					},
+					"response": []
+				}
+			]
+		},
+		{
+			"name": "recipients",
+			"item": [
+				{
+					"name": "recipients_create",
+					"request": {
+						"method": "POST",
+						"header": [
+							{
+								"key": "Authorization",
+								"value": "{{jwt_token}}",
+								"type": "text"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n    \"name\": \"test_recipient_1\",\r\n    \"email\": \"emailexample@domain.com\",\r\n    \"telegram_id\": 781795608\r\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{url_base}}/recipients/create",
+							"host": [
+								"{{url_base}}"
+							],
+							"path": [
+								"recipients",
+								"create"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "recipients_confirmCreation",
+					"request": {
+						"method": "PUT",
+						"header": [
+							{
+								"key": "Authorization",
+								"value": "{{jwt_token}}",
+								"type": "text"
+							}
+						],
+						"url": {
+							"raw": "{{url_base}}/recipients/confirmCreation?draft_id=0193fdc2-828d-74cc-b679-9889c9d60f11",
+							"host": [
+								"{{url_base}}"
+							],
+							"path": [
+								"recipients",
+								"confirmCreation"
+							],
+							"query": [
+								{
+									"key": "draft_id",
+									"value": "0193fdc2-828d-74cc-b679-9889c9d60f11"
+								}
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "recipients_get",
+					"request": {
+						"method": "GET",
+						"header": [
+							{
+								"key": "Authorization",
+								"value": "{{jwt_token}}",
+								"type": "text"
+							}
+						],
+						"url": {
+							"raw": "{{url_base}}/recipients?recipient_id=01938746-1ed1-73d5-893e-da3abe47de2e",
+							"host": [
+								"{{url_base}}"
+							],
+							"path": [
+								"recipients"
+							],
+							"query": [
+								{
+									"key": "recipient_id",
+									"value": "01938746-1ed1-73d5-893e-da3abe47de2e"
+								}
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "recipients_getAll",
+					"request": {
+						"method": "GET",
+						"header": [
+							{
+								"key": "Authorization",
+								"value": "{{jwt_token}}",
+								"type": "text"
+							}
+						],
+						"url": {
+							"raw": "{{url_base}}/recipients/all",
+							"host": [
+								"{{url_base}}"
+							],
+							"path": [
+								"recipients",
+								"all"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "recipients_deleteRecipient",
+					"request": {
+						"method": "DELETE",
+						"header": [
+							{
+								"key": "Authorization",
+								"value": "{{jwt_token}}",
+								"type": "text"
+							}
+						],
+						"url": {
+							"raw": "{{url_base}}/recipients/deleteRecipient?recipient_id=01938750-64c7-7524-8592-8b12eb8464e9",
+							"host": [
+								"{{url_base}}"
+							],
+							"path": [
+								"recipients",
+								"deleteRecipient"
+							],
+							"query": [
+								{
+									"key": "recipient_id",
+									"value": "01938750-64c7-7524-8592-8b12eb8464e9"
+								}
+							]
+						}
+					},
+					"response": []
+				}
+			]
+		},
+		{
+			"name": "notifications",
+			"item": [
+				{
+					"name": "notifications_createBatch",
+					"request": {
+						"method": "POST",
+						"header": [
+							{
+								"key": "Authorization",
+								"value": "{{jwt_token}}",
+								"type": "text"
+							}
+						],
+						"url": {
+							"raw": "{{url_base}}/notifications/createBatch",
+							"host": [
+								"{{url_base}}"
+							],
+							"path": [
+								"notifications",
+								"createBatch"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "notifications_sendBatch",
+					"request": {
+						"method": "PUT",
+						"header": [
+							{
+								"key": "Authorization",
+								"value": "{{jwt_token}}",
+								"type": "text"
+							}
+						],
+						"url": {
+							"raw": "{{url_base}}/recipients/confirmCreation?draft_id=0193fdc2-828d-74cc-b679-9889c9d60f11",
+							"host": [
+								"{{url_base}}"
+							],
+							"path": [
+								"recipients",
+								"confirmCreation"
+							],
+							"query": [
+								{
+									"key": "draft_id",
+									"value": "0193fdc2-828d-74cc-b679-9889c9d60f11"
+								}
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "notifications_get",
+					"request": {
+						"method": "GET",
+						"header": [
+							{
+								"key": "Authorization",
+								"value": "{{jwt_token}}",
+								"type": "text"
+							}
+						],
+						"url": {
+							"raw": "{{url_base}}/notifications?notification_id=01938746-1ed1-73d5-893e-da3abe47de2e",
+							"host": [
+								"{{url_base}}"
+							],
+							"path": [
+								"notifications"
+							],
+							"query": [
+								{
+									"key": "notification_id",
+									"value": "01938746-1ed1-73d5-893e-da3abe47de2e"
+								}
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "notifications_getAll",
+					"request": {
+						"method": "GET",
+						"header": [
+							{
+								"key": "Authorization",
+								"value": "{{jwt_token}}",
+								"type": "text"
+							}
+						],
+						"url": {
+							"raw": "{{url_base}}/notifications/all",
+							"host": [
+								"{{url_base}}"
+							],
+							"path": [
+								"notifications",
+								"all"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "notifications_getPending",
+					"request": {
+						"method": "GET",
+						"header": [
+							{
+								"key": "Authorization",
+								"value": "{{jwt_token}}",
+								"type": "text"
+							}
+						],
+						"url": {
+							"raw": "{{url_base}}/notifications/pending",
+							"host": [
+								"{{url_base}}"
+							],
+							"path": [
+								"notifications",
+								"pending"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "notifications_cancelNotification",
+					"request": {
+						"method": "DELETE",
+						"header": [
+							{
+								"key": "Authorization",
+								"value": "{{jwt_token}}",
+								"type": "text"
+							}
+						],
+						"url": {
+							"raw": "{{url_base}}/notifications/cancelNotification?notification_id=01938750-64c7-7524-8592-8b12eb8464e9",
+							"host": [
+								"{{url_base}}"
+							],
+							"path": [
+								"notifications",
+								"cancelNotification"
+							],
+							"query": [
+								{
+									"key": "notification_id",
+									"value": "01938750-64c7-7524-8592-8b12eb8464e9"
+								}
+							]
+						}
+					},
+					"response": []
+				}
+			]
+		},
+		{
+			"name": "groups",
+			"item": [
+				{
+					"name": "groups_create",
+					"request": {
+						"method": "POST",
+						"header": [
+							{
+								"key": "Authorization",
+								"value": "{{jwt_token}}",
+								"type": "text"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n    \"name\": \"test_group_1\",\r\n    \"active\": true\r\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{url_base}}/groups/create",
+							"host": [
+								"{{url_base}}"
+							],
+							"path": [
+								"groups",
+								"create"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "groups_confirmCreation",
+					"request": {
+						"method": "PUT",
+						"header": [
+							{
+								"key": "Authorization",
+								"value": "{{jwt_token}}",
+								"type": "text"
+							}
+						],
+						"url": {
+							"raw": "{{url_base}}/groups/confirmCreation?draft_id=0193fdb8-aa33-738b-97e9-0b294a4bd584",
+							"host": [
+								"{{url_base}}"
+							],
+							"path": [
+								"groups",
+								"confirmCreation"
+							],
+							"query": [
+								{
+									"key": "draft_id",
+									"value": "0193fdb8-aa33-738b-97e9-0b294a4bd584"
+								}
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "groups_getAll",
+					"request": {
+						"method": "GET",
+						"header": [
+							{
+								"key": "Authorization",
+								"value": "{{jwt_token}}",
+								"type": "text"
+							}
+						],
+						"url": {
+							"raw": "{{url_base}}/groups/all",
+							"host": [
+								"{{url_base}}"
+							],
+							"path": [
+								"groups",
+								"all"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "groups_addRecipient",
+					"request": {
+						"method": "PUT",
+						"header": [
+							{
+								"key": "Authorization",
+								"value": "{{jwt_token}}",
+								"type": "text"
+							}
+						],
+						"url": {
+							"raw": "{{url_base}}/groups/addRecipient?group_id=0194dbde-d0a2-710f-a80a-4d371a46266a&recipient_id=0194dbdf-785c-7339-9d7a-0db48a61ad1f",
+							"host": [
+								"{{url_base}}"
+							],
+							"path": [
+								"groups",
+								"addRecipient"
+							],
+							"query": [
+								{
+									"key": "group_id",
+									"value": "0194dbde-d0a2-710f-a80a-4d371a46266a"
+								},
+								{
+									"key": "recipient_id",
+									"value": "0194dbdf-785c-7339-9d7a-0db48a61ad1f"
+								}
+							]
+						}
+					},
+					"response": []
+				}
+			]
+		},
+		{
+			"name": "templates",
+			"item": [
+				{
+					"name": "templates_create",
+					"request": {
+						"method": "POST",
+						"header": [
+							{
+								"key": "Authorization",
+								"value": "{{jwt_token}}",
+								"type": "text"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n    \"name\": \"test_recipient_1\",\r\n    \"email\": \"emaiexample@domain.coml\",\r\n    \"phone_number\": \"+1234567\",\r\n    \"telegram_username\": \"@example_username\"\r\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{url_base}}/recipients/create",
+							"host": [
+								"{{url_base}}"
+							],
+							"path": [
+								"recipients",
+								"create"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "templates_confirmCreation",
+					"request": {
+						"method": "PUT",
+						"header": [
+							{
+								"key": "Authorization",
+								"value": "{{jwt_token}}",
+								"type": "text"
+							}
+						],
+						"url": {
+							"raw": "{{url_base}}/templates/confirmCreation",
+							"host": [
+								"{{url_base}}"
+							],
+							"path": [
+								"templates",
+								"confirmCreation"
+							],
+							"query": [
+								{
+									"key": "draft_id",
+									"value": "0193f0bb-24ab-71b2-bf43-d0aecae561c0",
+									"disabled": true
+								}
+							]
+						}
+					},
+					"response": []
+				}
+			]
+		}
+	]
+}

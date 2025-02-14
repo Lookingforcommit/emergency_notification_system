@@ -9,7 +9,7 @@ post:
     content:
       application/json:
         schema:
-          $ref: "/../../schemas.yaml/#/components/schemas/RecipientGroupWithoutId"
+          $ref: "../../schemas.yaml#/components/schemas/RecipientGroupWithoutId"
     required: true
   responses:
     "200":
@@ -17,14 +17,14 @@ post:
       content:
         application/json:
           schema:
-            $ref: "/../../schemas.yaml/#/components/schemas/RecipientGroupDraft"
+            $ref: "../../schemas.yaml#/components/schemas/RecipientGroupDraft"
     "401":
-      $ref: "/../../responses.yaml/#/components/responses/Unauthorized"
+      $ref: "../../responses.yaml#/components/responses/Unauthorized"
     "422":
       "description": "Invalid json"
     "429":
-      $ref: "/../../responses.yaml/#/components/responses/TooManyRequests"
+      $ref: "../../responses.yaml#/components/responses/TooManyRequests"
     "500":
-      $ref: "/../../responses.yaml/#/components/responses/InternalServerError"
+      $ref: "../../responses.yaml#/components/responses/InternalServerError"
     "503":
-      $ref: "/../../responses.yaml/#/components/responses/ServiceUnavailable"
+      $ref: "../../responses.yaml#/components/responses/ServiceUnavailable"

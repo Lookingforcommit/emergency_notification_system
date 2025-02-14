@@ -1,47 +1,69 @@
-# ens
+# Emergency Notification System
 
-Template of a C++ service that uses [userver framework](https://github.com/userver-framework/userver) with PostgreSQL.
+> This system allows you to quickly and efficiently send notifications to a large number of recipients during emergency
+> situations.
 
+## Functional requirements:
 
-## Download and Build
+- [x] **Notification Sending:** Clients should be able to send notifications to the registered recipients, alerting them
+  about emergency situations, through different communication channels, such as:
+   - [ ] email
+   - [x] telegram
+   - [ ] push notifications
+   - [ ] SMS
+- [x] **Recipient Registration:** The system should support registering and grouping trusted recipients
+- [x] **Notification Templates:**  The system should allow clients to create and manage pre-defined notification
+  templates for instantaneous notifications sending.
+- [ ] **Recipient Response:** Recipients should have the capability to respond to notifications, providing their safety
+  status or any other pertinent information (e.g., indicating whether they are safe and currently located in a shelter).
 
-To create your own userver-based service follow the following steps:
+## Non-functional requirements:
 
-1. Press the green "Use this template button" at the top of this github page
-2. Clone the service `git clone your-service-repo && cd your-service-repo`
-3. Give a propper name to your service and replace all the occurences of "ens" string with that name
-   (could be done via `find . -not -path "./third_party/*" -not -path ".git/*" -not -path './build_*' -type f | xargs sed -i 's/ens/YOUR_SERVICE_NAME/g'`).
-4. Feel free to tweak, adjust or fully rewrite the source code of your service.
+- [ ] **High Availability:** The system should be highly available, ensuring that it is accessible and operational even
+  during peak usage or in the event of system failures.
+- [ ] **Reliability:** The system should be reliable and deliver notifications consistently without any data loss.
+- [ ] **Scalability:** The system should be able to handle a growing number of recipients and notifications without
+  compromising performance or functionality.
+- [x] **Security:** The system should have appropriate security measures in place to protect sensitive information,
+  prevent unauthorized access, and ensure the privacy and integrity of data.
 
+##
 
-## Makefile
+### Security
 
-Makefile contains typicaly useful targets for development:
+These steps ensure that only authorized users with valid JWT tokens can access the system and individual services
+can make informed decisions based on the client's identity.
 
-* `make build-debug` - debug build of the service with all the assertions and sanitizers enabled
-* `make build-release` - release build of the service with LTO
-* `make test-debug` - does a `make build-debug` and runs all the tests on the result
-* `make test-release` - does a `make build-release` and runs all the tests on the result
-* `make service-start-debug` - builds the service in debug mode and starts it
-* `make service-start-release` - builds the service in release mode and starts it
-* `make` or `make all` - builds and runs all the tests in release and debug modes
-* `make format` - autoformat all the C++ and Python sources
-* `make clean-` - cleans the object files
-* `make dist-clean` - clean all, including the CMake cached configurations
-* `make install` - does a `make build-release` and runs install in directory set in environment `PREFIX`
-* `make install-debug` - does a `make build-debug` and runs install in directory set in environment `PREFIX`
-* `make docker-COMMAND` - run `make COMMAND` in docker environment
-* `make docker-build-debug` - debug build of the service with all the assertions and sanitizers enabled in docker environment
-* `make docker-test-debug` - does a `make build-debug` and runs all the tests on the result in docker environment
-* `make docker-start-service-release` - does a `make install-release` and runs service in docker environment
-* `make docker-start-service-debug` - does a `make install-debug` and runs service in docker environment
-* `make docker-clean-data` - stop docker containers and clean database data
+1. The client registers in the system, saving his account credentials.
+2. The client sends his account credentials through the /user/login endpoint, receiving a pair of JWT tokens.
+3. The client initiates a request to the API and includes a JWT token in the request headers.
+4. The API intercepts the request and extracts the JWT token.
+5. The extracted JWT token is validated by the API using a JWTManager component.
+6. Upon successful validation, JWTManager component extracts a user ID.
+7. User ID is then passed to the request handlers, providing them with user-specific information.
 
-Edit `Makefile.local` to change the default configuration and build options.
+- In order to protect user data from database leaks, hashes of user passwords are stored instead of passwords themselves.
+Moreover, random salt is applied to passwords for protection from brute-force attacks.
 
+### Code Coverage
 
-## License
+Both functional and manual tests are used to guarantee the correct work of the application. 
+Functional tests were written using the pytest framework (https://github.com/pytest-dev/pytest/).
+Postman was used for optimization of manual testing.
 
-The original template is distributed under the [Apache-2.0 License](https://github.com/userver-framework/userver/blob/develop/LICENSE)
-and [CLA](https://github.com/userver-framework/userver/blob/develop/CONTRIBUTING.md). Services based on the template may change
-the license and CLA.
+![](images/postman-flows.png)
+
+![](images/postman-requests.png)
+
+### Endpoints documentation
+> The API endpoints are documented in the OpenAPI specification (swagger directory) and can be viewed through Swagger UI
+
+![](images/user-spec.png)
+
+![](images/recipients-spec.png)
+
+![](images/groups-spec.png)
+
+![](images/templates-spec.png)
+
+![](images/notifications-spec.png)

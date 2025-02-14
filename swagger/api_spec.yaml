@@ -33,51 +33,51 @@ paths:
     $ref: "paths/user/user.yaml"
 
   /recipients/create:
-    $ref: "/paths/recipients/recipients-create.yaml"
+    $ref: "paths/recipients/recipients-create.yaml"
   /recipients/all:
-    $ref: "/paths/recipients/recipients-all.yaml"
+    $ref: "paths/recipients/recipients-all.yaml"
   /recipients:
-    $ref: "/paths/recipients/recipients.yaml"
+    $ref: "paths/recipients/recipients.yaml"
   /recipients/confirmCreation:
-    $ref: "/paths/recipients/recipients-confirmCreation.yaml"
+    $ref: "paths/recipients/recipients-confirmCreation.yaml"
   /recipients/modifyRecipient:
-    $ref: "/paths/recipients/recipients-modifyRecipient.yaml"
+    $ref: "paths/recipients/recipients-modifyRecipient.yaml"
   /recipients/deleteRecipient:
-    $ref: "/paths/recipients/recipients-deleteRecipient.yaml"
+    $ref: "paths/recipients/recipients-deleteRecipient.yaml"
 
   /groups/create:
-    $ref: "/paths/groups/groups-create.yaml"
+    $ref: "paths/groups/groups-create.yaml"
   /groups/all:
-    $ref: "/paths/groups/groups-all.yaml"
+    $ref: "paths/groups/groups-all.yaml"
   /groups/active:
-    $ref: "/paths/groups/groups-active.yaml"
+    $ref: "paths/groups/groups-active.yaml"
   /groups:
-    $ref: "/paths/groups/groups.yaml"
+    $ref: "paths/groups/groups.yaml"
   /groups/recipients:
-    $ref: "/paths/groups/groups-recipients.yaml"
+    $ref: "paths/groups/groups-recipients.yaml"
   /groups/confirmCreation:
-    $ref: "/paths/groups/groups-confirmCreation.yaml"
+    $ref: "paths/groups/groups-confirmCreation.yaml"
   /groups/modifyGroup:
-    $ref: "/paths/groups/groups-modifyGroup.yaml"
+    $ref: "paths/groups/groups-modifyGroup.yaml"
   /groups/addRecipient:
-    $ref: "/paths/groups/groups-addRecipient.yaml"
+    $ref: "paths/groups/groups-addRecipient.yaml"
   /groups/deleteRecipient:
-    $ref: "/paths/groups/groups-deleteRecipient.yaml"
+    $ref: "paths/groups/groups-deleteRecipient.yaml"
   /groups/deleteGroup:
-    $ref: "/paths/groups/groups-deleteGroup.yaml"
+    $ref: "paths/groups/groups-deleteGroup.yaml"
 
   /templates/create:
-    $ref: "/paths/templates/templates-create.yaml"
+    $ref: "paths/templates/templates-create.yaml"
   /templates:
-    $ref: "/paths/templates/templates.yaml"
+    $ref: "paths/templates/templates.yaml"
   /templates/all:
-    $ref: "/paths/templates/templates-all.yaml"
+    $ref: "paths/templates/templates-all.yaml"
   /templates/confirmCreation:
-    $ref: "/paths/templates/templates-confirmCreation.yaml"
+    $ref: "paths/templates/templates-confirmCreation.yaml"
   /templates/modifyTemplate:
-    $ref: "/paths/templates/templates-modifyTemplate.yaml"
+    $ref: "paths/templates/templates-modifyTemplate.yaml"
   /templates/deleteTemplate:
-    $ref: "/paths/templates/templates-deleteTemplate.yaml"
+    $ref: "paths/templates/templates-deleteTemplate.yaml"
 
   /notifications/createBatch:
     $ref: "paths/notifications/notifications-createBatch.yaml"

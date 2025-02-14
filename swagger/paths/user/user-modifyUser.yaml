@@ -9,19 +9,19 @@ put:
     content:
       application/json:
         schema:
-          $ref: "/../../schemas.yaml/#/components/schemas/User"
+          $ref: "../../schemas.yaml#/components/schemas/User"
   responses:
     "200":
       description: Successful operation
     "401":
-      $ref: "/../../responses.yaml/#/components/responses/Unauthorized"
+      $ref: "../../responses.yaml#/components/responses/Unauthorized"
     "404":
       "description": "User not found"
     "422":
       "description": "Invalid json"
     "429":
-      $ref: "/../../responses.yaml/#/components/responses/TooManyRequests"
+      $ref: "../../responses.yaml#/components/responses/TooManyRequests"
     "500":
-      $ref: "/../../responses.yaml/#/components/responses/InternalServerError"
+      $ref: "../../responses.yaml#/components/responses/InternalServerError"
     "503":
-      $ref: "/../../responses.yaml/#/components/responses/ServiceUnavailable"
+      $ref: "../../responses.yaml#/components/responses/ServiceUnavailable"
